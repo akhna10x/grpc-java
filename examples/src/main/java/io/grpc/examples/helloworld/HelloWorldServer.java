@@ -130,6 +130,12 @@ static class NLImageServiceImpl extends NLImageServiceGrpc.NLImageServiceImplBas
       logger.info("Runng RotateImage() impl...."); 
     }
     
+    @Override 
+    public void customImageEndpoint(NLCustomImageEndpointRequest req, 
+                                    StreamObserver<NLCustomImageEndpointResponse> responseObserver) {
+       // TODO: embed Neuralink logo
+       logger.info("Running customImageEndpoint() ...");
+    }
 }
 
   static class GreeterImpl extends GreeterGrpc.GreeterImplBase {
@@ -138,7 +144,7 @@ static class NLImageServiceImpl extends NLImageServiceGrpc.NLImageServiceImplBas
       logger.info("Runng sayHello() impl...."); 
       HelloReply reply = HelloReply.newBuilder().setMessage("Hello " + req.getName()).build();
 
-      //                                                               
+      //  TODO: remove                                               
 
       responseObserver.onNext(reply);
       responseObserver.onCompleted();
