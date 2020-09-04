@@ -123,10 +123,14 @@ public class HelloWorldServer {
     server.blockUntilShutdown();
   }
 // NLImageService
-  static class NLImageServiceImpl extends NLImageServiceGrpc.NLImageServiceImplBase  {
-  //   2
+static class NLImageServiceImpl extends NLImageServiceGrpc.NLImageServiceImplBase  {
+
+    @Override
+    public void rotateImage(NLImageRotateRequest req, StreamObserver<NLImage> responseObserver) {
+      logger.info("Runng RotateImage() impl...."); 
+    }
     
-  }
+}
 
   static class GreeterImpl extends GreeterGrpc.GreeterImplBase {
     @Override
