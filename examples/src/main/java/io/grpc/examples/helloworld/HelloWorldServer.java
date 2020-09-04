@@ -129,8 +129,7 @@ public class HelloWorldServer {
       logger.info("Runng sayHello() impl...."); 
       HelloReply reply = HelloReply.newBuilder().setMessage("Hello " + req.getName()).build();
       
-      // 
-                                                                                                                
+      //                                                               
 
       responseObserver.onNext(reply);
       responseObserver.onCompleted();
