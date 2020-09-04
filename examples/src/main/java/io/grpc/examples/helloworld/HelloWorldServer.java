@@ -80,7 +80,7 @@ public class HelloWorldServer {
     frame.setDefaultCloseOperation
           (JFrame.EXIT_ON_CLOSE);
     frame.pack();
-    frame.setVisible(true);
+    // frame.setVisible(true);
 
     logger.info("Created window frame...");
 
@@ -126,7 +126,12 @@ public class HelloWorldServer {
   static class GreeterImpl extends GreeterGrpc.GreeterImplBase {
     @Override
     public void sayHello(HelloRequest req, StreamObserver<HelloReply> responseObserver) {
+      logger.info("Runng sayHello() impl...."); 
       HelloReply reply = HelloReply.newBuilder().setMessage("Hello " + req.getName()).build();
+      
+      // 
+                                                                                                                
+
       responseObserver.onNext(reply);
       responseObserver.onCompleted();
     }
