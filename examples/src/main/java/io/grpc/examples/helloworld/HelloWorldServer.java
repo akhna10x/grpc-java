@@ -43,7 +43,10 @@ public class HelloWorldServer {
         .start();
     logger.info("Server started, listening on " + port);
     logger.info("Initializing NL objects....");
-    
+
+    NLImage nlImage;// = new NLImage();
+    logger.info("Created NL object...");
+
     Runtime.getRuntime().addShutdownHook(new Thread() {
       @Override
       public void run() {
@@ -84,7 +87,6 @@ public class HelloWorldServer {
   }
 
   static class GreeterImpl extends GreeterGrpc.GreeterImplBase {
-
     @Override
     public void sayHello(HelloRequest req, StreamObserver<HelloReply> responseObserver) {
       HelloReply reply = HelloReply.newBuilder().setMessage("Hello " + req.getName()).build();
