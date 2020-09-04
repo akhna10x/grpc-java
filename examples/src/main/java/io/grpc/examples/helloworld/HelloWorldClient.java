@@ -64,6 +64,9 @@ public class HelloWorldClient {
     BufferedImage bimg = ImageIO.read(new File(filename));
     int width = bimg.getWidth();
     int height   = bimg.getHeight();
+    logger.info("_____Width: " + width);
+    logger.info("____Height: " + height);
+
     // logger.info("img.class:", img.class);
 
     frame.add(label);
