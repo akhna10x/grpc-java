@@ -16,12 +16,14 @@
 
 package io.grpc.examples.helloworld;
 
+import com.neuralink.interviewing.*;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
+
 
 /**
  * Server that manages startup/shutdown of a {@code Greeter} server.
@@ -34,11 +36,14 @@ public class HelloWorldServer {
   private void start() throws IOException {
     /* The port on which the server should run */
     int port = 50051;
+    // int port = 50071;
     server = ServerBuilder.forPort(port)
         .addService(new GreeterImpl())
         .build()
         .start();
     logger.info("Server started, listening on " + port);
+    logger.info("Initializing NL objects....");
+    
     Runtime.getRuntime().addShutdownHook(new Thread() {
       @Override
       public void run() {
