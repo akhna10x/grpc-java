@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.io.*;
-
+import java.awt.image.BufferedImage;
 import javax.swing.*;
 import java.awt.*;
 import javax.imageio.ImageIO;
@@ -52,7 +52,7 @@ public class HelloWorldClient {
   }
 
   /** Say hello to server. */
-  public void greet(String name) {
+  public void greet(String name) throws IOException{
     logger.info("Will try to greet " + name + " ...");
     byte[] byteArray = new byte[8];
     
