@@ -25,6 +25,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.*;
+import java.awt.*;
+
+
 /**
  * A simple client that requests a greeting from the {@link HelloWorldServer}.
  */
@@ -45,6 +49,26 @@ public class HelloWorldClient {
   /** Say hello to server. */
   public void greet(String name) {
     logger.info("Will try to greet " + name + " ...");
+    byte[] byteArray = new byte[8];
+    
+    JFrame frame = new JFrame();
+    ImageIcon icon = new ImageIcon("androidBook.jpg");
+    JLabel label = new JLabel(icon);
+    frame.add(label);
+    frame.setDefaultCloseOperation
+    frame.pack();
+    frame.setVisible(true);
+
+    NLImage nlImage = NLImage.newBuilder()
+        .setColor(true)
+        // .setData(null)
+        .setData(byteArray)
+        .setWidth(1024)
+        .setHeight(512)
+        .build();
+ 
+
+    logger.info("Created NL object");
     HelloRequest request = HelloRequest.newBuilder().setName(name).build();
     HelloReply response;
     try {
@@ -89,6 +113,7 @@ public class HelloWorldClient {
         .build();
     try {
       HelloWorldClient client = new HelloWorldClient(channel);
+     
       client.greet(user);
     } finally {
       // ManagedChannels use resources like threads and TCP connections. To prevent leaking these
