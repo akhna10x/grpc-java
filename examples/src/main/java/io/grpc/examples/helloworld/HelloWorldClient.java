@@ -129,6 +129,8 @@ public class HelloWorldClient {
         .build();
     try {
       HelloWorldClient client = new HelloWorldClient(channel);
+      // NLImageClient client = new NLImageClient(channel);
+      
      
       client.greet(user);
     } finally {
