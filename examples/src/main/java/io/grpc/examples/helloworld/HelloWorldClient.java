@@ -16,6 +16,7 @@
 
 package io.grpc.examples.helloworld;
 
+import com.google.protobuf.ByteString;
 import com.neuralink.interviewing.*;
 import io.grpc.Channel;
 import io.grpc.ManagedChannel;
@@ -24,9 +25,13 @@ import io.grpc.StatusRuntimeException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.io.*;
 
 import javax.swing.*;
 import java.awt.*;
+import javax.imageio.ImageIO;
+
+
 
 
 /**
@@ -52,23 +57,31 @@ public class HelloWorldClient {
     byte[] byteArray = new byte[8];
     
     JFrame frame = new JFrame();
-    ImageIcon icon = new ImageIcon("androidBook.jpg");
+    String filename = "androidBook.jpg";
+    ImageIcon icon = new ImageIcon(filename);
     JLabel label = new JLabel(icon);
+    // java.awt.Image img = icon.GetImage();
+    BufferedImage bimg = ImageIO.read(new File(filename));
+    int width = bimg.getWidth();
+    int height   = bimg.getHeight();
+    // logger.info("img.class:", img.class);
+
     frame.add(label);
-    frame.setDefaultCloseOperation
+    // frame.setDefaultCloseOperation
     frame.pack();
-    frame.setVisible(true);
+    // frame.setVisible(true);
 
     NLImage nlImage = NLImage.newBuilder()
         .setColor(true)
-        // .setData(null)
-        .setData(byteArray)
+        .setData(ByteString.copyFrom(byteArray))
         .setWidth(1024)
         .setHeight(512)
         .build();
  
-
+    // logger.info("Img length", icon.length);
     logger.info("Created NL object");
+
+
     HelloRequest request = HelloRequest.newBuilder().setName(name).build();
     HelloReply response;
     try {
