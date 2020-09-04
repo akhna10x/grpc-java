@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * Server that manages startup/shutdown of a {@code Greeter} server.
@@ -43,9 +45,44 @@ public class HelloWorldServer {
         .start();
     logger.info("Server started, listening on " + port);
     logger.info("Initializing NL objects....");
-
-    NLImage nlImage;// = new NLImage();
+    // new NLImageBuilder();
+    // NLImage.builder();
+    // new NLImage().builder();
+    // NLImage.newBuilder().build();
+    NLImage nlImage = 
+        NLImage.newBuilder().build();
+    //new NLImageBuilder.newBuilder().build();
+    // ;// = new NLImage();
     logger.info("Created NL object...");
+    
+    //1. Create the frame.
+    // JFrame frame = new JFrame("FrameDemo");
+
+    // //2. Optional: What happens when the frame closes?
+    // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+    // // //3. Create components and put them in the frame.
+    // // //...create emptyLabel...
+    // JLabel emptyLabel = new JLabel();
+    // frame.getContentPane().add(emptyLabel, BorderLayout.CENTER);
+
+    // // //4. Size the frame.
+    // frame.pack();
+
+    // // //5. Show it.
+    // frame.setVisible(true);
+
+    // 9-4-2020
+    JFrame frame = new JFrame();
+    ImageIcon icon = new ImageIcon("androidBook.jpg");
+    JLabel label = new JLabel(icon);
+    frame.add(label);
+    frame.setDefaultCloseOperation
+          (JFrame.EXIT_ON_CLOSE);
+    frame.pack();
+    frame.setVisible(true);
+
+    logger.info("Created window frame...");
 
     Runtime.getRuntime().addShutdownHook(new Thread() {
       @Override
