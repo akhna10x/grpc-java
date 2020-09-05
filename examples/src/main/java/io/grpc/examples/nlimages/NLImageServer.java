@@ -2,7 +2,7 @@
  * Neuralink image server.
  */
 
-package io.grpc.examples.helloworld;
+package io.grpc.examples.nlimages;
 
 import com.neuralink.interviewing.*;
 import io.grpc.Server;
@@ -18,8 +18,8 @@ import java.awt.*;
 /**
  * Server that manages startup/shutdown of a {@code Greeter} server.
  */
-public class HelloWorldServer {
-  private static final Logger logger = Logger.getLogger(HelloWorldServer.class.getName());
+public class NLImageServer {
+  private static final Logger logger = Logger.getLogger(NLImageServer.class.getName());
 
   private Server server;
 
@@ -78,7 +78,7 @@ public class HelloWorldServer {
         // Use stderr here since the logger may have been reset by its JVM shutdown hook.
         System.err.println("*** shutting down gRPC server since JVM is shutting down");
         try {
-          HelloWorldServer.this.stop();
+          NLImageServer.this.stop();
         } catch (InterruptedException e) {
           e.printStackTrace(System.err);
         }
@@ -106,7 +106,7 @@ public class HelloWorldServer {
    * Main launches the server from the command line.
    */
   public static void main(String[] args) throws IOException, InterruptedException {
-    final HelloWorldServer server = new HelloWorldServer();
+    final NLImageServer server = new NLImageServer();
     server.start();
     server.blockUntilShutdown();
   }
@@ -119,9 +119,10 @@ static class NLImageServiceImpl extends NLImageServiceGrpc.NLImageServiceImplBas
           // TODO handle error
 
       // TODO: return valid response
-      NLImage reply;
+      NLImageReply reply;
 
-      // responseObserver.onNext(reply);
+
+      responseObserver.onNext(reply);
       responseObserver.onCompleted();
     }
     

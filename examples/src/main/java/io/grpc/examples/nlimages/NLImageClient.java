@@ -2,7 +2,7 @@
  * Neuralink image client.
  */
 
-package io.grpc.examples.helloworld;
+package io.grpc.examples.nlimages;
 
 import com.google.protobuf.ByteString;
 import com.neuralink.interviewing.*;

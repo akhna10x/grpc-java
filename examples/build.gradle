@@ -60,22 +60,22 @@ sourceSets {
 
 startScripts.enabled = false
 
-task helloWorldServer(type: CreateStartScripts) {
-    mainClassName = 'io.grpc.examples.helloworld.HelloWorldServer'
-    applicationName = 'hello-world-server'
+task nlImageServer(type: CreateStartScripts) {
+    mainClassName = 'io.grpc.examples.nlimages.NLImageServer'
+    applicationName = 'nl-image-server'
     outputDir = new File(project.buildDir, 'tmp')
     classpath = startScripts.classpath
 }
 
 task nLImageClient(type: CreateStartScripts) {
-    mainClassName = 'io.grpc.examples.helloworld.NLImageClient'
+    mainClassName = 'io.grpc.examples.nlimages.NLImageClient'
     applicationName = 'nl-image-client'
     outputDir = new File(project.buildDir, 'tmp')
     classpath = startScripts.classpath
 }
 
 applicationDistribution.into('bin') {
-    from(helloWorldServer)
+    from(nlImageServer)
     from(nLImageClient)
     fileMode = 0755
 }
