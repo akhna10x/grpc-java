@@ -28,7 +28,7 @@ public class HelloWorldServer {
     int port = 50051;
     server = ServerBuilder.forPort(port)
         // .addService(new GreeterImpl())
-        .addService(new NLImageServiceImpl)
+        .addService(new NLImageServiceImpl())
         .build()
         .start();
     logger.info("Server started, listening on " + port);
