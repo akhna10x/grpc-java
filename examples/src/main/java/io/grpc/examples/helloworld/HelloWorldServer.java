@@ -116,7 +116,16 @@ static class NLImageServiceImpl extends NLImageServiceGrpc.NLImageServiceImplBas
     @Override
     public void rotateImage(NLImageRotateRequest req, StreamObserver<NLImage> responseObserver) {
       logger.info("Runng RotateImage() impl...."); 
+          // TODO handle error
+
+      // TODO: return valid response
+      NLImage reply;
+
+      responseObserver.onNext(reply);
+      responseObserver.onCompleted();
     }
+    
+
     
     @Override 
     public void customImageEndpoint(NLCustomImageEndpointRequest req, 
@@ -126,16 +135,16 @@ static class NLImageServiceImpl extends NLImageServiceGrpc.NLImageServiceImplBas
     }
 }
 
-  static class GreeterImpl extends GreeterGrpc.GreeterImplBase {
-    @Override
-    public void sayHello(HelloRequest req, StreamObserver<HelloReply> responseObserver) {
-      logger.info("Runng sayHello() impl...."); 
-      HelloReply reply = HelloReply.newBuilder().setMessage("Hello " + req.getName()).build();
+  // static class GreeterImpl extends GreeterGrpc.GreeterImplBase {
+  //   @Override
+  //   public void sayHello(HelloRequest req, StreamObserver<HelloReply> responseObserver) {
+  //     logger.info("Runng sayHello() impl...."); 
+  //     HelloReply reply = HelloReply.newBuilder().setMessage("Hello " + req.getName()).build();
 
-      //  TODO: remove                                               
+  //     //  TODO: remove                                               
 
-      responseObserver.onNext(reply);
-      responseObserver.onCompleted();
-    }
-  }
+  //     responseObserver.onNext(reply);
+  //     responseObserver.onCompleted();
+  //   }
+  // }
 }
