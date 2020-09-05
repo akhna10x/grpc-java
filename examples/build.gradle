@@ -84,8 +84,15 @@ task helloWorldServer(type: CreateStartScripts) {
     classpath = startScripts.classpath
 }
 
-task helloWorldClient(type: CreateStartScripts) {
-    mainClassName = 'io.grpc.examples.helloworld.HelloWorldClient'
+// task helloWorldClient(type: CreateStartScripts) {
+//     mainClassName = 'io.grpc.examples.helloworld.HelloWorldClient'
+//     applicationName = 'hello-world-client'
+//     outputDir = new File(project.buildDir, 'tmp')
+//     classpath = startScripts.classpath
+// }
+
+task nLImageClient(type: CreateStartScripts) {
+    mainClassName = 'io.grpc.examples.helloworld.NLImageClient'
     applicationName = 'hello-world-client'
     outputDir = new File(project.buildDir, 'tmp')
     classpath = startScripts.classpath
@@ -127,14 +134,7 @@ task compressingHelloWorldClient(type: CreateStartScripts) {
 }
 
 applicationDistribution.into('bin') {
-    from(routeGuideServer)
-    from(routeGuideClient)
     from(helloWorldServer)
     from(helloWorldClient)
-    from(hedgingHelloWorldClient)
-    from(hedgingHelloWorldServer)
-    from(retryingHelloWorldClient)
-    from(retryingHelloWorldServer)
-    from(compressingHelloWorldClient)
     fileMode = 0755
 }

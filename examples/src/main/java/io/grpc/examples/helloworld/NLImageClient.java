@@ -37,13 +37,13 @@ import javax.imageio.ImageIO;
 /**
  * A simple client that requests a greeting from the {@link HelloWorldServer}.
  */
-public class HelloWorldClient {
-  private static final Logger logger = Logger.getLogger(HelloWorldClient.class.getName());
+public class NLImageClient {
+  private static final Logger logger = Logger.getLogger(NLImageClient.class.getName());
 
   private final GreeterGrpc.GreeterBlockingStub blockingStub;
 
   /** Construct client for accessing HelloWorld server using the existing channel. */
-  public HelloWorldClient(Channel channel) {
+  public NLImageClient(Channel channel) {
     // 'channel' here is a Channel, not a ManagedChannel, so it is not this code's responsibility to
     // shut it down.
 
@@ -128,8 +128,8 @@ public class HelloWorldClient {
         .usePlaintext()
         .build();
     try {
-      HelloWorldClient client = new HelloWorldClient(channel);
-      // NLImageClient client = new NLImageClient(channel);
+      NLImageClient client = new NLImageClient(channel);
+      // NLImageServiceClient client = new NLImageServiceClient(channel);
       
      
       client.greet(user);
