@@ -40,7 +40,7 @@ public class NLImageClient {
   }
 
   /** Say hello to server. */
-  public void greet(String name) throws IOException{
+  public void requestRotate(String name) throws IOException{
     logger.info("Will try to greet " + name + " ...");
     byte[] byteArray = new byte[8];
     
@@ -57,10 +57,10 @@ public class NLImageClient {
 
     // logger.info("img.class:", img.class);
 
-    frame.add(label);
-    // frame.setDefaultCloseOperation
-    frame.pack();
-    // frame.setVisible(true);
+    // frame.add(label);
+    // // frame.setDefaultCloseOperation
+    // frame.pack();
+    // // frame.setVisible(true);
 
     NLImage nlImage = NLImage.newBuilder()
         .setColor(true)
@@ -89,6 +89,8 @@ public class NLImageClient {
   }
 
   /**
+   * Runs Neuralink image client.
+   * 
    * Greet server. If provided, the first element of {@code args} is the name to use in the
    * greeting. The second argument is the target server.
    */
@@ -101,7 +103,6 @@ public class NLImageClient {
       if ("--help".equals(args[0])) {
         System.err.println("Usage: [name [target]]");
         System.err.println("");
-        System.err.println("  name    The name you wish to be greeted by. Defaults to " + user);
         System.err.println("  target  The server to connect to. Defaults to " + target);
         System.exit(1);
       }
@@ -112,8 +113,7 @@ public class NLImageClient {
     }
 
     // Create a communication channel to the server, known as a Channel. Channels are thread-safe
-    // and reusable. It is common to create channels at the beginning of your application and reuse
-    // them until the application shuts down.
+    // and reusable.
     ManagedChannel channel = ManagedChannelBuilder.forTarget(target)
         // Channels are secure by default (via SSL/TLS). For the example we disable TLS to avoid
         // needing certificates.
@@ -121,9 +121,7 @@ public class NLImageClient {
         .build();
     try {
       NLImageClient client = new NLImageClient(channel);
-      // NLImageServiceClient client = new NLImageServiceClient(channel);
-     
-      client.greet(user);
+      client.requestRotate(user);
     } finally {
       // ManagedChannels use resources like threads and TCP connections. To prevent leaking these
       // resources the channel should be shut down when it will no longer be used. If it may be used
