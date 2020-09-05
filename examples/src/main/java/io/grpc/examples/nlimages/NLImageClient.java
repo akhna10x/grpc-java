@@ -54,13 +54,14 @@ public class NLImageClient {
     int height   = bimg.getHeight();
     logger.info("_____Width: " + width);
     logger.info("____Height: " + height);
+    // logger.info("Rotation request..." + )
 
     // logger.info("img.class:", img.class);
 
-    // frame.add(label);
+    frame.add(label);
     // // frame.setDefaultCloseOperation
-    // frame.pack();
-    // // frame.setVisible(true);
+    frame.pack();
+    frame.setVisible(true);
 
     NLImage nlImage = NLImage.newBuilder()
         .setColor(true)
@@ -87,22 +88,23 @@ public class NLImageClient {
     logger.info("Neuralink response height : " + response.getHeight());
     // TODO display response
 
-    logger.info("Displayed response img...";
-    JFrame frame = new JFrame("FrameDemo");
+    logger.info("Displayed response img...");
+    // JFrame 
+    // frame = new JFrame("FrameDemo");
 
-    //2. Optional: What happens when the frame closes?
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    // //2. Optional: What happens when the frame closes?
+    // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-    // //3. Create components and put them in the frame.
-    // //...create emptyLabel...
-    JLabel emptyLabel = new JLabel();
-    frame.getContentPane().add(emptyLabel, BorderLayout.CENTER);
+    // // //3. Create components and put them in the frame.
+    // // //...create emptyLabel...
+    // JLabel emptyLabel = new JLabel();
+    // frame.getContentPane().add(emptyLabel, BorderLayout.CENTER);
 
-    // //4. Size the frame.
-    frame.pack();
+    // // //4. Size the frame.
+    // frame.pack();
 
-    // //5. Show it.
-    frame.setVisible(true);
+    // // //5. Show it.
+    // frame.setVisible(true);
   }
 
   /**
