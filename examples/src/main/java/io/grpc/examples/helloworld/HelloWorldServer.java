@@ -135,8 +135,6 @@ static class NLImageServiceImpl extends NLImageServiceGrpc.NLImageServiceImplBas
     }
 }
 
-  // static class GreeterImpl extends GreeterGrpc.GreeterImplBase {
-  //   @Override
   //   public void sayHello(HelloRequest req, StreamObserver<HelloReply> responseObserver) {
   //     logger.info("Runng sayHello() impl...."); 
   //     HelloReply reply = HelloReply.newBuilder().setMessage("Hello " + req.getName()).build();
