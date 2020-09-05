@@ -119,8 +119,14 @@ static class NLImageServiceImpl extends NLImageServiceGrpc.NLImageServiceImplBas
           // TODO handle error
 
       // TODO: return valid response
-      NLImageReply reply;
-
+      int TMP_SIZE = 7;
+      byte[] rotatedImg = new byte[TMP_SIZE];
+      NLImage reply = NLImage.newBuilder()
+        .setWidth(TMP_SIZE)
+        .setHeight(TMP_SIZE)
+        // .setData()
+        .build();
+      // TODO: set data
 
       responseObserver.onNext(reply);
       responseObserver.onCompleted();
@@ -136,7 +142,7 @@ static class NLImageServiceImpl extends NLImageServiceGrpc.NLImageServiceImplBas
     }
 }
 
-  //   public void sayHello(HelloRequest req, StreamObserver<HelloReply> responseObserver) {
+  
   //     logger.info("Runng sayHello() impl...."); 
   //     HelloReply reply = HelloReply.newBuilder().setMessage("Hello " + req.getName()).build();
 
