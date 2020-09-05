@@ -1,17 +1,5 @@
 /*
- * Copyright 2015 The gRPC Authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Neuralink image client.
  */
 
 package io.grpc.examples.helloworld;
@@ -31,16 +19,15 @@ import javax.swing.*;
 import java.awt.*;
 import javax.imageio.ImageIO;
 
-
-
-
 /**
  * A simple client that requests a greeting from the {@link HelloWorldServer}.
  */
 public class NLImageClient {
   private static final Logger logger = Logger.getLogger(NLImageClient.class.getName());
 
-  private final GreeterGrpc.GreeterBlockingStub blockingStub;
+  // private final GreeterGrpc.GreeterBlockingStub blockingStub;
+  private final NLImageServiceGrpc.NLImageServiceBlockingStub blockingStub;
+
 
   /** Construct client for accessing HelloWorld server using the existing channel. */
   public NLImageClient(Channel channel) {
@@ -48,7 +35,8 @@ public class NLImageClient {
     // shut it down.
 
     // Passing Channels to code makes code easier to test and makes it easier to reuse Channels.
-    blockingStub = GreeterGrpc.newBlockingStub(channel);
+    // blockingStub = GreeterGrpc.newBlockingStub(channel);
+    blockingStub = NLImageServiceGrpc.newBlockingStub(channel);
   }
 
   /** Say hello to server. */
@@ -84,16 +72,20 @@ public class NLImageClient {
     // logger.info("Img length", icon.length);
     logger.info("Created NL object");
 
-
-    HelloRequest request = HelloRequest.newBuilder().setName(name).build();
-    HelloReply response;
+    // HelloRequest request = HelloRequest.newBuilder().setName(name).build();
+    // HelloReply response;
+    NLImageRotateRequest request = NLImageRotateRequest.newBuilder().build();
+    NLImage response;
     try {
-      response = blockingStub.sayHello(request);
+      response = blockingStub.rotateImage(request);
     } catch (StatusRuntimeException e) {
       logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
       return;
     }
-    logger.info("Greeting: " + response.getMessage());
+    logger.info("Neuralink response color: " + response.getColor());
+    // TODO
+
+    // logger.info("Displayed response img...";
   }
 
   /**
@@ -101,7 +93,7 @@ public class NLImageClient {
    * greeting. The second argument is the target server.
    */
   public static void main(String[] args) throws Exception {
-    String user = "world";
+    String user = "world-x";
     // Access a service running on the local machine on port 50051
     String target = "localhost:50051";
     // Allow passing in the user and target strings as command line arguments
@@ -130,7 +122,6 @@ public class NLImageClient {
     try {
       NLImageClient client = new NLImageClient(channel);
       // NLImageServiceClient client = new NLImageServiceClient(channel);
-      
      
       client.greet(user);
     } finally {
