@@ -121,7 +121,7 @@ static class NLImageServiceImpl extends NLImageServiceGrpc.NLImageServiceImplBas
       // TODO: return valid response
       NLImage reply;
 
-      responseObserver.onNext(reply);
+      // responseObserver.onNext(reply);
       responseObserver.onCompleted();
     }
     
