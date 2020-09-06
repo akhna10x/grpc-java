@@ -74,6 +74,7 @@ public class NLImageServer {
 
   // NLImageService
   static class NLImageServiceImpl extends NLImageServiceGrpc.NLImageServiceImplBase  {
+    
       @Override
       public void rotateImage(NLImageRotateRequest req, StreamObserver<NLImage> responseObserver) {
         logger.info("Runng RotateImage() impl...."); 
@@ -91,6 +92,14 @@ public class NLImageServer {
 
         responseObserver.onNext(reply);
         responseObserver.onCompleted();
+      }
+
+      private ImageIcon bytesToIcon() {
+        return null;
+      }
+
+      private byte[] iconToBytes() {
+        return null;
       }
       
       @Override 
