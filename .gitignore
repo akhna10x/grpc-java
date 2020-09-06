@@ -36,3 +36,16 @@ bin
 *~
 \#*\#
 .vscode/settings.json
+.metadata/version.ini
+.metadata/.plugins/org.eclipse.ui.workbench/workingsets.xml
+.metadata/.plugins/org.eclipse.ui.intro/introstate
+.metadata/.plugins/org.eclipse.oomph.setup/workspace.setup
+.metadata/.plugins/org.eclipse.m2e.logback.configuration/logback.1.16.0.20200318-1040.xml
+.metadata/.plugins/org.eclipse.m2e.logback.configuration/0.log
+.metadata/.plugins/org.eclipse.core.resources/.root/.indexes/properties.index
+.metadata/.mylyn/tasks.xml.zip
+.metadata/.mylyn/repositories.xml.zip
+.metadata/.mylyn/.taskListIndex/write.lock
+.metadata/.mylyn/.taskListIndex/segments_1
+.metadata/.log
+.metadata/.lock
