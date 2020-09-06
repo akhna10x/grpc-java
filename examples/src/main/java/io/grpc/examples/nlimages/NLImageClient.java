@@ -63,6 +63,7 @@ public class NLImageClient {
     displayImg(filename);
     BufferedImage bimg = ImageIO.read(new File(filename));
     byte[] byteArray = 
+        // bimg.getData().getDataBuffer();
         ((DataBufferByte) bimg.getData().getDataBuffer()).getData();
     
     int width = bimg.getWidth();
