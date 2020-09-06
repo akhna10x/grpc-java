@@ -96,11 +96,11 @@ public class NLImageServer {
   // NLImageService
   static class NLImageServiceImpl extends NLImageServiceGrpc.NLImageServiceImplBase  {
     
-    public static Image getImageFromArray(int[] pixels, int width, int height) {
+    public static ImageIcon getImageFromArray(int[] pixels, int width, int height) {
       BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
       WritableRaster raster = (WritableRaster) image.getData();
       raster.setPixels(0,0,width,height,pixels);
-      return image;
+      return new ImageIcon(image) ;
     }
 
     public ImageIcon createImage(byte[] b){
