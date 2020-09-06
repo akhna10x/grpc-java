@@ -84,13 +84,62 @@ public class NLImageClient {
     // TODO display response
     // logger.info("Displayed response img...");
 
+    String sFilename = "s-result.jpg";
+    File file = new File("C:\\rose.jpg");
+    FileInputStream fis = new FileInputStream(sFilename);
 
-    JFrame frame = new JFrame();
-    ImageIcon icon = new ImageIcon(filename);
-    JLabel label = new JLabel(icon);
-    frame.add(label);
-    frame.pack();
-    frame.setVisible(true);
+    ByteArrayOutputStream baos=new ByteArrayOutputStream(1000);
+    BufferedImage img=ImageIO.read(new File(sFilename));
+    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+    byte[] buf = new byte[1024];
+    try {
+        for (int readNum; (readNum = fis.read(buf)) != -1;) {
+            //Writes to this byte array output stream
+            bos.write(buf, 0, readNum); 
+            System.out.println("read " + readNum + " bytes,");
+        }
+    } catch (IOException ex) {
+        // Logger.getLogger(ConvertImage.class.getName()).log(Level.SEVERE, null, ex);
+    }
+
+    byte[] bytesArray = bos.toByteArray();
+    System.out.println("bytesArray.length: " + bytesArray.length);
+
+
+    ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+    Iterator<?> readers = ImageIO.getImageReadersByFormatName("jpg");
+
+    //ImageIO is a class containing static methods for locating ImageReaders
+    //and ImageWriters, and performing simple encoding and decoding. 
+
+    ImageReader reader = (ImageReader) readers.next();
+    Object source = bis; 
+    ImageInputStream iis = ImageIO.createImageInputStream(source); 
+    reader.setInput(iis, true);
+    ImageReadParam param = reader.getDefaultReadParam();
+
+    Image image = reader.read(0, param);
+    //got an image file
+
+    BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_RGB);
+    //bufferedImage is the RenderedImage to be written
+
+    Graphics2D g2 = bufferedImage.createGraphics();
+    g2.drawImage(image, null, null);
+
+
+		// ImageIO.write(img, "jpg", baos);
+		// baos.flush();
+ 
+		// String base64String=Base64.encode(baos.toByteArray());
+		// baos.close();
+
+    // JFrame frame = new JFrame();
+    // ImageIcon icon = new ImageIcon(filename);
+    // JLabel label = new JLabel(icon);
+    // frame.add(label);
+    // frame.pack();
+    // frame.setVisible(true);
     
     // JFrame frame = new JFrame("FrameDemo");
     // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
