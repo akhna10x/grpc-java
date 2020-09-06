@@ -119,7 +119,7 @@ static class NLImageServiceImpl extends NLImageServiceGrpc.NLImageServiceImplBas
           // TODO handle error
 
       // TODO: return valid response
-      int TMP_SIZE = 7;
+      int TMP_SIZE = 70;
       byte[] rotatedImg = new byte[TMP_SIZE];
       NLImage reply = NLImage.newBuilder()
         .setWidth(TMP_SIZE)

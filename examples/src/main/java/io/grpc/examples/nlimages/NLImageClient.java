@@ -43,6 +43,13 @@ public class NLImageClient {
     frame.setVisible(true);
   }
 
+  // TODO: remove filename parameter
+  private ImageIcon getImgFromResponse(String filename) {
+    ImageIcon icon = new ImageIcon(filename);
+    // ImageIcon icon = new ImageIcon(filename);
+    return icon;
+  }
+
   /** 
    * Requests an image be rotated.
    */
@@ -55,20 +62,14 @@ public class NLImageClient {
     int height   = bimg.getHeight();
     logger.info("_____Width: " + width);
     logger.info("____Height: " + height);
-
-
     NLImage nlImage = NLImage.newBuilder()
         .setColor(true)
         .setData(ByteString.copyFrom(byteArray))
-        .setWidth(1024)
-        .setHeight(512)
+        .setWidth(width)
+        .setHeight(height)
         .build();
  
-    // logger.info("Img length", icon.length);
     logger.info("Created NL object");
-
-    // HelloRequest request = HelloRequest.newBuilder().setName(name).build();
-    // HelloReply response;
     NLImageRotateRequest request = NLImageRotateRequest.newBuilder().build();
     NLImage response;
     try {
@@ -81,23 +82,14 @@ public class NLImageClient {
     logger.info("Neuralink response width : " + response.getWidth());
     logger.info("Neuralink response height : " + response.getHeight());
     // TODO display response
+    // logger.info("Displayed response img...");
 
-    logger.info("Displayed response img...");
-    // JFrame 
-    // frame = new JFrame("FrameDemo");
-
-    // //2. Optional: What happens when the frame closes?
+    
+    // JFrame frame = new JFrame("FrameDemo");
     // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-    // // //3. Create components and put them in the frame.
-    // // //...create emptyLabel...
     // JLabel emptyLabel = new JLabel();
     // frame.getContentPane().add(emptyLabel, BorderLayout.CENTER);
-
-    // // //4. Size the frame.
     // frame.pack();
-
-    // // //5. Show it.
     // frame.setVisible(true);
   }
 
