@@ -125,13 +125,19 @@ public class NLImageClient {
     java.awt.Image image = reader.read(0, param);
     BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_RGB);
     //bufferedImage is the RenderedImage to be written
-
     Graphics2D g2 = bufferedImage.createGraphics();
     g2.drawImage(image, null, null);
+    System.out.println("g2.drawImage() img drawn...");
 
 
 
     
+    JFrame frame = new JFrame();
+    ImageIcon icon = new ImageIcon(bufferedImage);
+    JLabel label = new JLabel(icon);
+    frame.add(label);
+    frame.pack();
+    frame.setVisible(true);
 
 		// ImageIO.write(img, "jpg", baos);
 		// baos.flush();
