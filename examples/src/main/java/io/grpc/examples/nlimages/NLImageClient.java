@@ -34,24 +34,22 @@ public class NLImageClient {
     blockingStub = NLImageServiceGrpc.newBlockingStub(channel);
   }
 
-  private void displayImg() {
-    
+  private void displayImg(String filename) {
+    JFrame frame = new JFrame();
+    ImageIcon icon = new ImageIcon(filename);
+    JLabel label = new JLabel(icon);
+    frame.add(label);
+    frame.pack();
+    frame.setVisible(true);
   }
 
   /** 
    * Requests an image be rotated.
    */
   public void requestRotate(String name) throws IOException{
-    JFrame frame = new JFrame();
     String filename = "androidBook.jpg";
-    ImageIcon icon = new ImageIcon(filename);
+    displayImg(filename);
     byte[] byteArray = new byte[8]; // TODO: set based on img
-    JLabel label = new JLabel(icon);
-    frame.add(label);
-    frame.pack();
-    frame.setVisible(true);
-
-    // ??
     BufferedImage bimg = ImageIO.read(new File(filename));
     int width = bimg.getWidth();
     int height   = bimg.getHeight();
