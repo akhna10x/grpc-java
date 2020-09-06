@@ -60,17 +60,16 @@ public class NLImageClient {
    * Requests an image be rotated.
    */
   public void requestRotate(String filename, boolean isColor) throws IOException{
-    
     displayImg(filename);
     BufferedImage bimg = ImageIO.read(new File(filename));
     byte[] byteArray = 
         ((DataBufferByte) bimg.getData().getDataBuffer()).getData();
-      //new byte[8]; // TODO: set based on img
     
     int width = bimg.getWidth();
     int height   = bimg.getHeight();
     logger.info("_____Width: " + width);
     logger.info("____Height: " + height);
+    // logger.info("byteArray.length: ")
     NLImage nlImage = NLImage.newBuilder()
         .setColor(true)
         // .setData(ByteString.copyFrom(byteArray))
@@ -78,9 +77,11 @@ public class NLImageClient {
         .setWidth(width)
         .setHeight(height)
         .build();
- 
-    logger.info("Created NL object");
-    NLImageRotateRequest request = NLImageRotateRequest.newBuilder().build();
+    NLImageRotateRequest request = NLImageRotateRequest.newBuilder()
+        .setImage(nlImage)
+        .build();
+
+      
     NLImage response;
     try {
       response = blockingStub.rotateImage(request);
@@ -94,9 +95,12 @@ public class NLImageClient {
     // TODO display response
     // logger.info("Displayed response img...");
 
-    String sFilename = "s-result.png";//"s-result.jpg";
-    FileInputStream fis = new FileInputStream(sFilename);
 
+    /**
+     * Reads img objecrt -> bytes.
+     */
+    String sFilename = "s-result.png";
+    FileInputStream fis = new FileInputStream(sFilename);
     ByteArrayOutputStream baos=new ByteArrayOutputStream(1000);
     BufferedImage img=ImageIO.read(new File(sFilename));
     ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -107,62 +111,40 @@ public class NLImageClient {
             bos.write(buf, 0, readNum); 
             System.out.println("read " + readNum + " bytes,");
         }
-    } catch (IOException ex) {
-        // Logger.getLogger(ConvertImage.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (IOException e) {
+        logger.info("IOException: " + e.getMessage());
     }
-
     byte[] bytes = bos.toByteArray();
     System.out.println("bytesArray.length: " + bytes.length);
 
 
-    ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
-    Iterator<?> readers = ImageIO.getImageReadersByFormatName("png");
+    // /**
+    //  * Reads bytes back to img object.
+    //  */
+    // ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+    // Iterator<?> readers = ImageIO.getImageReadersByFormatName("png");
+    // ImageReader reader = (ImageReader) readers.next();
+    // Object source = bis; 
+    // ImageInputStream iis = ImageIO.createImageInputStream(source); 
+    // reader.setInput(iis, true);
+    // ImageReadParam param = reader.getDefaultReadParam();
+    // java.awt.Image image = reader.read(0, param);
+    // BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_RGB);
+    // //bufferedImage is the RenderedImage to be written
+    // Graphics2D g2 = bufferedImage.createGraphics();
+    // g2.drawImage(image, null, null);
+    // System.out.println("g2.drawImage() img drawn...");
+    // displayResponse(bufferedImage);
+  }
 
-    //ImageIO is a class containing static methods for locating ImageReaders
-    //and ImageWriters, and performing simple encoding and decoding. 
-
-    ImageReader reader = (ImageReader) readers.next();
-    Object source = bis; 
-    ImageInputStream iis = ImageIO.createImageInputStream(source); 
-    reader.setInput(iis, true);
-    ImageReadParam param = reader.getDefaultReadParam();
-
-    java.awt.Image image = reader.read(0, param);
-    BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_RGB);
-    //bufferedImage is the RenderedImage to be written
-    Graphics2D g2 = bufferedImage.createGraphics();
-    g2.drawImage(image, null, null);
-    System.out.println("g2.drawImage() img drawn...");
-
-
-
-    
+  private void displayResponse(BufferedImage bufferedImage) {
+    // TODO: implement
     JFrame frame = new JFrame();
     ImageIcon icon = new ImageIcon(bufferedImage);
     JLabel label = new JLabel(icon);
     frame.add(label);
     frame.pack();
     frame.setVisible(true);
-
-	
-
-    // JFrame frame = new JFrame();
-    // ImageIcon icon = new ImageIcon(filename);
-    // JLabel label = new JLabel(icon);
-    // frame.add(label);
-    // frame.pack();
-    // frame.setVisible(true);
-    
-    // JFrame frame = new JFrame("FrameDemo");
-    // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    // JLabel emptyLabel = new JLabel();
-    // frame.getContentPane().add(emptyLabel, BorderLayout.CENTER);
-    // frame.pack();
-    // frame.setVisible(true);
-  }
-
-  private void displayResponse() {
-
   }
 
   /**
@@ -188,8 +170,7 @@ public class NLImageClient {
     }
 
     ManagedChannel channel = ManagedChannelBuilder.forTarget(target)
-        // Channels are secure by default (via SSL/TLS). For the example we disable TLS to avoid
-        // needing certificates.
+        // TODO: add comment on security
         .usePlaintext()
         .build();
     try {
