@@ -84,6 +84,13 @@ public class NLImageClient {
     // TODO display response
     // logger.info("Displayed response img...");
 
+
+    JFrame frame = new JFrame();
+    ImageIcon icon = new ImageIcon(filename);
+    JLabel label = new JLabel(icon);
+    frame.add(label);
+    frame.pack();
+    frame.setVisible(true);
     
     // JFrame frame = new JFrame("FrameDemo");
     // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -91,6 +98,10 @@ public class NLImageClient {
     // frame.getContentPane().add(emptyLabel, BorderLayout.CENTER);
     // frame.pack();
     // frame.setVisible(true);
+  }
+
+  private void displayResponse() {
+
   }
 
   /**
