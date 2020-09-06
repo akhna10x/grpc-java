@@ -10,6 +10,7 @@ import io.grpc.Channel;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
+import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,6 +19,10 @@ import java.awt.image.BufferedImage;
 import javax.swing.*;
 import java.awt.*;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageReadParam;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
+ 
 
 /**
  * Client for managing requests to the Neuralink image service.
@@ -84,8 +89,7 @@ public class NLImageClient {
     // TODO display response
     // logger.info("Displayed response img...");
 
-    String sFilename = "s-result.jpg";
-    File file = new File("C:\\rose.jpg");
+    String sFilename = "s-result.png";//"s-result.jpg";
     FileInputStream fis = new FileInputStream(sFilename);
 
     ByteArrayOutputStream baos=new ByteArrayOutputStream(1000);
@@ -102,12 +106,12 @@ public class NLImageClient {
         // Logger.getLogger(ConvertImage.class.getName()).log(Level.SEVERE, null, ex);
     }
 
-    byte[] bytesArray = bos.toByteArray();
-    System.out.println("bytesArray.length: " + bytesArray.length);
+    byte[] bytes = bos.toByteArray();
+    System.out.println("bytesArray.length: " + bytes.length);
 
 
     ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
-    Iterator<?> readers = ImageIO.getImageReadersByFormatName("jpg");
+    Iterator<?> readers = ImageIO.getImageReadersByFormatName("png");
 
     //ImageIO is a class containing static methods for locating ImageReaders
     //and ImageWriters, and performing simple encoding and decoding. 
@@ -118,15 +122,16 @@ public class NLImageClient {
     reader.setInput(iis, true);
     ImageReadParam param = reader.getDefaultReadParam();
 
-    Image image = reader.read(0, param);
-    //got an image file
-
+    java.awt.Image image = reader.read(0, param);
     BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_RGB);
     //bufferedImage is the RenderedImage to be written
 
     Graphics2D g2 = bufferedImage.createGraphics();
     g2.drawImage(image, null, null);
 
+
+
+    
 
 		// ImageIO.write(img, "jpg", baos);
 		// baos.flush();
