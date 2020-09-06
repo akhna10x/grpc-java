@@ -18,6 +18,7 @@ import java.io.*;
 import java.awt.image.BufferedImage;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.DataBufferByte;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReadParam;
 import javax.imageio.ImageReader;
