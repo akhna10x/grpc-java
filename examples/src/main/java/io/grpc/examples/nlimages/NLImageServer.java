@@ -115,7 +115,8 @@ public class NLImageServer {
           byte[] bytes = reqImgBytes.toByteArray();
 
           ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
-          Iterator<?> readers = ImageIO.getImageReadersByFormatName("png");
+          // Iterator<?> readers = ImageIO.getImageReadersByFormatName("png");
+          Iterator<?> readers = ImageIO.getImageReadersByFormatName("bmp");
           ImageReader reader = (ImageReader) readers.next();
           Object source = bis; 
           ImageInputStream iis = ImageIO.createImageInputStream(source); 
