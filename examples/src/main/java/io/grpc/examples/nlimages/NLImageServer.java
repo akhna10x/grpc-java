@@ -36,11 +36,13 @@ public class NLImageServer {
       @Override
       public void run() {
         System.err.println("*** shutting down gRPC server since JVM is shutting down");
-          NLImageServer.this.stop();
+        try {
+           NLImageServer.this.stop();
         } catch (InterruptedException e) {
           e.printStackTrace(System.err);
         }
         System.err.println("*** server shut down");
+        
       }
     });
   }
@@ -68,39 +70,35 @@ public class NLImageServer {
     server.start();
     server.blockUntilShutdown();
   }
-// NLImageService
-static class NLImageServiceImpl extends NLImageServiceGrpc.NLImageServiceImplBase  {
-
-    @Override
-    public void rotateImage(NLImageRotateRequest req, StreamObserver<NLImage> responseObserver) {
-      logger.info("Runng RotateImage() impl...."); 
-          // TODO handle error
 
 
-      // TODO: display client img (debug)
+  // NLImageService
+  static class NLImageServiceImpl extends NLImageServiceGrpc.NLImageServiceImplBase  {
+      @Override
+      public void rotateImage(NLImageRotateRequest req, StreamObserver<NLImage> responseObserver) {
+        logger.info("Runng RotateImage() impl...."); 
+        // TODO handle error
 
-
-      // TODO: return valid response
-      int TMP_SIZE = 70;
-      byte[] rotatedImg = new byte[TMP_SIZE];
-      NLImage reply = NLImage.newBuilder()
-        .setWidth(TMP_SIZE)
-        .setHeight(TMP_SIZE)
+        // TODO: return valid response
+        int TMP_SIZE = 70;
+        byte[] rotatedImg = new byte[TMP_SIZE];
+        NLImage reply = NLImage.newBuilder()
+          .setWidth(TMP_SIZE)
+          .setHeight(TMP_SIZE)
+          // .setData()
+          .build();
         // TODO: set data
-        // .setData()
-        .build();
 
-
-      responseObserver.onNext(reply);
-      responseObserver.onCompleted();
-    }
-    
-    @Override 
-    public void customImageEndpoint(NLCustomImageEndpointRequest req, 
-                                    StreamObserver<NLCustomImageEndpointResponse> responseObserver) {
-       // TODO: embed Neuralink logo
-       logger.info("Running customImageEndpoint() ...");
-    }
+        responseObserver.onNext(reply);
+        responseObserver.onCompleted();
+      }
+      
+      @Override 
+      public void customImageEndpoint(NLCustomImageEndpointRequest req, 
+                                      StreamObserver<NLCustomImageEndpointResponse> responseObserver) {
+        // TODO: embed Neuralink logo
+        logger.info("Running customImageEndpoint() ...");
+      }
+  }
 }
 
-}
