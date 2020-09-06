@@ -20,48 +20,42 @@ import java.awt.*;
 import javax.imageio.ImageIO;
 
 /**
- * A simple client that requests a greeting from the {@link HelloWorldServer}.
+ * Client for managing requests to the Neuralink image service.
  */
 public class NLImageClient {
   private static final Logger logger = Logger.getLogger(NLImageClient.class.getName());
 
-  // private final GreeterGrpc.GreeterBlockingStub blockingStub;
   private final NLImageServiceGrpc.NLImageServiceBlockingStub blockingStub;
 
-
-  /** Construct client for accessing HelloWorld server using the existing channel. */
+  /** 
+   * Creates an NLImageClient using the provided channel.
+   **/
   public NLImageClient(Channel channel) {
-    // 'channel' here is a Channel, not a ManagedChannel, so it is not this code's responsibility to
-    // shut it down.
-
-    // Passing Channels to code makes code easier to test and makes it easier to reuse Channels.
-    // blockingStub = GreeterGrpc.newBlockingStub(channel);
     blockingStub = NLImageServiceGrpc.newBlockingStub(channel);
   }
 
-  /** Say hello to server. */
+  private void displayImg
+
+  /** 
+   * Requests an image be rotated.
+   */
   public void requestRotate(String name) throws IOException{
-    logger.info("Will try to greet " + name + " ...");
-    byte[] byteArray = new byte[8];
-    
     JFrame frame = new JFrame();
     String filename = "androidBook.jpg";
     ImageIcon icon = new ImageIcon(filename);
+    byte[] byteArray = new byte[8]; // TODO: set based on img
     JLabel label = new JLabel(icon);
-    // java.awt.Image img = icon.GetImage();
+    frame.add(label);
+    frame.pack();
+    frame.setVisible(true);
+
+    // ??
     BufferedImage bimg = ImageIO.read(new File(filename));
     int width = bimg.getWidth();
     int height   = bimg.getHeight();
     logger.info("_____Width: " + width);
     logger.info("____Height: " + height);
-    // logger.info("Rotation request..." + )
 
-    // logger.info("img.class:", img.class);
-
-    frame.add(label);
-    // // frame.setDefaultCloseOperation
-    frame.pack();
-    frame.setVisible(true);
 
     NLImage nlImage = NLImage.newBuilder()
         .setColor(true)
