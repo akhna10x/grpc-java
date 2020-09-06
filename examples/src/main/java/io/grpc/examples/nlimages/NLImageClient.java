@@ -61,14 +61,18 @@ public class NLImageClient {
   public void requestRotate(String filename, boolean isColor) throws IOException{
     
     displayImg(filename);
-    byte[] byteArray = new byte[8]; // TODO: set based on img
     BufferedImage bimg = ImageIO.read(new File(filename));
+    byte[] byteArray = 
+        ((DataBufferByte) bimg.getData().getDataBuffer()).getData();
+      //new byte[8]; // TODO: set based on img
+    
     int width = bimg.getWidth();
     int height   = bimg.getHeight();
     logger.info("_____Width: " + width);
     logger.info("____Height: " + height);
     NLImage nlImage = NLImage.newBuilder()
         .setColor(true)
+        // .setData(ByteString.copyFrom(byteArray))
         .setData(ByteString.copyFrom(byteArray))
         .setWidth(width)
         .setHeight(height)
@@ -177,7 +181,6 @@ public class NLImageClient {
         System.err.println("  target  The server to connect to. Defaults to " + target);
         System.exit(1);
       }
-      user = args[0];
     }
     if (args.length > 1) {
       target = args[1];
