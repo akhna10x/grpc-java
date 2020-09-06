@@ -58,8 +58,8 @@ public class NLImageClient {
   /** 
    * Requests an image be rotated.
    */
-  public void requestRotate(String name) throws IOException{
-    String filename = "androidBook.jpg";
+  public void requestRotate(String filename, boolean isColor) throws IOException{
+    
     displayImg(filename);
     byte[] byteArray = new byte[8]; // TODO: set based on img
     BufferedImage bimg = ImageIO.read(new File(filename));
@@ -139,11 +139,7 @@ public class NLImageClient {
     frame.pack();
     frame.setVisible(true);
 
-		// ImageIO.write(img, "jpg", baos);
-		// baos.flush();
- 
-		// String base64String=Base64.encode(baos.toByteArray());
-		// baos.close();
+	
 
     // JFrame frame = new JFrame();
     // ImageIcon icon = new ImageIcon(filename);
@@ -171,7 +167,6 @@ public class NLImageClient {
    * greeting. The second argument is the target server.
    */
   public static void main(String[] args) throws Exception {
-    String user = "world-x";
     // Access a service running on the local machine on port 50051
     String target = "localhost:50051";
     // Allow passing in the user and target strings as command line arguments
@@ -188,8 +183,6 @@ public class NLImageClient {
       target = args[1];
     }
 
-    // Create a communication channel to the server, known as a Channel. Channels are thread-safe
-    // and reusable.
     ManagedChannel channel = ManagedChannelBuilder.forTarget(target)
         // Channels are secure by default (via SSL/TLS). For the example we disable TLS to avoid
         // needing certificates.
@@ -197,11 +190,10 @@ public class NLImageClient {
         .build();
     try {
       NLImageClient client = new NLImageClient(channel);
-      client.requestRotate(user);
+      String filename = "androidBook.jpg";
+      boolean isColor = true;
+      client.requestRotate(filename, isColor);
     } finally {
-      // ManagedChannels use resources like threads and TCP connections. To prevent leaking these
-      // resources the channel should be shut down when it will no longer be used. If it may be used
-      // again leave it running.
       channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
     }
   }
