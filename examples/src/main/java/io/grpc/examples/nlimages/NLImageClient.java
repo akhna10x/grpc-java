@@ -41,12 +41,12 @@ public class NLImageClient {
   }
 
   private void displayImg(String filename) {
-    JFrame frame = new JFrame();
-    ImageIcon icon = new ImageIcon(filename);
-    JLabel label = new JLabel(icon);
-    frame.add(label);
-    frame.pack();
-    frame.setVisible(true);
+    // JFrame frame = new JFrame();
+    // ImageIcon icon = new ImageIcon(filename);
+    // JLabel label = new JLabel(icon);
+    // frame.add(label);
+    // frame.pack();
+    // frame.setVisible(true);
   }
 
   // TODO: remove filename parameter
@@ -139,12 +139,13 @@ public class NLImageClient {
 
   private void displayResponse(BufferedImage bufferedImage) {
     // TODO: implement
-    JFrame frame = new JFrame();
-    ImageIcon icon = new ImageIcon(bufferedImage);
-    JLabel label = new JLabel(icon);
-    frame.add(label);
-    frame.pack();
-    frame.setVisible(true);
+
+    // JFrame frame = new JFrame();
+    // ImageIcon icon = new ImageIcon(bufferedImage);
+    // JLabel label = new JLabel(icon);
+    // frame.add(label);
+    // frame.pack();
+    // frame.setVisible(true);
   }
 
   /**
