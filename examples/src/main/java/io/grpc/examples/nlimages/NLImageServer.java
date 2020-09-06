@@ -33,38 +33,18 @@ public class NLImageServer {
         .start();
     logger.info("Server started, listening on " + port);
     logger.info("Initializing NL objects....");
-    // new NLImageBuilder();
-    // NLImage.builder();
-    // new NLImage().builder();
-    // NLImage.newBuilder().build();
     NLImage nlImage = 
         NLImage.newBuilder().build();
-    //new NLImageBuilder.newBuilder().build();
-    // ;// = new NLImage();
-
-
-
-
-    
-    // JFrame frame = new JFrame("FrameDemo");
-    // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    // // //3. Create components and put them in the frame.
-    // // //...create emptyLabel...
-    // JLabel emptyLabel = new JLabel();
-    // frame.getContentPane().add(emptyLabel, BorderLayout.CENTER);
-    // // //4. Size the frame.
-    // frame.pack();
-    // frame.setVisible(true);
 
     // 9-4-2020
-    JFrame frame = new JFrame();
-    ImageIcon icon = new ImageIcon("androidBook.jpg");
-    JLabel label = new JLabel(icon);
-    frame.add(label);
-    frame.setDefaultCloseOperation
-          (JFrame.EXIT_ON_CLOSE);
-    frame.pack();
-    // frame.setVisible(true);
+    // JFrame frame = new JFrame();
+    // ImageIcon icon = new ImageIcon("androidBook.jpg");
+    // JLabel label = new JLabel(icon);
+    // frame.add(label);
+    // frame.setDefaultCloseOperation
+    //       (JFrame.EXIT_ON_CLOSE);
+    // frame.pack();
+    // // frame.setVisible(true);
 
     logger.info("Created window frame...");
 
