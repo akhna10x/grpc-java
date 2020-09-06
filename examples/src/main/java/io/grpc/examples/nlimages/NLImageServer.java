@@ -16,7 +16,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Server that manages startup/shutdown of a {@code Greeter} server.
+ * Neuralink image service server.
  */
 public class NLImageServer {
   private static final Logger logger = Logger.getLogger(NLImageServer.class.getName());
@@ -24,36 +24,18 @@ public class NLImageServer {
   private Server server;
 
   private void start() throws IOException {
-    /* The port on which the server should run */
     int port = 50051;
     server = ServerBuilder.forPort(port)
-        // .addService(new GreeterImpl())
         .addService(new NLImageServiceImpl())
         .build()
         .start();
-    logger.info("Server started, listening on " + port);
-    logger.info("Initializing NL objects....");
-    NLImage nlImage = 
-        NLImage.newBuilder().build();
-
-    // 9-4-2020
-    // JFrame frame = new JFrame();
-    // ImageIcon icon = new ImageIcon("androidBook.jpg");
-    // JLabel label = new JLabel(icon);
-    // frame.add(label);
-    // frame.setDefaultCloseOperation
-    //       (JFrame.EXIT_ON_CLOSE);
-    // frame.pack();
-    // // frame.setVisible(true);
-
-    logger.info("Created window frame...");
+    logger.info("Listening on " + port);
+    NLImage nlImage =  NLImage.newBuilder().build();
 
     Runtime.getRuntime().addShutdownHook(new Thread() {
       @Override
       public void run() {
-        // Use stderr here since the logger may have been reset by its JVM shutdown hook.
         System.err.println("*** shutting down gRPC server since JVM is shutting down");
-        try {
           NLImageServer.this.stop();
         } catch (InterruptedException e) {
           e.printStackTrace(System.err);
@@ -70,7 +52,7 @@ public class NLImageServer {
   }
 
   /**
-   * Await termination on the main thread since the grpc library uses daemon threads.
+   * Blocks until server is shutdown.
    */
   private void blockUntilShutdown() throws InterruptedException {
     if (server != null) {
@@ -79,7 +61,7 @@ public class NLImageServer {
   }
 
   /**
-   * Main launches the server from the command line.
+   * Launches the server from the command line.
    */
   public static void main(String[] args) throws IOException, InterruptedException {
     final NLImageServer server = new NLImageServer();
@@ -94,21 +76,24 @@ static class NLImageServiceImpl extends NLImageServiceGrpc.NLImageServiceImplBas
       logger.info("Runng RotateImage() impl...."); 
           // TODO handle error
 
+
+      // TODO: display client img (debug)
+
+
       // TODO: return valid response
       int TMP_SIZE = 70;
       byte[] rotatedImg = new byte[TMP_SIZE];
       NLImage reply = NLImage.newBuilder()
         .setWidth(TMP_SIZE)
         .setHeight(TMP_SIZE)
+        // TODO: set data
         // .setData()
         .build();
-      // TODO: set data
+
 
       responseObserver.onNext(reply);
       responseObserver.onCompleted();
     }
-    
-
     
     @Override 
     public void customImageEndpoint(NLCustomImageEndpointRequest req, 
@@ -118,14 +103,4 @@ static class NLImageServiceImpl extends NLImageServiceGrpc.NLImageServiceImplBas
     }
 }
 
-  
-  //     logger.info("Runng sayHello() impl...."); 
-  //     HelloReply reply = HelloReply.newBuilder().setMessage("Hello " + req.getName()).build();
-
-  //     //  TODO: remove                                               
-
-  //     responseObserver.onNext(reply);
-  //     responseObserver.onCompleted();
-  //   }
-  // }
 }
