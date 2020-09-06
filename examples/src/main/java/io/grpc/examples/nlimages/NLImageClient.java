@@ -34,7 +34,9 @@ public class NLImageClient {
     blockingStub = NLImageServiceGrpc.newBlockingStub(channel);
   }
 
-  private void displayImg
+  private void displayImg() {
+    
+  }
 
   /** 
    * Requests an image be rotated.
