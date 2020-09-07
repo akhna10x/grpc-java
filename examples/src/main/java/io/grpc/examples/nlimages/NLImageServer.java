@@ -170,7 +170,7 @@ public class NLImageServer {
         // at.concatenate(AffineTransform.getTranslateInstance(0, -image.getHeight()));
         // return createTransformed(image, at);
 
-      return rotate(image, 180.0)
+      return rotate(image, 180.0);
     }
 
       @Override
