@@ -208,9 +208,15 @@ public class NLImageServer {
       //   // icon.getImage().getBytes();
       //      reqImgBytes;
       // byte[] imageBytes = 
-      byte[] responseData = 
-        ((DataBufferByte) ((BufferedImage) 
+      int[] responseInts = 
+        ((java.awt.image.DataBufferInt) ((BufferedImage) 
             icon.getImage()).getData().getDataBuffer()).getData();
+      byte[] reponseData = new byte[responseInts.length];
+      for (int i = 0; i < reponseData.length; ++i) {
+        reponseData[i] = (byte) responseInts[i];
+      }
+
+
 
       /**
        * Sends reply back.
@@ -220,7 +226,7 @@ public class NLImageServer {
       NLImage reply = NLImage.newBuilder()
           .setWidth(width)
           .setHeight(height)
-          .setData(ByteString.copyFrom(responseData))
+          // .setData(ByteString.copyFrom(responseData))
           .build();
       responseObserver.onNext(reply);
       responseObserver.onCompleted();
