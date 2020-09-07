@@ -71,18 +71,8 @@ public class NLImageClient {
     logger.info("_____Width: " + width);
     logger.info("____Height: " + height);
     // logger.info("byteArray.length: ")
-    NLImage nlImage = NLImage.newBuilder()
-        .setColor(true)
-        // .setData(ByteString.copyFrom(byteArray))
-        .setData(ByteString.copyFrom(byteArray))
-        .setWidth(width)
-        .setHeight(height)
-        .build();
-    NLImageRotateRequest request = NLImageRotateRequest.newBuilder()
-        .setImage(nlImage)
-        .build();
 
-     /**
+    /**
      * Reads img objecrt -> bytes.
      */
     String sFilename = "s-result.png";
@@ -104,17 +94,30 @@ public class NLImageClient {
     System.out.println("bytesArray.length: " + bytes.length);
     // TODO: 9-4: just send bytes
 
+
+
+    NLImage nlImage = NLImage.newBuilder()
+        .setColor(true)
+        // .setData(ByteString.copyFrom(byteArray))
+        .setData(ByteString.copyFrom(byteArray))
+        .setWidth(width)
+        .setHeight(height)
+        .build();
+    NLImageRotateRequest request = NLImageRotateRequest.newBuilder()
+        .setImage(nlImage)
+        .build();
+
+     
+
+
+
+
     // Object source = ByteString.copyFrom(byteArray);
     ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
     Object source = bis; 
     ImageInputStream iis = ImageIO.createImageInputStream(source); 
-    //   //bis; 
-    // ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
     Iterator<?> readers = ImageIO.getImageReadersByFormatName("png");
     ImageReader reader = (ImageReader) readers.next();
-    // Object source = bis; 
-    // Iterator<?> readers = ImageIO.getImageReadersByFormatName("png");
-    // ImageReader reader = (ImageReader) readers.next();
     
     reader.setInput(iis, true);
     ImageReadParam param = reader.getDefaultReadParam();
