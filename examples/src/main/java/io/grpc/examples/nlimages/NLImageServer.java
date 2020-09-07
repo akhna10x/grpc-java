@@ -1,7 +1,7 @@
 /*
  * Neuralink image server.
  */
-
+ 
 package io.grpc.examples.nlimages;
 
 import com.google.protobuf.ByteString;
@@ -32,6 +32,7 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageReadParam;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
+import java.awt.geom.AffineTransform;
 
 import javax.swing.*;
 import java.awt.*;
@@ -98,23 +99,45 @@ public class NLImageServer {
     public static ImageIcon getImageFromArray(byte[] bytes, int width, int height) {
       // TODO: verify conversion  
       int[] pixels = new int[bytes.length];
-      // @nxt: __ 
-
       // ALt just send file byes
       for (int i = 0; i < bytes.length; ++i) {
         pixels[i] = bytes[i];
       }
-
       BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
       WritableRaster raster = (WritableRaster) image.getData();
       raster.setPixels(0,0,width,height,pixels);
-
       return new ImageIcon(image);
     }
 
-    public ImageIcon createImage(byte[] b){
-      return new ImageIcon(b);
-   }
+    public ImageIcon createImage(byte[] b, int width, int height) {
+        ImageIcon icon = new ImageIcon(b);
+        java.awt.Image rawImage = icon.getImage();
+
+        // BufferedImage image = new  BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        // WritableRaster raster = (WritableRaster) image.getData();
+        // raster.setPixels(0,0,width,height,pixels);
+        // icon.setImage(createFlipped(new BufferedImage(icon.getImage())));
+        return icon;
+    }
+
+    private static BufferedImage createTransformed(BufferedImage image, AffineTransform at) {
+        BufferedImage newImage = new BufferedImage(
+            image.getWidth(), image.getHeight(),
+            BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = newImage.createGraphics();
+        g.transform(at);
+        g.drawImage(image, 0, 0, null);
+        g.dispose();
+        return newImage;
+    }
+
+    private static BufferedImage createFlipped(BufferedImage image){
+        AffineTransform at = new AffineTransform();
+        at.concatenate(AffineTransform.getScaleInstance(1, -1));
+        at.concatenate(AffineTransform.getTranslateInstance(0, -image.getHeight()));
+        return createTransformed(image, at);
+    }
+
 
       @Override
       public void rotateImage(NLImageRotateRequest req, StreamObserver<NLImage> responseObserver) {
@@ -129,7 +152,7 @@ public class NLImageServer {
         ByteString reqImgBytes = reqImg.getData();
         logger.info("__ reqImgBytes.size(): " + reqImgBytes.size());
         byte[] bytes = reqImgBytes.toByteArray();
-        ImageIcon icon = createImage(bytes);
+        ImageIcon icon = createImage(bytes, width, height);
         displayResponse(icon);
         logger.info("displayResponse");
         ByteString responseData = reqImgBytes;
