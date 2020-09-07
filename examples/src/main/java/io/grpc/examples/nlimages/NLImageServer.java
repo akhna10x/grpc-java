@@ -34,6 +34,9 @@ import javax.imageio.ImageReadParam;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 import java.awt.geom.AffineTransform;
+import java.awt.GraphicsEnvironment;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsConfiguration;
 
 import javax.swing.*;
 import java.awt.*;
@@ -144,13 +147,31 @@ public class NLImageServer {
         return newImage;
     }
 
-    private static BufferedImage createFlipped(BufferedImage image){
-        AffineTransform at = new AffineTransform();
-        at.concatenate(AffineTransform.getScaleInstance(1, -1));
-        at.concatenate(AffineTransform.getTranslateInstance(0, -image.getHeight()));
-        return createTransformed(image, at);
+    public static GraphicsConfiguration getDefaultConfiguration() {
+      GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+      GraphicsDevice gd = ge.getDefaultScreenDevice();
+      return gd.getDefaultConfiguration();
+    }
+    
+    public static BufferedImage rotate(BufferedImage image, double angle) {
+        int w = image.getWidth(), h = image.getHeight();
+        GraphicsConfiguration gc = getDefaultConfiguration();
+        BufferedImage result = gc.createCompatibleImage(w, h);
+        Graphics2D g = result.createGraphics();
+        g.rotate(Math.toRadians(angle), w / 2, h / 2);
+        g.drawRenderedImage(image, null);
+        g.dispose();
+        return result;
     }
 
+    private static BufferedImage createFlipped(BufferedImage image){
+        // AffineTransform at = new AffineTransform();
+        // at.concatenate(AffineTransform.getScaleInstance(1, -1));
+        // at.concatenate(AffineTransform.getTranslateInstance(0, -image.getHeight()));
+        // return createTransformed(image, at);
+
+      return rotate(image, 180.0)
+    }
 
       @Override
       public void rotateImage(NLImageRotateRequest req, StreamObserver<NLImage> responseObserver) {
