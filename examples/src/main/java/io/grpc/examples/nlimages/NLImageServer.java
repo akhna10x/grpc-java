@@ -192,31 +192,6 @@ public class NLImageServer {
         ByteString responseData = reqImgBytes;
 
         /**
-         * Reads bytes back to img object.
-         */
-        // try {
-        //   byte[] bytes = reqImgBytes.toByteArray();
-
-        //   ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
-        //   // Iterator<?> readers = ImageIO.getImageReadersByFormatName("png");
-        //   Iterator<?> readers = ImageIO.getImageReadersByFormatName("bmp");
-        //   ImageReader reader = (ImageReader) readers.next();
-        //   Object source = bis; 
-        //   ImageInputStream iis = ImageIO.createImageInputStream(source); 
-        //   reader.setInput(iis, true);
-        //   ImageReadParam param = reader.getDefaultReadParam();
-        //   java.awt.Image image = reader.read(0, param);
-        //   BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_RGB);
-        //   //bufferedImage is the RenderedImage to be written
-        //   Graphics2D g2 = bufferedImage.createGraphics();
-        //   g2.drawImage(image, null, null);
-        //   System.out.println("g2.drawImage() img drawn...");
-        //   displayResponse(bufferedImage);
-        // } catch(IOException e) {
-        //   logger.info("IOException: " + e.getMessage());
-        // }
-
-        /**
          * Sends reply back.
          */ 
         NLImage reply = NLImage.newBuilder()
