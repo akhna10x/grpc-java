@@ -97,8 +97,11 @@ public class NLImageServer {
   static class NLImageServiceImpl extends NLImageServiceGrpc.NLImageServiceImplBase  {
     
     public static ImageIcon getImageFromArray(byte[] bytes, int width, int height) {
-      // TODO: verify conversion
+      // TODO: verify conversion  
       int[] pixels = new int[bytes.length];
+      // @nxt: __ 
+
+      // ALt just send file byes
       for (int i = 0; i < bytes.length; ++i) {
         pixels[i] = bytes[i];
       }
@@ -106,6 +109,7 @@ public class NLImageServer {
       BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
       WritableRaster raster = (WritableRaster) image.getData();
       raster.setPixels(0,0,width,height,pixels);
+
       return new ImageIcon(image);
     }
 
