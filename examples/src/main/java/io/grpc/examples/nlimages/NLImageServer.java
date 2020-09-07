@@ -166,8 +166,6 @@ public class NLImageServer {
       GraphicsConfiguration gc = getDefaultConfiguration();
       BufferedImage result = gc.createCompatibleImage(w, h);
       try {
-          // BufferedImage sourceImage = ImageIO.read(sourceImageFile);
-          // File sourceImageFile
           String filename = "watermark.png";
           BufferedImage watermarkImage = ImageIO.read(new File("watermark.png"));
           
@@ -181,8 +179,10 @@ public class NLImageServer {
           g2d.drawImage(watermarkImage, topLeftX, topLeftY, null);
           System.out.println("The image watermark is added to the image.");
    
-          g.drawRenderedImage(watermarkImage, null);
+          // g.drawRenderedImage(watermarkImage, null);
+        
           g.dispose();
+          return sourceImage;
           
       } catch (IOException ex) {
           System.err.println(ex);
@@ -194,7 +194,8 @@ public class NLImageServer {
       return rotate(image, 180.0);
     }
     private static BufferedImage createWatermarked(BufferedImage image){
-      return rotate(image, 180.0);
+      return addImageWatermark(image);
+      // rotate(image, 180.0);
     }
 
       @Override
