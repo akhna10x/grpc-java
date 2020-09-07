@@ -168,7 +168,6 @@ public class NLImageServer {
           String filename = "watermark.png";
           BufferedImage watermarkImage = ImageIO.read(new File("watermark.png"));
           
-          
           Graphics2D g = result.createGraphics();
           Graphics2D g2d = (Graphics2D) sourceImage.getGraphics();
           AlphaComposite alphaChannel = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f);
@@ -177,9 +176,6 @@ public class NLImageServer {
           int topLeftY = (sourceImage.getHeight() - watermarkImage.getHeight()) / 2;
           g2d.drawImage(watermarkImage, topLeftX, topLeftY, null);
           System.out.println("The image watermark is added to the image.");
-   
-          // g.drawRenderedImage(watermarkImage, null);
-        
           g.dispose();
           return sourceImage;
           
@@ -194,32 +190,25 @@ public class NLImageServer {
     }
     private static BufferedImage createWatermarked(BufferedImage image){
       return addImageWatermark(image);
-      // rotate(image, 180.0);
     }
 
       @Override
       public void rotateImage(NLImageRotateRequest req, StreamObserver<NLImage> responseObserver) {
-        logger.info("Runng RotateImage() impl...."); 
-        // TODO handle error
-        // TODO: return valid response
-        // int TMP_SIZE = 70;
         NLImage reqImg = req.getImage();
         int height = reqImg.getHeight();
         int width = reqImg.getWidth();
         byte[] rotatedImg = new byte[width * height];
         ByteString reqImgBytes = reqImg.getData();
-        logger.info("__ reqImgBytes.size(): " + reqImgBytes.size());
         byte[] bytes = reqImgBytes.toByteArray();
-        // ImageIcon icon = createImage(bytes, width, height);
-        // displayResponse(icon);
         ImageIcon icon = createWatermarkImage(bytes, width, height);
         displayResponse(icon);
-        logger.info("displayResponse");
         ByteString responseData = reqImgBytes;
 
         /**
          * Sends reply back.
          */ 
+        int newWidth = width;
+        int newHeight = height;
         NLImage reply = NLImage.newBuilder()
             .setWidth(width)
             .setHeight(height)

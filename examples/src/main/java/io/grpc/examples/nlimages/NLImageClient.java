@@ -56,6 +56,16 @@ public class NLImageClient {
     return icon;
   }
 
+
+  private void displayResponse(ImageIcon icon) {
+    // TODO: remove this method
+    JFrame frame = new JFrame();
+    JLabel label = new JLabel(icon);
+    frame.add(label);
+    frame.pack();
+    frame.setVisible(true);
+  }
+
   /** 
    * Requests an image be rotated.
    */
@@ -108,12 +118,6 @@ public class NLImageClient {
         .setImage(nlImage)
         .build();
 
-     
-
-
-
-
-    // Object source = ByteString.copyFrom(byteArray);
     ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
     Object source = bis; 
     ImageInputStream iis = ImageIO.createImageInputStream(source); 
@@ -129,7 +133,6 @@ public class NLImageClient {
     g2.drawImage(image, null, null);
     System.out.println("g2.drawImage() img drawn...");
     displayResponse(bufferedImage);
-
       
     NLImage response;
     try {
@@ -143,8 +146,13 @@ public class NLImageClient {
     logger.info("Neuralink response height : " + response.getHeight());
     // TODO display response
     // logger.info("Displayed response img...");
-
-
+    // NLImage respImg = response.getImage();
+    ByteString respImgBytes = response.getData();
+    logger.info("__ reqImgBytes.size(): " + respImgBytes.size());
+    byte[] rBytes = respImgBytes.toByteArray();
+    ImageIcon icon = createRespImage(rBytes, response.getWidth(), response.getHeight() );
+    displayResponse(icon);
+  
    
 
 
@@ -165,6 +173,13 @@ public class NLImageClient {
     // g2.drawImage(image, null, null);
     // System.out.println("g2.drawImage() img drawn...");
     // displayResponse(bufferedImage);
+  }
+
+  private ImageIcon createRespImage(byte[] b, int width, int height) {
+    ImageIcon icon = new ImageIcon(b);
+    // java.awt.Image rawImage = icon.getImage();
+    // BufferedImage image = convertToBufferedImage(rawImage);
+    return icon;
   }
 
   private void displayResponse(BufferedImage bufferedImage) {
