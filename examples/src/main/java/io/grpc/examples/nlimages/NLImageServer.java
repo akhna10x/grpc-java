@@ -8,6 +8,7 @@ import com.google.protobuf.ByteString;
 import com.neuralink.interviewing.*;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+import java.awt.Graphics2D;
 import io.grpc.stub.StreamObserver;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -109,14 +110,26 @@ public class NLImageServer {
       return new ImageIcon(image);
     }
 
+    public static BufferedImage convertToBufferedImage(
+            java.awt.Image image) {
+        BufferedImage newImage = new BufferedImage(
+            image.getWidth(null), image.getHeight(null),
+            BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = newImage.createGraphics();
+        g.drawImage(image, 0, 0, null);
+        g.dispose();
+        return newImage;
+    }
+
     public ImageIcon createImage(byte[] b, int width, int height) {
         ImageIcon icon = new ImageIcon(b);
         java.awt.Image rawImage = icon.getImage();
-
+        BufferedImage image = convertToBufferedImage(rawImage);
+        //(BufferedImage) rawImage;
         // BufferedImage image = new  BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        // WritableRaster raster = (WritableRaster) image.getData();
-        // raster.setPixels(0,0,width,height,pixels);
-        // icon.setImage(createFlipped(new BufferedImage(icon.getImage())));
+        // // WritableRaster raster = (WritableRaster) image.getData();
+        // // raster.setPixels(0,0,width,height,pixels);
+        icon.setImage(createFlipped(image));
         return icon;
     }
 
