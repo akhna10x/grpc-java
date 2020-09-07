@@ -192,51 +192,50 @@ public class NLImageServer {
       return addImageWatermark(image);
     }
 
-      @Override
-      public void rotateImage(NLImageRotateRequest req, StreamObserver<NLImage> responseObserver) {
-        NLImage reqImg = req.getImage();
-        int height = reqImg.getHeight();
-        int width = reqImg.getWidth();
-        byte[] rotatedImg = new byte[width * height];
-        ByteString reqImgBytes = reqImg.getData();
-        byte[] bytes = reqImgBytes.toByteArray();
-        ImageIcon icon = createWatermarkImage(bytes, width, height);
-        displayResponse(icon);
-        ByteString responseData = reqImgBytes;
+    @Override
+    public void rotateImage(NLImageRotateRequest req, StreamObserver<NLImage> responseObserver) {
+      NLImage reqImg = req.getImage();
+      int height = reqImg.getHeight();
+      int width = reqImg.getWidth();
+      byte[] rotatedImg = new byte[width * height];
+      ByteString reqImgBytes = reqImg.getData();
+      byte[] bytes = reqImgBytes.toByteArray();
+      ImageIcon icon = createWatermarkImage(bytes, width, height);
+      displayResponse(icon);
+      // icon.getImage();
 
-        /**
-         * Sends reply back.
-         */ 
-        int newWidth = width;
-        int newHeight = height;
-        NLImage reply = NLImage.newBuilder()
-            .setWidth(width)
-            .setHeight(height)
-            // .setData()
-            .build();
-            // TODO: set data
-        responseObserver.onNext(reply);
-        responseObserver.onCompleted();
-      }
+      // ByteString responseData =
+      //   // icon.getImage().getBytes();
+      //      reqImgBytes;
+      // byte[] imageBytes = 
+      byte[] responseData = 
+        ((DataBufferByte) ((BufferedImage) 
+            icon.getImage()).getData().getDataBuffer()).getData();
+
+      /**
+       * Sends reply back.
+       */ 
+      int newWidth = width;
+      int newHeight = height;
+      NLImage reply = NLImage.newBuilder()
+          .setWidth(width)
+          .setHeight(height)
+          .setData(ByteString.copyFrom(responseData))
+          .build();
+      responseObserver.onNext(reply);
+      responseObserver.onCompleted();
+    }
 
       private void displayResponse(ImageIcon icon) {
         // TODO: remove this method
-        // JFrame frame = new JFrame();
-        // JLabel label = new JLabel(icon);
-        // frame.add(label);
-        // frame.pack();
-        // frame.setVisible(true);
+        JFrame frame = new JFrame();
+        JLabel label = new JLabel(icon);
+        frame.add(label);
+        frame.pack();
+        frame.setVisible(true);
       }
 
-      private void displayResponse(BufferedImage bufferedImage) {
-        // TODO: remove this method
-        // JFrame frame = new JFrame();
-        // ImageIcon icon = new ImageIcon(bufferedImage);
-        // JLabel label = new JLabel(icon);
-        // frame.add(label);
-        // frame.pack();
-        // frame.setVisible(true);
-      }
+      
     
       private ImageIcon bytesToIcon() {
         return null;

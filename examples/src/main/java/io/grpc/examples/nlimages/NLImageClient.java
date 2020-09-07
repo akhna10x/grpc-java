@@ -73,27 +73,23 @@ public class NLImageClient {
     displayImg(filename);
     BufferedImage bimg = ImageIO.read(new File(filename));
     byte[] byteArray = 
-        // bimg.getData().getDataBuffer();
         ((DataBufferByte) bimg.getData().getDataBuffer()).getData();
-    
     int width = bimg.getWidth();
     int height   = bimg.getHeight();
     logger.info("_____Width: " + width);
     logger.info("____Height: " + height);
-    // logger.info("byteArray.length: ")
 
     /**
-     * Reads img objecrt -> bytes.
+     * Reads img object -> bytes.
      */
     String sFilename = "s-result.png";
     FileInputStream fis = new FileInputStream(sFilename);
-    ByteArrayOutputStream baos=new ByteArrayOutputStream(1000);
-    BufferedImage img=ImageIO.read(new File(sFilename));
+    ByteArrayOutputStream baos = new ByteArrayOutputStream(1000);
+    BufferedImage img = ImageIO.read(new File(sFilename));
     ByteArrayOutputStream bos = new ByteArrayOutputStream();
     byte[] buf = new byte[1024];
     try {
         for (int readNum; (readNum = fis.read(buf)) != -1;) {
-            //Writes to this byte array output stream
             bos.write(buf, 0, readNum); 
             System.out.println("read " + readNum + " bytes,");
         }
@@ -101,15 +97,11 @@ public class NLImageClient {
         logger.info("IOException: " + e.getMessage());
     }
     byte[] bytes = bos.toByteArray();
-    System.out.println("bytesArray.length: " + bytes.length);
-    // TODO: 9-4: just send bytes
 
 
 
     NLImage nlImage = NLImage.newBuilder()
         .setColor(true)
-        // .setData(ByteString.copyFrom(byteArray))
-        // .setData(ByteString.copyFrom(byteArray))
         .setData(ByteString.copyFrom(bytes))
         .setWidth(width)
         .setHeight(height)
