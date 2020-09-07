@@ -82,34 +82,7 @@ public class NLImageClient {
         .setImage(nlImage)
         .build();
 
-    // Object source = bis; 
-    // ImageInputStream iis = ImageIO.createImageInputStream(source); 
-    // reader.setInput(iis, true);
-    // ImageReadParam param = reader.getDefaultReadParam();
-    // java.awt.Image image = reader.read(0, param);
-    // BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_RGB);
-    // //bufferedImage is the RenderedImage to be written
-    // Graphics2D g2 = bufferedImage.createGraphics();
-    // g2.drawImage(image, null, null);
-    // System.out.println("g2.drawImage() img drawn...");
-    // displayResponse(bufferedImage);
-
-      
-    NLImage response;
-    try {
-      response = blockingStub.rotateImage(request);
-    } catch (StatusRuntimeException e) {
-      logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
-      return;
-    }
-    logger.info("Neuralink response color: " + response.getColor());
-    logger.info("Neuralink response width : " + response.getWidth());
-    logger.info("Neuralink response height : " + response.getHeight());
-    // TODO display response
-    // logger.info("Displayed response img...");
-
-
-    /**
+     /**
      * Reads img objecrt -> bytes.
      */
     String sFilename = "s-result.png";
@@ -129,6 +102,46 @@ public class NLImageClient {
     }
     byte[] bytes = bos.toByteArray();
     System.out.println("bytesArray.length: " + bytes.length);
+    // TODO: 9-4: just send bytes
+
+    // Object source = ByteString.copyFrom(byteArray);
+    ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+    Object source = bis; 
+    ImageInputStream iis = ImageIO.createImageInputStream(source); 
+    //   //bis; 
+    // ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+    Iterator<?> readers = ImageIO.getImageReadersByFormatName("png");
+    ImageReader reader = (ImageReader) readers.next();
+    // Object source = bis; 
+    // Iterator<?> readers = ImageIO.getImageReadersByFormatName("png");
+    // ImageReader reader = (ImageReader) readers.next();
+    
+    reader.setInput(iis, true);
+    ImageReadParam param = reader.getDefaultReadParam();
+    java.awt.Image image = reader.read(0, param);
+    BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_RGB);
+    //bufferedImage is the RenderedImage to be written
+    Graphics2D g2 = bufferedImage.createGraphics();
+    g2.drawImage(image, null, null);
+    System.out.println("g2.drawImage() img drawn...");
+    displayResponse(bufferedImage);
+
+      
+    NLImage response;
+    try {
+      response = blockingStub.rotateImage(request);
+    } catch (StatusRuntimeException e) {
+      logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
+      return;
+    }
+    logger.info("Neuralink response color: " + response.getColor());
+    logger.info("Neuralink response width : " + response.getWidth());
+    logger.info("Neuralink response height : " + response.getHeight());
+    // TODO display response
+    // logger.info("Displayed response img...");
+
+
+   
 
 
     // /**
