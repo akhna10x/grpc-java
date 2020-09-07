@@ -99,7 +99,8 @@ public class NLImageClient {
     NLImage nlImage = NLImage.newBuilder()
         .setColor(true)
         // .setData(ByteString.copyFrom(byteArray))
-        .setData(ByteString.copyFrom(byteArray))
+        // .setData(ByteString.copyFrom(byteArray))
+        .setData(ByteString.copyFrom(bytes))
         .setWidth(width)
         .setHeight(height)
         .build();
