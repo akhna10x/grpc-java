@@ -37,6 +37,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.GraphicsEnvironment;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsConfiguration;
+import java.awt.AlphaComposite;
 
 import javax.swing.*;
 import java.awt.*;
@@ -128,24 +129,19 @@ public class NLImageServer {
         ImageIcon icon = new ImageIcon(b);
         java.awt.Image rawImage = icon.getImage();
         BufferedImage image = convertToBufferedImage(rawImage);
-        //(BufferedImage) rawImage;
-        // BufferedImage image = new  BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        // // WritableRaster raster = (WritableRaster) image.getData();
-        // // raster.setPixels(0,0,width,height,pixels);
         icon.setImage(createFlipped(image));
         return icon;
     }
 
-    private static BufferedImage createTransformed(BufferedImage image, AffineTransform at) {
-        BufferedImage newImage = new BufferedImage(
-            image.getWidth(), image.getHeight(),
-            BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g = newImage.createGraphics();
-        g.transform(at);
-        g.drawImage(image, 0, 0, null);
-        g.dispose();
-        return newImage;
-    }
+    public ImageIcon createWatermarkImage(byte[] b, int width, int height) {
+      ImageIcon icon = new ImageIcon(b);
+      java.awt.Image rawImage = icon.getImage();
+      BufferedImage image = convertToBufferedImage(rawImage);
+      // icon.setImage(createFlipped(image));
+      icon.setImage(createWatermarked(image));
+      return icon;
+  }
+  
 
     public static GraphicsConfiguration getDefaultConfiguration() {
       GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -164,12 +160,39 @@ public class NLImageServer {
         return result;
     }
 
-    private static BufferedImage createFlipped(BufferedImage image){
-        // AffineTransform at = new AffineTransform();
-        // at.concatenate(AffineTransform.getScaleInstance(1, -1));
-        // at.concatenate(AffineTransform.getTranslateInstance(0, -image.getHeight()));
-        // return createTransformed(image, at);
+    static BufferedImage addImageWatermark(BufferedImage sourceImage) {
+      int w = sourceImage.getWidth();
+      int h = sourceImage.getHeight();
+      BufferedImage result = gc.createCompatibleImage(w, h);
+      try {
+          // BufferedImage sourceImage = ImageIO.read(sourceImageFile);
+          // File sourceImageFile
+          String filename = "watermark.png";
+          BufferedImage watermarkImage = ImageIO.read(new File("watermark.png"));
+          GraphicsConfiguration gc = getDefaultConfiguration();
+          
+          Graphics2D g = result.createGraphics();
+          Graphics2D g2d = (Graphics2D) sourceImage.getGraphics();
+          AlphaComposite alphaChannel = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f);
+          g2d.setComposite(alphaChannel);
+          int topLeftX = (sourceImage.getWidth() - watermarkImage.getWidth()) / 2;
+          int topLeftY = (sourceImage.getHeight() - watermarkImage.getHeight()) / 2;
+          g2d.drawImage(watermarkImage, topLeftX, topLeftY, null);
+          System.out.println("The image watermark is added to the image.");
+   
+          g.drawRenderedImage(watermarkImage, null);
+          g.dispose();
+          
+      } catch (IOException ex) {
+          System.err.println(ex);
+      }
+      return result;
+  }
 
+    private static BufferedImage createFlipped(BufferedImage image){
+      return rotate(image, 180.0);
+    }
+    private static BufferedImage createWatermarked(BufferedImage image){
       return rotate(image, 180.0);
     }
 
@@ -186,7 +209,9 @@ public class NLImageServer {
         ByteString reqImgBytes = reqImg.getData();
         logger.info("__ reqImgBytes.size(): " + reqImgBytes.size());
         byte[] bytes = reqImgBytes.toByteArray();
-        ImageIcon icon = createImage(bytes, width, height);
+        // ImageIcon icon = createImage(bytes, width, height);
+        // displayResponse(icon);
+        ImageIcon icon = createWatermarkImage(bytes, width, height);
         displayResponse(icon);
         logger.info("displayResponse");
         ByteString responseData = reqImgBytes;
