@@ -62,13 +62,12 @@ public class NLImageServer {
     Runtime.getRuntime().addShutdownHook(new Thread() {
       @Override
       public void run() {
-        System.err.println("*** shutting down gRPC server since JVM is shutting down");
         try {
            NLImageServer.this.stop();
         } catch (InterruptedException e) {
           e.printStackTrace(System.err);
         }
-        System.err.println("*** server shut down");
+        System.err.println("Server shut down");
       }
     });
   }
