@@ -163,13 +163,14 @@ public class NLImageServer {
     static BufferedImage addImageWatermark(BufferedImage sourceImage) {
       int w = sourceImage.getWidth();
       int h = sourceImage.getHeight();
+      GraphicsConfiguration gc = getDefaultConfiguration();
       BufferedImage result = gc.createCompatibleImage(w, h);
       try {
           // BufferedImage sourceImage = ImageIO.read(sourceImageFile);
           // File sourceImageFile
           String filename = "watermark.png";
           BufferedImage watermarkImage = ImageIO.read(new File("watermark.png"));
-          GraphicsConfiguration gc = getDefaultConfiguration();
+          
           
           Graphics2D g = result.createGraphics();
           Graphics2D g2d = (Graphics2D) sourceImage.getGraphics();
