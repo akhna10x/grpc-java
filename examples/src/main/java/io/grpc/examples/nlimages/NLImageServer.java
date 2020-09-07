@@ -221,24 +221,23 @@ public class NLImageServer {
 
       private void displayResponse(ImageIcon icon) {
         // TODO: remove this method
-        JFrame frame = new JFrame();
-        JLabel label = new JLabel(icon);
-        frame.add(label);
-        frame.pack();
-        frame.setVisible(true);
+        // JFrame frame = new JFrame();
+        // JLabel label = new JLabel(icon);
+        // frame.add(label);
+        // frame.pack();
+        // frame.setVisible(true);
       }
 
       private void displayResponse(BufferedImage bufferedImage) {
         // TODO: remove this method
-        JFrame frame = new JFrame();
-        ImageIcon icon = new ImageIcon(bufferedImage);
-        JLabel label = new JLabel(icon);
-        frame.add(label);
-        frame.pack();
-        frame.setVisible(true);
+        // JFrame frame = new JFrame();
+        // ImageIcon icon = new ImageIcon(bufferedImage);
+        // JLabel label = new JLabel(icon);
+        // frame.add(label);
+        // frame.pack();
+        // frame.setVisible(true);
       }
     
-
       private ImageIcon bytesToIcon() {
         return null;
       }
