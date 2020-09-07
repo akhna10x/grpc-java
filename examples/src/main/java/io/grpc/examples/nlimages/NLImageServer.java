@@ -141,6 +141,7 @@ public class NLImageServer {
         ImageIcon icon = createImage(bytes);
         displayResponse(icon);
         logger.info("displayResponse");
+        ByteString responseData = reqImgBytes;
 
         /**
          * Reads bytes back to img object.
@@ -169,7 +170,7 @@ public class NLImageServer {
 
         /**
          * Sends reply back.
-         */
+         */ 
         NLImage reply = NLImage.newBuilder()
             .setWidth(width)
             .setHeight(height)
