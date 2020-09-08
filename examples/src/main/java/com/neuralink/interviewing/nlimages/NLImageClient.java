@@ -24,7 +24,6 @@ import javax.imageio.ImageReadParam;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
  
-
 /**
  * Client for managing requests to the Neuralink image service.
  */
@@ -98,8 +97,6 @@ public class NLImageClient {
     }
     byte[] bytes = bos.toByteArray();
 
-
-
     NLImage nlImage = NLImage.newBuilder()
         .setColor(true)
         .setData(ByteString.copyFrom(bytes))
@@ -172,6 +169,22 @@ public class NLImageClient {
     // displayResponse(bufferedImage);
   }
 
+  
+  public void requestWatermark(String filename, boolean isColor) 
+                                      { 
+    // throws IOException{
+
+    // displayImg(filename);
+    // BufferedImage bimg = ImageIO.read(new File(filename));
+    // byte[] byteArray = 
+    //     ((DataBufferByte) bimg.getData().getDataBuffer()).getData();
+    // int width = bimg.getWidth();
+    // int height   = bimg.getHeight();
+    // logger.info("_____Width: " + width);
+    // logger.info("____Height: " + height);
+
+  }
+
   private ImageIcon createRespImage(byte[] b, int width, int height) {
     ImageIcon icon = new ImageIcon(b);
     // java.awt.Image rawImage = icon.getImage();
@@ -197,11 +210,12 @@ public class NLImageClient {
    * greeting. The second argument is the target server.
    */
   public static void main(String[] args) throws Exception {
+    final String customEndpoint = "watermark";
     String target = "localhost:9090";
     // Allow passing in the user and target strings as command line arguments
     if (args.length > 0) {
       if ("--help".equals(args[0])) {
-        System.err.println("Usage: [name [target]]");
+        System.err.println("Usage: [name [mode] [filename]]");
         System.err.println("");
         System.err.println("  target  The server to connect to. Defaults to " + target);
         System.exit(1);
@@ -210,16 +224,23 @@ public class NLImageClient {
     if (args.length > 1) {
       target = args[1];
     }
+    boolean watermarkEndpoint = false;
+    if (args.length > 1 && args[1] == customEndpoint) {
+      watermarkEndpoint = true;
+    }
 
     ManagedChannel channel = ManagedChannelBuilder.forTarget(target)
-        // TODO: add comment on security
         .usePlaintext()
         .build();
     try {
       NLImageClient client = new NLImageClient(channel);
-      String filename = "androidBook.jpg";
+      String filename = "sample.jpg";
       boolean isColor = true;
-      client.requestRotate(filename, isColor);
+      if (watermarkEndpoint) {
+        client.requestWatermark(filename, isColor); 
+      } else {
+        client.requestRotate(filename, isColor); 
+      }
     } finally {
       channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
     }
