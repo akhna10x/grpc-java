@@ -204,43 +204,40 @@ public class NLImageServer {
       ImageIcon icon = createWatermarkImage(bytes, width, height);
       displayResponse(icon);
       try {
-      // icon.getImage();
+        // ByteString responseData =
+        //   // icon.getImage().getBytes();
+        //      reqImgBytes;
+        // byte[] imageBytes = 
+        // int[] responseInts = 
+        //   ((java.awt.image.DataBufferInt) ((BufferedImage) 
+        //       icon.getImage()).getData().getDataBuffer()).getData();
+        // byte[] reponseData = new byte[responseInts.length];
+        // for (int i = 0; i < reponseData.length; ++i) {
+        //   reponseData[i] = (byte) responseInts[i];
+        //   System.out.println("reponseInts[i]: " + responseInts[i]);
+        //   System.out.println("reponseData[i]: " + reponseData[i]);
+        // }
+        ByteArrayOutputStream baos = new ByteArrayOutputStream ();
+        ImageOutputStream stream = new MemoryCacheImageOutputStream(baos);
+        ImageIO.write((
+            (BufferedImage) icon.getImage()), "png", stream);
+        //       icon.getImage()), "png", stream);
+        stream.close();
+        baos.toByteArray();
 
-      // ByteString responseData =
-      //   // icon.getImage().getBytes();
-      //      reqImgBytes;
-      // byte[] imageBytes = 
-      // int[] responseInts = 
-      //   ((java.awt.image.DataBufferInt) ((BufferedImage) 
-      //       icon.getImage()).getData().getDataBuffer()).getData();
-      // byte[] reponseData = new byte[responseInts.length];
-      // for (int i = 0; i < reponseData.length; ++i) {
-      //   reponseData[i] = (byte) responseInts[i];
-      //   System.out.println("reponseInts[i]: " + responseInts[i]);
-      //   System.out.println("reponseData[i]: " + reponseData[i]);
-      // }
-      ByteArrayOutputStream baos = new ByteArrayOutputStream ();
-      ImageOutputStream stream = new MemoryCacheImageOutputStream(baos);
-      ImageIO.write((
-          (BufferedImage) icon.getImage()), "png", stream);
-      //       icon.getImage()), "png", stream);
-      stream.close();
-      // return 
-      baos.toByteArray();
-
-      /**
-       * Sends reply back.
-       */ 
-      int newWidth = width;
-      int newHeight = height;
-      NLImage reply = NLImage.newBuilder()
-          .setWidth(width)
-          .setHeight(height)
-          // .setData(ByteString.copyFrom(reponseData))
-          .setData(ByteString.copyFrom(baos.toByteArray()))
-          .build();
-      responseObserver.onNext(reply);
-      responseObserver.onCompleted();
+        /**
+         * Sends reply back.
+         */ 
+        int newWidth = width;
+        int newHeight = height;
+        NLImage reply = NLImage.newBuilder()
+            .setWidth(width)
+            .setHeight(height)
+            // .setData(ByteString.copyFrom(reponseData))
+            .setData(ByteString.copyFrom(baos.toByteArray()))
+            .build();
+        responseObserver.onNext(reply);
+        responseObserver.onCompleted();
       } catch(IOException e) {
         System.err.println("IOExceotion: " + e.getMessage());
       }
