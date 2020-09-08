@@ -51,7 +51,7 @@ public class NLImageServer {
   private Server server;
 
   private void start() throws IOException {
-    int port = 50051;
+    int port = 9090;
     server = ServerBuilder.forPort(port)
         .addService(new NLImageServiceImpl())
         .build()
