@@ -63,10 +63,9 @@ public class NLImageClient {
     /**
      * Reads img object -> bytes.
      */
-    String sFilename = "s-result.png";
-    FileInputStream fis = new FileInputStream(sFilename);
+    FileInputStream fis = new FileInputStream(filename);
     ByteArrayOutputStream baos = new ByteArrayOutputStream(1000);
-    BufferedImage img = ImageIO.read(new File(sFilename));
+    BufferedImage img = ImageIO.read(new File(filename));
     ByteArrayOutputStream bos = new ByteArrayOutputStream();
     byte[] buf = new byte[1024];
     try {
@@ -216,7 +215,7 @@ public class NLImageClient {
         .build();
     try {
       NLImageClient client = new NLImageClient(channel);
-      String filename = "sample.jpg";
+      String filename = "s-result.png";
       boolean isColor = true;
       if (watermarkEndpoint) {
         client.requestWatermark(filename, isColor); 
