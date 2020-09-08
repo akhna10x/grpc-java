@@ -204,19 +204,6 @@ public class NLImageServer {
       ImageIcon icon = createWatermarkImage(bytes, width, height);
       displayResponse(icon);
       try {
-        // ByteString responseData =
-        //   // icon.getImage().getBytes();
-        //      reqImgBytes;
-        // byte[] imageBytes = 
-        // int[] responseInts = 
-        //   ((java.awt.image.DataBufferInt) ((BufferedImage) 
-        //       icon.getImage()).getData().getDataBuffer()).getData();
-        // byte[] reponseData = new byte[responseInts.length];
-        // for (int i = 0; i < reponseData.length; ++i) {
-        //   reponseData[i] = (byte) responseInts[i];
-        //   System.out.println("reponseInts[i]: " + responseInts[i]);
-        //   System.out.println("reponseData[i]: " + reponseData[i]);
-        // }
         ByteArrayOutputStream baos = new ByteArrayOutputStream ();
         ImageOutputStream stream = new MemoryCacheImageOutputStream(baos);
         ImageIO.write((
