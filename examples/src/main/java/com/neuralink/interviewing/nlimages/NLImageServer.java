@@ -41,7 +41,6 @@ import javax.imageio.stream.MemoryCacheImageOutputStream;
 import javax.imageio.stream.ImageOutputStream;
 import javax.swing.*;
 
-
 /**
  * Neuralink image service server.
  */
@@ -88,17 +87,16 @@ public class NLImageServer {
   }
 
   private void parseColorImg() {
-
+    // TODOO: impl.
   }
 
   private void parsegrayscaleImg() {
-    
+    // TODOO: impl.
   }
 
   // NLImageService
   static class NLImageServiceImpl extends NLImageServiceGrpc.NLImageServiceImplBase  {
     public static ImageIcon getImageFromArray(byte[] bytes, int width, int height) {
-      // TODO: verify conversion  
       int[] pixels = new int[bytes.length];
       for (int i = 0; i < bytes.length; ++i) {
         pixels[i] = bytes[i];
@@ -125,6 +123,17 @@ public class NLImageServer {
         java.awt.Image rawImage = icon.getImage();
         BufferedImage image = convertToBufferedImage(rawImage);
         icon.setImage(createFlipped(image));
+        NLImageRotateRequest.Rotation rotation;
+        if (rotation == NLImageRotateRequest.Rotation.NONE) { 
+            rotate(image,0.0);
+        } else if (rotation == NLImageRotateRequest.Rotation.NINETY_DEG) {
+            rotate(image, 90.0);
+        } else if (rotation == NLImageRotateRequest.Rotation.ONE_EIGHTY_DEG) {
+            rotate(image, 180.0);
+        } else if (rotation == NLImageRotateRequest.Rotation.TWO_SEVENTY_DEG) {
+          rotate(image, 270.0);
+        }
+        
         return icon;
     }
 
@@ -196,7 +205,8 @@ public class NLImageServer {
       byte[] rotatedImg = new byte[width * height];
       ByteString reqImgBytes = reqImg.getData();
       byte[] bytes = reqImgBytes.toByteArray();
-      ImageIcon icon = createWatermarkImage(bytes, width, height);
+      ImageIcon icon = createImage(bytes, width, height);
+      //createWatermarkImage(bytes, width, height);
       displayResponse(icon);
       try {
         ByteArrayOutputStream baos = new ByteArrayOutputStream ();
@@ -206,9 +216,6 @@ public class NLImageServer {
         stream.close();
         baos.toByteArray();
 
-        /**
-         * Sends reply back.
-         */ 
         int newWidth = width;
         int newHeight = height;
         NLImage reply = NLImage.newBuilder()
@@ -224,7 +231,6 @@ public class NLImageServer {
     }
 
       private void displayResponse(ImageIcon icon) {
-        // TODO: remove this method
         JFrame frame = new JFrame();
         JLabel label = new JLabel(icon);
         frame.add(label);
@@ -235,7 +241,6 @@ public class NLImageServer {
       @Override 
       public void customImageEndpoint(NLCustomImageEndpointRequest req, 
                                       StreamObserver<NLCustomImageEndpointResponse> responseObserver) {
-        // TODO: embed Neuralink logo
         logger.info("Running customImageEndpoint() ...");
         NLImage reqImg = req.getImage();
         int height = reqImg.getHeight();

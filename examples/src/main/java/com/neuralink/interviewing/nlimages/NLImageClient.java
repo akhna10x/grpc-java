@@ -14,6 +14,9 @@ import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.io.*;
@@ -150,32 +153,39 @@ public class NLImageClient {
   public static void main(String[] args) throws Exception {
     // TODO: expand command line options
     final String customEndpoint = "watermark";
+    // final String rotate = "rotate";
     String target = "localhost:9090";
 
     List<String> argsList = new ArrayList<String>();  
+    Map<String, Option> optsSet = new HashMap<>();
     List<Option> optsList = new ArrayList<Option>();
     List<String> doubleOptsList = new ArrayList<String>();
 
     for (int i = 0; i < args.length; i++) {
         switch (args[i].charAt(0)) {
         case '-':
-            if (args[i].length() < 2)
+            if (args[i].length() < 2) {
                 throw new IllegalArgumentException("Not a valid argument: " + args[i]);
-            if (args[i].charAt(1) == '-') {
-                if (args[i].length() < 3)
-                    throw new IllegalArgumentException("Not a valid argument: "+args[i]);
-                // --opt
-                doubleOptsList.add(args[i].substring(2, args[i].length()));
-            } else {
-                if (args.length-1 == i)
-                    throw new IllegalArgumentException("Expected arg after: "+args[i]);
-                // -opt
-                optsList.add(new Option(args[i], args[i+1]));
-                i++;
             }
+            if (args[i].length() < 3) {
+                throw new IllegalArgumentException("Not a valid argument: "+args[i]);
+            }
+            String name = args[i].replace("-", "");
+                doubleOptsList.add(args[i].substring(2, args[i].length()));
+                System.out.println("Adding to doubles: " +
+                    args[i]
+                      );
+                if (args.length-1 == i) {
+                    throw new IllegalArgumentException("Expected arg after: "+args[i]);
+                }
+                System.out.println("Adding to map: " +
+                    args[i]
+                      );
+                optsList.add(new Option(args[i], args[i+1]));
+                optsSet.put(name, new Option(name, args[i+1]));
+                i++;
             break;
         default:
-            // arg
             argsList.add(args[i]);
             break;
         }
@@ -212,8 +222,24 @@ public class NLImageClient {
         if (watermarkEndpoint) {
           client.requestWatermark(filename, isColor); 
         } else {
+          System.out.println("Args rotate: " +
+              optsSet.get("rotate"));
           NLImageRotateRequest.Rotation rotation = 
               NLImageRotateRequest.Rotation.ONE_EIGHTY_DEG;
+          String rotationArg = optsSet.get("rotate").opt;
+          if (rotationArg.equals("90")) {
+              rotation = NLImageRotateRequest.Rotation.NINETY_DEG;
+          } else if (rotationArg.equals("180")) {
+             rotation = NLImageRotateRequest.Rotation.ONE_EIGHTY_DEG;
+          } else if (rotationArg.equals("270")) {
+            rotation = NLImageRotateRequest.Rotation.TWO_SEVENTY_DEG;
+          } else if (rotationArg.equals("0")) {
+            rotation = NLImageRotateRequest.Rotation.NONE;
+          } else {
+            System.err.println("Invalid routation specified. Exiting.");
+            return;
+          }
+
           client.requestRotate(filename, isColor, rotation); 
         }
       } finally {
