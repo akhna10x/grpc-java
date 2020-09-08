@@ -161,9 +161,6 @@ public class NLImageClient {
           }
           String name = args[i].replace("-", "");
               doubleOptsList.add(args[i].substring(2, args[i].length()));
-              System.out.println("Adding to doubles: " +
-                  args[i]
-                    );
               if (args.length-1 == i) {
                   throw new IllegalArgumentException("Expected arg after: "+args[i]);
               }
