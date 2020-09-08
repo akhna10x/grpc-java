@@ -12,6 +12,8 @@ import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.io.*;
@@ -130,6 +132,18 @@ public class NLImageClient {
     frame.setVisible(true);
   }
 
+  private static class Option {
+    String flag, opt;
+    public Option(String flag, String opt) { 
+        this.flag = flag; 
+        this.opt = opt; 
+    }
+}
+
+
+  private void parseArgs() {
+    
+  }
   /**
    * Runs Neuralink image client.
    */
@@ -137,6 +151,36 @@ public class NLImageClient {
     // TODO: expand command line options
     final String customEndpoint = "watermark";
     String target = "localhost:9090";
+
+    List<String> argsList = new ArrayList<String>();  
+    List<Option> optsList = new ArrayList<Option>();
+    List<String> doubleOptsList = new ArrayList<String>();
+
+    for (int i = 0; i < args.length; i++) {
+        switch (args[i].charAt(0)) {
+        case '-':
+            if (args[i].length() < 2)
+                throw new IllegalArgumentException("Not a valid argument: " + args[i]);
+            if (args[i].charAt(1) == '-') {
+                if (args[i].length() < 3)
+                    throw new IllegalArgumentException("Not a valid argument: "+args[i]);
+                // --opt
+                doubleOptsList.add(args[i].substring(2, args[i].length()));
+            } else {
+                if (args.length-1 == i)
+                    throw new IllegalArgumentException("Expected arg after: "+args[i]);
+                // -opt
+                optsList.add(new Option(args[i], args[i+1]));
+                i++;
+            }
+            break;
+        default:
+            // arg
+            argsList.add(args[i]);
+            break;
+        }
+    }
+
     if (args.length > 0) {
       if ("--help".equals(args[0])) {
         System.err.println("Usage: target [mode] [filename]");
@@ -148,6 +192,9 @@ public class NLImageClient {
     if (args.length > 1) {
       target = args[1];
     }
+
+
+
     boolean watermarkEndpoint = false;
     boolean grayscaleImg = false;
     if (args.length > 2 && args[2].equals(customEndpoint)) {
@@ -159,18 +206,18 @@ public class NLImageClient {
         .usePlaintext()
         .build();
     try {
-      NLImageClient client = new NLImageClient(channel);
-      String filename = "s-result.png";
-      boolean isColor = true;
-      if (watermarkEndpoint) {
-        client.requestWatermark(filename, isColor); 
-      } else {
-        NLImageRotateRequest.Rotation rotation = 
-            NLImageRotateRequest.Rotation.ONE_EIGHTY_DEG;
-        client.requestRotate(filename, isColor, rotation); 
+        NLImageClient client = new NLImageClient(channel);
+        String filename = "s-result.png";
+        boolean isColor = true;
+        if (watermarkEndpoint) {
+          client.requestWatermark(filename, isColor); 
+        } else {
+          NLImageRotateRequest.Rotation rotation = 
+              NLImageRotateRequest.Rotation.ONE_EIGHTY_DEG;
+          client.requestRotate(filename, isColor, rotation); 
+        }
+      } finally {
+        channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
       }
-    } finally {
-      channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
-    }
   }
 }
