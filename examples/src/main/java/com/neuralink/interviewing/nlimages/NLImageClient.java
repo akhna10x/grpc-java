@@ -141,55 +141,53 @@ public class NLImageClient {
         this.flag = flag; 
         this.opt = opt; 
     }
-}
+  }
 
+  private static Map<String, Option> parseArgs(String[] args) {
+    Map<String, Option> optsSet = new HashMap<>();
+    List<Option> optsList = new ArrayList<Option>();
+    List<String> doubleOptsList = new ArrayList<String>();
+    List<String> argsList = new ArrayList<String>();  
 
-  private void parseArgs() {
-    
+    for (int i = 0; i < args.length; i++) {
+      switch (args[i].charAt(0)) {
+      case '-':
+          if (args[i].length() < 2) {
+              throw new IllegalArgumentException("Not a valid argument: " + args[i]);
+          }
+          if (args[i].length() < 3) {
+              throw new IllegalArgumentException("Not a valid argument: "+args[i]);
+          }
+          String name = args[i].replace("-", "");
+              doubleOptsList.add(args[i].substring(2, args[i].length()));
+              System.out.println("Adding to doubles: " +
+                  args[i]
+                    );
+              if (args.length-1 == i) {
+                  throw new IllegalArgumentException("Expected arg after: "+args[i]);
+              }
+              System.out.println("Adding to map: " +
+                  args[i]
+                    );
+              optsList.add(new Option(args[i], args[i+1]));
+              optsSet.put(name, new Option(name, args[i+1]));
+              i++;
+          break;
+      default:
+          argsList.add(args[i]);
+          break;
+      }
+    }
+
+    return optsSet;
   }
   /**
    * Runs Neuralink image client.
    */
   public static void main(String[] args) throws Exception {
-    // TODO: expand command line options
     final String customEndpoint = "watermark";
-    // final String rotate = "rotate";
     String target = "localhost:9090";
-
-    List<String> argsList = new ArrayList<String>();  
-    Map<String, Option> optsSet = new HashMap<>();
-    List<Option> optsList = new ArrayList<Option>();
-    List<String> doubleOptsList = new ArrayList<String>();
-
-    for (int i = 0; i < args.length; i++) {
-        switch (args[i].charAt(0)) {
-        case '-':
-            if (args[i].length() < 2) {
-                throw new IllegalArgumentException("Not a valid argument: " + args[i]);
-            }
-            if (args[i].length() < 3) {
-                throw new IllegalArgumentException("Not a valid argument: "+args[i]);
-            }
-            String name = args[i].replace("-", "");
-                doubleOptsList.add(args[i].substring(2, args[i].length()));
-                System.out.println("Adding to doubles: " +
-                    args[i]
-                      );
-                if (args.length-1 == i) {
-                    throw new IllegalArgumentException("Expected arg after: "+args[i]);
-                }
-                System.out.println("Adding to map: " +
-                    args[i]
-                      );
-                optsList.add(new Option(args[i], args[i+1]));
-                optsSet.put(name, new Option(name, args[i+1]));
-                i++;
-            break;
-        default:
-            argsList.add(args[i]);
-            break;
-        }
-    }
+    Map<String, Option> optsSet = parseArgs(args);
 
     if (args.length > 0) {
       if ("--help".equals(args[0])) {
