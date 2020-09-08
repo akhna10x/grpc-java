@@ -203,13 +203,10 @@ public class NLImageClient {
       target = args[1];
     }
 
-
-
     boolean watermarkEndpoint = false;
     boolean grayscaleImg = false;
     if (args.length > 2 && args[2].equals(customEndpoint)) {
       watermarkEndpoint = true;
-      System.out.println("Watermark endpoint..." + true);
     }
 
     ManagedChannel channel = ManagedChannelBuilder.forTarget(target)
