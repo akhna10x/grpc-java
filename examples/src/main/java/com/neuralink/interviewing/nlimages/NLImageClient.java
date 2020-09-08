@@ -45,7 +45,6 @@ public class NLImageClient {
    */
   public void requestRotate(String filename, 
       boolean isColor, NLImageRotateRequest.Rotation rotation) throws IOException{ 
-    System.out.println("DEBUG: requestRotate()");
     BufferedImage img = ImageIO.read(new File(filename));
     byte[] bytes = readImgFile(filename);
     NLImage nlImage = NLImage.newBuilder()
@@ -67,8 +66,6 @@ public class NLImageClient {
       return;
     }
     ByteString respImgBytes = response.getData();
-    logger.info("DEBUG respImgBytes.size(): " + respImgBytes.size());
-    
     byte[] rBytes = response.getData().toByteArray();
     ImageIcon icon = createRespImage(rBytes, response.getWidth(), response.getHeight());
     displayResponse(icon);
@@ -158,7 +155,7 @@ public class NLImageClient {
     String target = "localhost:9090";
     if (args.length > 0) {
       if ("--help".equals(args[0])) {
-        System.err.println("Usage: [name [mode] [filename]]");
+        System.err.println("Usage: target [mode] [filename]");
         System.err.println("");
         System.err.println("  target  The server to connect to. Defaults to " + target);
         System.exit(1);
@@ -169,8 +166,9 @@ public class NLImageClient {
     }
     boolean watermarkEndpoint = false;
     boolean grayscaleImg = false;
-    if (args.length > 1 && args[1] == customEndpoint) {
+    if (args.length > 2 && args[2].equals(customEndpoint)) {
       watermarkEndpoint = true;
+      System.out.println("Watermark endpoint..." + true);
     }
 
     ManagedChannel channel = ManagedChannelBuilder.forTarget(target)

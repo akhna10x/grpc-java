@@ -203,7 +203,6 @@ public class NLImageServer {
         ImageOutputStream stream = new MemoryCacheImageOutputStream(baos);
         ImageIO.write((
             (BufferedImage) icon.getImage()), "png", stream);
-        //       icon.getImage()), "png", stream);
         stream.close();
         baos.toByteArray();
 
@@ -215,7 +214,6 @@ public class NLImageServer {
         NLImage reply = NLImage.newBuilder()
             .setWidth(width)
             .setHeight(height)
-            // .setData(ByteString.copyFrom(reponseData))
             .setData(ByteString.copyFrom(baos.toByteArray()))
             .build();
         responseObserver.onNext(reply);
