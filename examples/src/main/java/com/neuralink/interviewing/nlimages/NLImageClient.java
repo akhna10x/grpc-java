@@ -40,7 +40,6 @@ public class NLImageClient {
   }
 
   private void displayResponse(ImageIcon icon) {
-    // TODO: remove this method
     JFrame frame = new JFrame();
     JLabel label = new JLabel(icon);
     frame.add(label);
@@ -67,7 +66,6 @@ public class NLImageClient {
     byte[] bytes = bos.toByteArray();
     int width = img.getWidth();
     int height = img.getHeight();
-
     NLImage nlImage = NLImage.newBuilder()
         .setColor(true) // TODO: set based on cmdline
         .setData(ByteString.copyFrom(bytes))
@@ -80,59 +78,60 @@ public class NLImageClient {
 
     NLImage response;
     try {
+      // response = blockingStub.rotateImage(request);
       response = blockingStub.rotateImage(request);
     } catch (StatusRuntimeException e) {
       logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
       return;
     }
-    logger.info("Neuralink response width : " + response.getWidth());
-    logger.info("Neuralink response height : " + response.getHeight());
     ByteString respImgBytes = response.getData();
     logger.info("__ responseImgBytes.size(): " + respImgBytes.size());
     byte[] rBytes = respImgBytes.toByteArray();
     ImageIcon icon = createRespImage(rBytes, response.getWidth(), response.getHeight() );
-    // displayResponse(icon);
-    JFrame frame = new JFrame();
-    JLabel label = new JLabel(icon);
-    frame.add(label);
-    frame.pack();
-    frame.setVisible(true);
-  
-   
-
-
-    // /**
-    //  * Reads bytes back to img object.
-    //  */
-    // ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
-    // Iterator<?> readers = ImageIO.getImageReadersByFormatName("png");
-    // ImageReader reader = (ImageReader) readers.next();
-    // Object source = bis; 
-    // ImageInputStream iis = ImageIO.createImageInputStream(source); 
-    // reader.setInput(iis, true);
-    // ImageReadParam param = reader.getDefaultReadParam();
-    // java.awt.Image image = reader.read(0, param);
-    // BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_RGB);
-    // //bufferedImage is the RenderedImage to be written
-    // Graphics2D g2 = bufferedImage.createGraphics();
-    // g2.drawImage(image, null, null);
-    // System.out.println("g2.drawImage() img drawn...");
-    // displayResponse(bufferedImage);
+    displayResponse(icon);
   }
 
-  
+   
   public void requestWatermark(String filename, boolean isColor) 
-                                      { 
-    // throws IOException{
-
-    // displayImg(filename);
-    // BufferedImage bimg = ImageIO.read(new File(filename));
-    // byte[] byteArray = 
-    //     ((DataBufferByte) bimg.getData().getDataBuffer()).getData();
-    // int width = bimg.getWidth();
-    // int height   = bimg.getHeight();
-    // logger.info("_____Width: " + width);
-    // logger.info("____Height: " + height);
+    throws IOException{
+      FileInputStream fis = new FileInputStream(filename);
+      ByteArrayOutputStream baos = new ByteArrayOutputStream(1000);
+      BufferedImage img = ImageIO.read(new File(filename));
+      ByteArrayOutputStream bos = new ByteArrayOutputStream();
+      byte[] buf = new byte[1024];
+      try {
+          for (int readNum; (readNum = fis.read(buf)) != -1;) {
+              bos.write(buf, 0, readNum); 
+          }
+      } catch (IOException e) {
+          logger.info("IOException: " + e.getMessage());
+      }
+      byte[] bytes = bos.toByteArray();
+      int width = img.getWidth();
+      int height = img.getHeight();
+      NLImage nlImage = NLImage.newBuilder()
+          .setColor(true) // TODO: set based on cmdline
+          .setData(ByteString.copyFrom(bytes))
+          .setWidth(width)
+          .setHeight(height)
+          .build();
+      NLCustomImageEndpointRequest request = NLCustomImageEndpointRequest.newBuilder()
+          .setImage(nlImage)
+          .build();
+  
+      NLImage response;
+      try {
+        // response = 
+        blockingStub.customImageEndpoint(request);
+      } catch (StatusRuntimeException e) {
+        logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
+        return;
+      }
+      // ByteString respImgBytes = response.getData();
+      // logger.info("__ responseImgBytes.size(): " + respImgBytes.size());
+      // byte[] rBytes = respImgBytes.toByteArray();
+      // ImageIcon icon = createRespImage(rBytes, response.getWidth(), response.getHeight() );
+      // displayResponse(icon);
 
   }
 
@@ -147,14 +146,10 @@ public class NLImageClient {
 
   /**
    * Runs Neuralink image client.
-   * 
-   * Greet server. If provided, the first element of {@code args} is the name to use in the
-   * greeting. The second argument is the target server.
    */
   public static void main(String[] args) throws Exception {
     final String customEndpoint = "watermark";
     String target = "localhost:9090";
-    // Allow passing in the user and target strings as command line arguments
     if (args.length > 0) {
       if ("--help".equals(args[0])) {
         System.err.println("Usage: [name [mode] [filename]]");
