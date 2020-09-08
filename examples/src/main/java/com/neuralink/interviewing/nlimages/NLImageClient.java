@@ -74,26 +74,13 @@ public class NLImageClient {
   public void requestWatermark(String filename, boolean isColor) 
     throws IOException{
       System.out.println("DEBUG: requestWatermark()");
-      FileInputStream fis = new FileInputStream(filename);
-      ByteArrayOutputStream baos = new ByteArrayOutputStream(1000);
       BufferedImage img = ImageIO.read(new File(filename));
-      ByteArrayOutputStream bos = new ByteArrayOutputStream();
-      byte[] buf = new byte[1024];
-      try {
-          for (int readNum; (readNum = fis.read(buf)) != -1;) {
-              bos.write(buf, 0, readNum); 
-          }
-      } catch (IOException e) {
-          logger.info("IOException: " + e.getMessage());
-      }
-      byte[] bytes = bos.toByteArray();
-      int width = img.getWidth();
-      int height = img.getHeight();
+      byte[] bytes = readImgFile(filename);
       NLImage nlImage = NLImage.newBuilder()
           .setColor(isColor)
           .setData(ByteString.copyFrom(bytes))
-          .setWidth(width)
-          .setHeight(height)
+          .setWidth(img.getWidth())
+          .setHeight(img.getHeight())
           .build();
       NLCustomImageEndpointRequest request = NLCustomImageEndpointRequest.newBuilder()
           .setImage(nlImage)
@@ -101,18 +88,15 @@ public class NLImageClient {
   
       NLImage response;
       try {
-        // response = 
-        blockingStub.customImageEndpoint(request);
+        response = blockingStub.customImageEndpoint(request).getImage();
+        ByteString respImgBytes = response.getData();
+        byte[] rBytes = response.getData().toByteArray();
+        ImageIcon icon = createRespImage(rBytes, response.getWidth(), response.getHeight());
+        displayResponse(icon);
       } catch (StatusRuntimeException e) {
         logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
         return;
       }
-      // ByteString respImgBytes = response.getData();
-      // logger.info("__ responseImgBytes.size(): " + respImgBytes.size());
-      // byte[] rBytes = respImgBytes.toByteArray();
-      // ImageIcon icon = createRespImage(rBytes, response.getWidth(), response.getHeight() );
-      // displayResponse(icon);
-
   }
 
   private byte[] readImgFile(String filename) throws IOException {

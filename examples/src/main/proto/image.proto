@@ -46,6 +46,7 @@ message NLCustomImageEndpointRequest {
 // Your response.  Feel free to replace this with NLImage or whatever
 // you'd like.
 message NLCustomImageEndpointResponse {
+    NLImage image = 1;
 }
 
 service NLImageService {

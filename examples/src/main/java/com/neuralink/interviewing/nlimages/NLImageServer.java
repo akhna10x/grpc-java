@@ -231,19 +231,46 @@ public class NLImageServer {
         frame.pack();
         frame.setVisible(true);
       }
-      // private ImageIcon bytesToIcon() {
-      //   return null;
-      // }
-
-      // private byte[] iconToBytes() {
-      //   return null;
-      // }
-      
+    
       @Override 
       public void customImageEndpoint(NLCustomImageEndpointRequest req, 
                                       StreamObserver<NLCustomImageEndpointResponse> responseObserver) {
         // TODO: embed Neuralink logo
         logger.info("Running customImageEndpoint() ...");
+        NLImage reqImg = req.getImage();
+        int height = reqImg.getHeight();
+        int width = reqImg.getWidth();
+        byte[] rotatedImg = new byte[width * height];
+        ByteString reqImgBytes = reqImg.getData();
+        byte[] bytes = reqImgBytes.toByteArray();
+        ImageIcon icon = createWatermarkImage(bytes, width, height);
+        displayResponse(icon);
+        try {
+          ByteArrayOutputStream baos = new ByteArrayOutputStream ();
+          ImageOutputStream stream = new MemoryCacheImageOutputStream(baos);
+          ImageIO.write((
+              (BufferedImage) icon.getImage()), "png", stream);
+          stream.close();
+          baos.toByteArray();
+  
+          /**
+           * Sends reply back.
+           */ 
+          int newWidth = width;
+          int newHeight = height;
+          NLImage replyImg = NLImage.newBuilder()
+              .setWidth(width)
+              .setHeight(height)
+              .setData(ByteString.copyFrom(baos.toByteArray()))
+              .build();
+          NLCustomImageEndpointResponse reply = NLCustomImageEndpointResponse.newBuilder()
+              .setImage(replyImg)
+              .build();
+          responseObserver.onNext(reply);
+          responseObserver.onCompleted();
+        } catch(IOException e) {
+          System.err.println("IOException: " + e.getMessage());
+        }
       }
   }
 
