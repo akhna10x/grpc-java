@@ -13,8 +13,6 @@ import io.grpc.stub.StreamObserver;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
-import com.google.protobuf.ByteString;
-import com.neuralink.interviewing.*;
 import io.grpc.Channel;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -41,7 +39,7 @@ import java.awt.AlphaComposite;
 import javax.imageio.stream.MemoryCacheImageOutputStream;
 import javax.imageio.stream.ImageOutputStream;
 import javax.swing.*;
-import java.awt.*;
+
 
 /**
  * Neuralink image service server.
@@ -88,23 +86,12 @@ public class NLImageServer {
     }
   }
 
-  /**
-   * Launches the server from the command line.
-   */
-  public static void main(String[] args) throws IOException, InterruptedException {
-    final NLImageServer server = new NLImageServer();
-    server.start();
-    server.blockUntilShutdown();
-  }
-
 
   // NLImageService
   static class NLImageServiceImpl extends NLImageServiceGrpc.NLImageServiceImplBase  {
-    
     public static ImageIcon getImageFromArray(byte[] bytes, int width, int height) {
       // TODO: verify conversion  
       int[] pixels = new int[bytes.length];
-      // ALt just send file byes
       for (int i = 0; i < bytes.length; ++i) {
         pixels[i] = bytes[i];
       }
@@ -238,16 +225,13 @@ public class NLImageServer {
         frame.pack();
         frame.setVisible(true);
       }
+      // private ImageIcon bytesToIcon() {
+      //   return null;
+      // }
 
-      
-    
-      private ImageIcon bytesToIcon() {
-        return null;
-      }
-
-      private byte[] iconToBytes() {
-        return null;
-      }
+      // private byte[] iconToBytes() {
+      //   return null;
+      // }
       
       @Override 
       public void customImageEndpoint(NLCustomImageEndpointRequest req, 
@@ -256,5 +240,13 @@ public class NLImageServer {
         logger.info("Running customImageEndpoint() ...");
       }
   }
-}
 
+  /**
+   * Launches the server from the command line.
+   */
+  public static void main(String[] args) throws IOException, InterruptedException {
+    final NLImageServer server = new NLImageServer();
+    server.start();
+    server.blockUntilShutdown();
+  }
+}
