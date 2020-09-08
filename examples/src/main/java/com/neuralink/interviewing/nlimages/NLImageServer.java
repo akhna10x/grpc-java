@@ -123,7 +123,6 @@ public class NLImageServer {
           int width, 
           int height, 
           NLImageRotateRequest.Rotation rotation) {
-
         ImageIcon icon = new ImageIcon(b);
         java.awt.Image rawImage = icon.getImage();
         BufferedImage image = convertToBufferedImage(rawImage);
