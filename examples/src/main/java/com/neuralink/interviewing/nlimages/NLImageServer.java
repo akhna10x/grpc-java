@@ -118,20 +118,25 @@ public class NLImageServer {
         return newImage;
     }
 
-    public ImageIcon createImage(byte[] b, int width, int height) {
+    public ImageIcon createImage(
+          byte[] b, 
+          int width, 
+          int height, 
+          NLImageRotateRequest.Rotation rotation) {
+
         ImageIcon icon = new ImageIcon(b);
         java.awt.Image rawImage = icon.getImage();
         BufferedImage image = convertToBufferedImage(rawImage);
         icon.setImage(createFlipped(image));
-        NLImageRotateRequest.Rotation rotation;
+        // NLImageRotateRequest.Rotation rotation;
         if (rotation == NLImageRotateRequest.Rotation.NONE) { 
-            rotate(image,0.0);
+          icon.setImage(rotate(image,0.0));
         } else if (rotation == NLImageRotateRequest.Rotation.NINETY_DEG) {
-            rotate(image, 90.0);
+          icon.setImage(rotate(image, 90.0));
         } else if (rotation == NLImageRotateRequest.Rotation.ONE_EIGHTY_DEG) {
-            rotate(image, 180.0);
+          icon.setImage(rotate(image, 180.0));
         } else if (rotation == NLImageRotateRequest.Rotation.TWO_SEVENTY_DEG) {
-          rotate(image, 270.0);
+          icon.setImage(rotate(image, 270.0));
         }
         
         return icon;
@@ -205,7 +210,8 @@ public class NLImageServer {
       byte[] rotatedImg = new byte[width * height];
       ByteString reqImgBytes = reqImg.getData();
       byte[] bytes = reqImgBytes.toByteArray();
-      ImageIcon icon = createImage(bytes, width, height);
+      ImageIcon icon = 
+          createImage(bytes, width, height, req.getRotation());
       //createWatermarkImage(bytes, width, height);
       displayResponse(icon);
       try {
