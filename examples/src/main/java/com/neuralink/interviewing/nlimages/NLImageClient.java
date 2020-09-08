@@ -39,15 +39,6 @@ public class NLImageClient {
     blockingStub = NLImageServiceGrpc.newBlockingStub(channel);
   }
 
-  private void displayImg(String filename) {
-    // JFrame frame = new JFrame();
-    // ImageIcon icon = new ImageIcon(filename);
-    // JLabel label = new JLabel(icon);
-    // frame.add(label);
-    // frame.pack();
-    // frame.setVisible(true);
-  }
-
   // TODO: remove filename parameter
   private ImageIcon getImgFromResponse(String filename) {
     ImageIcon icon = new ImageIcon(filename);
@@ -69,7 +60,6 @@ public class NLImageClient {
    * Requests an image be rotated.
    */
   public void requestRotate(String filename, boolean isColor) throws IOException{
-    displayImg(filename);
     BufferedImage bimg = ImageIO.read(new File(filename));
     byte[] byteArray = 
         ((DataBufferByte) bimg.getData().getDataBuffer()).getData();
