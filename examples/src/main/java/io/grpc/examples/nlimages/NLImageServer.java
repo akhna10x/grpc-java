@@ -208,13 +208,21 @@ public class NLImageServer {
       //   // icon.getImage().getBytes();
       //      reqImgBytes;
       // byte[] imageBytes = 
-      int[] responseInts = 
-        ((java.awt.image.DataBufferInt) ((BufferedImage) 
-            icon.getImage()).getData().getDataBuffer()).getData();
-      byte[] reponseData = new byte[responseInts.length];
-      for (int i = 0; i < reponseData.length; ++i) {
-        reponseData[i] = (byte) responseInts[i];
-      }
+      // int[] responseInts = 
+      //   ((java.awt.image.DataBufferInt) ((BufferedImage) 
+      //       icon.getImage()).getData().getDataBuffer()).getData();
+      // byte[] reponseData = new byte[responseInts.length];
+      // for (int i = 0; i < reponseData.length; ++i) {
+      //   reponseData[i] = (byte) responseInts[i];
+      //   System.out.println("reponseInts[i]: " + responseInts[i]);
+      //   System.out.println("reponseData[i]: " + reponseData[i]);
+      // }
+      ByteArrayOutputStream baos = new ByteArrayOutputStream ();
+      ImageOutputStream stream = new MemoryCacheImageOutputStream(baos);
+      ImageIO.write(image, "png", stream);
+      stream.close();
+      // return 
+      baos.toByteArray();
 
       /**
        * Sends reply back.
@@ -224,7 +232,8 @@ public class NLImageServer {
       NLImage reply = NLImage.newBuilder()
           .setWidth(width)
           .setHeight(height)
-          .setData(ByteString.copyFrom(responseData))
+          // .setData(ByteString.copyFrom(reponseData))
+          .setData(ByteString.copyFrom(baos.toByteArray()))
           .build();
       responseObserver.onNext(reply);
       responseObserver.onCompleted();

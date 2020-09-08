@@ -143,7 +143,12 @@ public class NLImageClient {
     logger.info("__ responseImgBytes.size(): " + respImgBytes.size());
     byte[] rBytes = respImgBytes.toByteArray();
     ImageIcon icon = createRespImage(rBytes, response.getWidth(), response.getHeight() );
-    displayResponse(icon);
+    // displayResponse(icon);
+    JFrame frame = new JFrame();
+    JLabel label = new JLabel(icon);
+    frame.add(label);
+    frame.pack();
+    frame.setVisible(true);
   
    
 
