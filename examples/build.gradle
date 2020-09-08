@@ -61,14 +61,15 @@ sourceSets {
 startScripts.enabled = false
 
 task nlImageServer(type: CreateStartScripts) {
-    mainClassName = 'io.grpc.examples.nlimages.NLImageServer'
+    mainClassName = 'com.neuralink.interviewing.nlimages.NLImageServer'
     applicationName = 'nl-image-server'
     outputDir = new File(project.buildDir, 'tmp')
     classpath = startScripts.classpath
 }
+ 
 
 task nLImageClient(type: CreateStartScripts) {
-    mainClassName = 'io.grpc.examples.nlimages.NLImageClient'
+    mainClassName = 'com.neuralink.interviewing.nlimages.NLImageClient'
     applicationName = 'nl-image-client'
     outputDir = new File(project.buildDir, 'tmp')
     classpath = startScripts.classpath
