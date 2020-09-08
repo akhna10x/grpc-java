@@ -87,6 +87,13 @@ public class NLImageServer {
     }
   }
 
+  private void parseColorImg() {
+
+  }
+
+  private void parsegrayscaleImg() {
+    
+  }
 
   // NLImageService
   static class NLImageServiceImpl extends NLImageServiceGrpc.NLImageServiceImplBase  {
