@@ -39,14 +39,6 @@ public class NLImageClient {
     blockingStub = NLImageServiceGrpc.newBlockingStub(channel);
   }
 
-  // TODO: remove filename parameter
-  private ImageIcon getImgFromResponse(String filename) {
-    ImageIcon icon = new ImageIcon(filename);
-    // ImageIcon icon = new ImageIcon(filename);
-    return icon;
-  }
-
-
   private void displayResponse(ImageIcon icon) {
     // TODO: remove this method
     JFrame frame = new JFrame();
