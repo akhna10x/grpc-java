@@ -140,7 +140,7 @@ public class NLImageClient {
     // logger.info("Displayed response img...");
     // NLImage respImg = response.getImage();
     ByteString respImgBytes = response.getData();
-    logger.info("__ reqImgBytes.size(): " + respImgBytes.size());
+    logger.info("__ responseImgBytes.size(): " + respImgBytes.size());
     byte[] rBytes = respImgBytes.toByteArray();
     ImageIcon icon = createRespImage(rBytes, response.getWidth(), response.getHeight() );
     displayResponse(icon);

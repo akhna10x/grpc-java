@@ -216,8 +216,6 @@ public class NLImageServer {
         reponseData[i] = (byte) responseInts[i];
       }
 
-
-
       /**
        * Sends reply back.
        */ 
@@ -226,7 +224,7 @@ public class NLImageServer {
       NLImage reply = NLImage.newBuilder()
           .setWidth(width)
           .setHeight(height)
-          // .setData(ByteString.copyFrom(responseData))
+          .setData(ByteString.copyFrom(responseData))
           .build();
       responseObserver.onNext(reply);
       responseObserver.onCompleted();
