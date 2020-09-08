@@ -52,17 +52,6 @@ public class NLImageClient {
    * Requests an image be rotated.
    */
   public void requestRotate(String filename, boolean isColor) throws IOException{
-    BufferedImage bimg = ImageIO.read(new File(filename));
-    byte[] byteArray = 
-        ((DataBufferByte) bimg.getData().getDataBuffer()).getData();
-    int width = bimg.getWidth();
-    int height   = bimg.getHeight();
-    logger.info("_____Width: " + width);
-    logger.info("____Height: " + height);
-
-    /**
-     * Reads img object -> bytes.
-     */
     FileInputStream fis = new FileInputStream(filename);
     ByteArrayOutputStream baos = new ByteArrayOutputStream(1000);
     BufferedImage img = ImageIO.read(new File(filename));
@@ -71,15 +60,16 @@ public class NLImageClient {
     try {
         for (int readNum; (readNum = fis.read(buf)) != -1;) {
             bos.write(buf, 0, readNum); 
-            System.out.println("read " + readNum + " bytes,");
         }
     } catch (IOException e) {
         logger.info("IOException: " + e.getMessage());
     }
     byte[] bytes = bos.toByteArray();
+    int width = img.getWidth();
+    int height = img.getHeight();
 
     NLImage nlImage = NLImage.newBuilder()
-        .setColor(true)
+        .setColor(true) // TODO: set based on cmdline
         .setData(ByteString.copyFrom(bytes))
         .setWidth(width)
         .setHeight(height)
@@ -88,22 +78,6 @@ public class NLImageClient {
         .setImage(nlImage)
         .build();
 
-    ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
-    Object source = bis; 
-    ImageInputStream iis = ImageIO.createImageInputStream(source); 
-    Iterator<?> readers = ImageIO.getImageReadersByFormatName("png");
-    ImageReader reader = (ImageReader) readers.next();
-    
-    reader.setInput(iis, true);
-    ImageReadParam param = reader.getDefaultReadParam();
-    java.awt.Image image = reader.read(0, param);
-    BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_RGB);
-    //bufferedImage is the RenderedImage to be written
-    Graphics2D g2 = bufferedImage.createGraphics();
-    g2.drawImage(image, null, null);
-    System.out.println("g2.drawImage() img drawn...");
-    displayResponse(bufferedImage);
-      
     NLImage response;
     try {
       response = blockingStub.rotateImage(request);
@@ -111,12 +85,8 @@ public class NLImageClient {
       logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
       return;
     }
-    logger.info("Neuralink response color: " + response.getColor());
     logger.info("Neuralink response width : " + response.getWidth());
     logger.info("Neuralink response height : " + response.getHeight());
-    // TODO display response
-    // logger.info("Displayed response img...");
-    // NLImage respImg = response.getImage();
     ByteString respImgBytes = response.getData();
     logger.info("__ responseImgBytes.size(): " + respImgBytes.size());
     byte[] rBytes = respImgBytes.toByteArray();
@@ -173,16 +143,7 @@ public class NLImageClient {
     return icon;
   }
 
-  private void displayResponse(BufferedImage bufferedImage) {
-    // TODO: implement
 
-    // JFrame frame = new JFrame();
-    // ImageIcon icon = new ImageIcon(bufferedImage);
-    // JLabel label = new JLabel(icon);
-    // frame.add(label);
-    // frame.pack();
-    // frame.setVisible(true);
-  }
 
   /**
    * Runs Neuralink image client.
