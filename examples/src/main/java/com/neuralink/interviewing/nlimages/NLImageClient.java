@@ -49,7 +49,8 @@ public class NLImageClient {
    * Requests an image be rotated.
    */
   public void requestRotate(String filename, 
-      boolean isColor, NLImageRotateRequest.Rotation rotation) throws IOException{ 
+      boolean isColor, 
+      NLImageRotateRequest.Rotation rotation) throws IOException{ 
     BufferedImage img = ImageIO.read(new File(filename));
     byte[] bytes = readImgFile(filename);
     NLImage nlImage = NLImage.newBuilder()
@@ -78,7 +79,6 @@ public class NLImageClient {
 
   public void requestWatermark(String filename, boolean isColor) 
     throws IOException{
-      System.out.println("DEBUG: requestWatermark()");
       BufferedImage img = ImageIO.read(new File(filename));
       byte[] bytes = readImgFile(filename);
       NLImage nlImage = NLImage.newBuilder()
@@ -192,7 +192,6 @@ public class NLImageClient {
     if (args.length > 0) {
       if ("--help".equals(args[0])) {
         System.err.println("Usage: target [mode] [filename]");
-        System.err.println("");
         System.err.println("  target  The server to connect to. Defaults to " + target);
         System.exit(1);
       }
@@ -202,6 +201,12 @@ public class NLImageClient {
     }
 
     boolean watermarkEndpoint = false;
+    Option endpoint = optsSet.get("endpoint");
+    if (endpoint != null && 
+        endpoint.opt.equals(customEndpoint)) {
+
+    }
+
     boolean grayscaleImg = false;
     if (args.length > 2 && args[2].equals(customEndpoint)) {
       watermarkEndpoint = true;
