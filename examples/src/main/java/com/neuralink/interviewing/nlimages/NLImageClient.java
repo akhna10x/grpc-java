@@ -50,9 +50,8 @@ public class NLImageClient {
    */
   public void requestRotate(String filename, boolean isColor, 
       NLImageRotateRequest.Rotation rotation) throws IOException{
-    FileInputStream fis = new FileInputStream(filename);
-    BufferedImage img = ImageIO.read(fis);
     byte[] bytes = readImgFile(filename);
+    BufferedImage img = ImageIO.read(new ByteArrayInputStream(bytes));
     NLImage nlImage = NLImage.newBuilder()
         .setColor(isColor)
         .setData(ByteString.copyFrom(bytes))
@@ -63,13 +62,9 @@ public class NLImageClient {
         .setImage(nlImage)
         .setRotation(rotation)
         .build();
-    InputStream in = new ByteArrayInputStream(bytes);
-    BufferedImage bImageFromConvert = ImageIO.read(in);
     System.out.println("bImageFromConvert created...");
     System.out.println("Old height..." + img.getHeight());
     System.out.println("bImageFromConvert height..." + bImageFromConvert.getHeight());
-// System.out.println("bImageFromConvert height...", img.getHeight());
-
 
     NLImage response;
     try {
@@ -86,8 +81,8 @@ public class NLImageClient {
 
   public void requestWatermark(String filename, boolean isColor) 
     throws IOException{
-      BufferedImage img = ImageIO.read(new File(filename));
       byte[] bytes = readImgFile(filename);
+      BufferedImage img = ImageIO.read(new ByteArrayInputStream(bytes));
       NLImage nlImage = NLImage.newBuilder()
           .setColor(isColor)
           .setData(ByteString.copyFrom(bytes))
@@ -191,7 +186,6 @@ public class NLImageClient {
     final String customEndpoint = "watermark";
     String target = "localhost:9090";
     Map<String, Option> optsSet = parseArgs(args);
-
     if (args.length > 0) {
       if ("--help".equals(args[0])) {
         System.err.println("Usage: target [mode] [filename]");
@@ -202,14 +196,11 @@ public class NLImageClient {
     if (args.length > 1) {
       target = args[1];
     }
-
     boolean watermarkEndpoint = false;
     Option endpoint = optsSet.get("endpoint");
     if (endpoint != null && 
         endpoint.opt.equals(customEndpoint)) {
-
     }
-
     boolean grayscaleImg = false;
     if (args.length > 2 && args[2].equals(customEndpoint)) {
       watermarkEndpoint = true;
