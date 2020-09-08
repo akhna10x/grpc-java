@@ -48,10 +48,10 @@ public class NLImageClient {
   /** 
    * Requests an image be rotated.
    */
-  public void requestRotate(String filename, 
-      boolean isColor, 
-      NLImageRotateRequest.Rotation rotation) throws IOException{ 
-    BufferedImage img = ImageIO.read(new File(filename));
+  public void requestRotate(String filename, boolean isColor, 
+      NLImageRotateRequest.Rotation rotation) throws IOException{
+    FileInputStream fis = new FileInputStream(filename);
+    BufferedImage img = ImageIO.read(fis);
     byte[] bytes = readImgFile(filename);
     NLImage nlImage = NLImage.newBuilder()
         .setColor(isColor)
@@ -63,6 +63,13 @@ public class NLImageClient {
         .setImage(nlImage)
         .setRotation(rotation)
         .build();
+    InputStream in = new ByteArrayInputStream(bytes);
+    BufferedImage bImageFromConvert = ImageIO.read(in);
+    System.out.println("bImageFromConvert created...");
+    System.out.println("Old height..." + img.getHeight());
+    System.out.println("bImageFromConvert height..." + bImageFromConvert.getHeight());
+// System.out.println("bImageFromConvert height...", img.getHeight());
+
 
     NLImage response;
     try {
@@ -123,7 +130,6 @@ public class NLImageClient {
 
   private ImageIcon createRespImage(byte[] b, int width, int height) {
     ImageIcon icon = new ImageIcon(b);
-
     return icon;
   }
 
@@ -166,9 +172,6 @@ public class NLImageClient {
               if (args.length-1 == i) {
                   throw new IllegalArgumentException("Expected arg after: "+args[i]);
               }
-              System.out.println("Adding to map: " +
-                  args[i]
-                    );
               optsList.add(new Option(args[i], args[i+1]));
               optsSet.put(name, new Option(name, args[i+1]));
               i++;
