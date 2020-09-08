@@ -38,7 +38,8 @@ import java.awt.GraphicsEnvironment;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsConfiguration;
 import java.awt.AlphaComposite;
-
+import javax.imageio.stream.MemoryCacheImageOutputStream;
+import javax.imageio.stream.ImageOutputStream;
 import javax.swing.*;
 import java.awt.*;
 
@@ -202,6 +203,7 @@ public class NLImageServer {
       byte[] bytes = reqImgBytes.toByteArray();
       ImageIcon icon = createWatermarkImage(bytes, width, height);
       displayResponse(icon);
+      try {
       // icon.getImage();
 
       // ByteString responseData =
@@ -219,7 +221,9 @@ public class NLImageServer {
       // }
       ByteArrayOutputStream baos = new ByteArrayOutputStream ();
       ImageOutputStream stream = new MemoryCacheImageOutputStream(baos);
-      ImageIO.write(image, "png", stream);
+      ImageIO.write((
+          (BufferedImage) icon.getImage()), "png", stream);
+      //       icon.getImage()), "png", stream);
       stream.close();
       // return 
       baos.toByteArray();
@@ -237,6 +241,9 @@ public class NLImageServer {
           .build();
       responseObserver.onNext(reply);
       responseObserver.onCompleted();
+      } catch(IOException e) {
+        System.err.println("IOExceotion: " + e.getMessage());
+      }
     }
 
       private void displayResponse(ImageIcon icon) {
