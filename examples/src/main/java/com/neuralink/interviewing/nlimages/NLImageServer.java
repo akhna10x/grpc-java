@@ -6,36 +6,32 @@ package com.neuralink.interviewing.nlimages;
 
 import com.google.protobuf.ByteString;
 import com.neuralink.interviewing.*;
-import io.grpc.Server;
-import io.grpc.ServerBuilder;
-import java.awt.Graphics2D;
-import io.grpc.stub.StreamObserver;
-import java.io.IOException;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 import io.grpc.Channel;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
-import java.util.Iterator;
+import io.grpc.Server;
+import io.grpc.ServerBuilder;
+import io.grpc.stub.StreamObserver;
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.Iterator;
 import java.io.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
-import javax.swing.*;
 import java.awt.*;
+import java.awt.AlphaComposite;
+import java.awt.Graphics2D;
+import java.awt.GraphicsEnvironment;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsConfiguration;
+import java.awt.geom.AffineTransform;
 import java.awt.image.DataBufferByte;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReadParam;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
-import java.awt.geom.AffineTransform;
-import java.awt.GraphicsEnvironment;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsConfiguration;
-import java.awt.AlphaComposite;
 import javax.imageio.stream.MemoryCacheImageOutputStream;
 import javax.imageio.stream.ImageOutputStream;
 import javax.swing.*;
@@ -85,27 +81,8 @@ public class NLImageServer {
 		}
 	}
 
-	private void parseColorImg() {
-		// TODOO: impl.
-	}
-
-	private void parsegrayscaleImg() {
-		// TODOO: impl.
-	}
-
 	// NLImageService
-	static class NLImageServiceImpl extends NLImageServiceGrpc.NLImageServiceImplBase  {
-		public static ImageIcon getImageFromArray(byte[] bytes, int width, int height) {
-			int[] pixels = new int[bytes.length];
-			for (int i = 0; i < bytes.length; ++i) {
-				pixels[i] = bytes[i];
-			}
-			BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-			WritableRaster raster = (WritableRaster) image.getData();
-			raster.setPixels(0,0,width,height,pixels);
-			return new ImageIcon(image);
-		}
-
+	static class NLImageServiceImpl extends NLImageServiceGrpc.NLImageServiceImplBase  {n
 		public static BufferedImage convertToBufferedImage(
 				java.awt.Image image) {
 			BufferedImage newImage = new BufferedImage(
@@ -117,16 +94,13 @@ public class NLImageServer {
 			return newImage;
 		}
 
-		public ImageIcon createImage(
-				byte[] b, 
-				int width, 
+		public ImageIcon createImage(byte[] b, int width, 
 				int height, 
 				NLImageRotateRequest.Rotation rotation) {
 			ImageIcon icon = new ImageIcon(b);
 			java.awt.Image rawImage = icon.getImage();
 			BufferedImage image = convertToBufferedImage(rawImage);
 			icon.setImage(createFlipped(image));
-			// NLImageRotateRequest.Rotation rotation;
 			if (rotation == NLImageRotateRequest.Rotation.NONE) { 
 				icon.setImage(rotate(image,0.0));
 			} else if (rotation == NLImageRotateRequest.Rotation.NINETY_DEG) {
@@ -144,7 +118,6 @@ public class NLImageServer {
 			ImageIcon icon = new ImageIcon(b);
 			java.awt.Image rawImage = icon.getImage();
 			BufferedImage image = convertToBufferedImage(rawImage);
-			// icon.setImage(createFlipped(image));
 			icon.setImage(createWatermarked(image));
 			return icon;
 		}
@@ -210,7 +183,6 @@ public class NLImageServer {
 			byte[] bytes = reqImgBytes.toByteArray();
 			ImageIcon icon = 
 					createImage(bytes, width, height, req.getRotation());
-			//createWatermarkImage(bytes, width, height);
 			displayResponse(icon);
 			try {
 				ByteArrayOutputStream baos = new ByteArrayOutputStream ();
@@ -220,11 +192,17 @@ public class NLImageServer {
 				stream.close();
 				baos.toByteArray();
 
+
 				int newWidth = width;
-				int newHeight = height;
+        int newHeight = height;
+        if (rotation == NLImageRotateRequest.Rotation.NINETY_DEG ||
+            rotation == NLImageRotateRequest.Rotation.TWO_SEVENTY_DEG) {
+              newWidth = height;
+              newHeight = width;
+        }
 				NLImage reply = NLImage.newBuilder()
-						.setWidth(width)
-						.setHeight(height)
+						.setWidth(newWidth)
+						.setHeight(newHeight)
 						.setData(ByteString.copyFrom(baos.toByteArray()))
 						.build();
 				responseObserver.onNext(reply);
@@ -248,24 +226,19 @@ public class NLImageServer {
 			NLImage reqImg = req.getImage();
 			int height = reqImg.getHeight();
 			int width = reqImg.getWidth();
-			byte[] rotatedImg = new byte[width * height];
 			ByteString reqImgBytes = reqImg.getData();
 			byte[] bytes = reqImgBytes.toByteArray();
 			ImageIcon icon = createWatermarkImage(bytes, width, height);
 			displayResponse(icon);
 			try {
-				ByteArrayOutputStream baos = new ByteArrayOutputStream ();
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				ImageOutputStream stream = new MemoryCacheImageOutputStream(baos);
 				ImageIO.write((
 						(BufferedImage) icon.getImage()), "png", stream);
 				stream.close();
 				baos.toByteArray();
 
-				/**
-				 * Sends reply back.
-				 */ 
-				int newWidth = width;
-				int newHeight = height;
+
 				NLImage replyImg = NLImage.newBuilder()
 						.setWidth(width)
 						.setHeight(height)
