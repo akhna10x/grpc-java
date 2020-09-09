@@ -107,7 +107,7 @@ public class NLImageServer {
 				NLImage reply = NLImage.newBuilder()
 						.setWidth(newWidth)
 						.setHeight(newHeight)
-            .setData(imgToByteString(icon))
+						.setData(imgToByteString(icon))
 						.build();
 				responseObserver.onNext(reply);
 				responseObserver.onCompleted();
@@ -160,15 +160,15 @@ public class NLImageServer {
 		g.drawImage(image, 0, 0, null);
 		g.dispose();
 		return newImage;
-  }
-  
-  private ByteString imgToByteString(ImageIcon icon) {
-    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    ImageOutputStream stream = new MemoryCacheImageOutputStream(baos);
-    ImageIO.write((
-        (BufferedImage) icon.getImage()), "png", stream);
-    return ByteString.copyFrom(baos.toByteArray());
-  }
+	}
+
+	private ByteString imgToByteString(ImageIcon icon) {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		ImageOutputStream stream = new MemoryCacheImageOutputStream(baos);
+		ImageIO.write((
+				(BufferedImage) icon.getImage()), "png", stream);
+		return ByteString.copyFrom(baos.toByteArray());
+	}
 
 	private ImageIcon createRotatedImage(byte[] b, int width, 
 			int height, boolean color, 
