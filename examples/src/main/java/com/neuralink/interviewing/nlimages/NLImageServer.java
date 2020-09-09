@@ -95,7 +95,6 @@ public class NLImageServer {
 			byte[] bytes = reqImgBytes.toByteArray();
 			ImageIcon icon = 
 					createRotatedImage(bytes, width, height, reqImg.getColor(), req.getRotation());
-			displayResponse(icon);
 			try {
 				int newWidth = width;
 				int newHeight = height;
@@ -125,7 +124,6 @@ public class NLImageServer {
 			ByteString reqImgBytes = reqImg.getData();
 			byte[] bytes = reqImgBytes.toByteArray();
 			ImageIcon icon = createWatermarkImage(bytes, width, height, reqImg.getColor());
-			displayResponse(icon);
 			try {
 				NLImage replyImg = NLImage.newBuilder()
 						.setWidth(width)
@@ -236,14 +234,6 @@ public class NLImageServer {
 			System.err.println(ex);
 		}
 		return result;
-	}
-
-	private static void displayResponse(ImageIcon icon) {
-		JFrame frame = new JFrame();
-		JLabel label = new JLabel(icon);
-		frame.add(label);
-		frame.pack();
-		frame.setVisible(true);
 	}
 
 	private static BufferedImage createFlipped(BufferedImage image){
