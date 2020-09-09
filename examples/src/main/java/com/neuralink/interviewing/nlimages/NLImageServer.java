@@ -246,7 +246,6 @@ public class NLImageServer {
       @Override 
       public void customImageEndpoint(NLCustomImageEndpointRequest req, 
                                       StreamObserver<NLCustomImageEndpointResponse> responseObserver) {
-        logger.info("Running customImageEndpoint() ...");
         NLImage reqImg = req.getImage();
         int height = reqImg.getHeight();
         int width = reqImg.getWidth();

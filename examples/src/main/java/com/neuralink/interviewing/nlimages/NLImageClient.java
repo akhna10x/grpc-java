@@ -123,11 +123,11 @@ public class NLImageClient {
 	}
 
 	private ImageIcon createRespImage(byte[] b, int width, int height) {
-		ImageIcon icon = 
-				new ImageIcon(b).getScaledInstance(width, 
+    java.awt.Image img = new ImageIcon(b).getImage().getScaledInstance(
+            width, 
 						height, 
 						java.awt.Image.SCALE_SMOOTH); 
-		return icon;
+		return new ImageIcon(img);
 	}
 
 	private void displayResponse(ImageIcon icon) {
@@ -181,18 +181,17 @@ public class NLImageClient {
 	 */
 	public static void main(String[] args) throws Exception {
 		// Flags and associated constants.
-		final String targetFlag = "target"
-				final String endpointFlag = "endpoint";
+		final String targetFlag = "target";
+		final String endpointFlag = "endpoint";
 		final String filenameFlag = "filename";
 		final String colorFlag = "color";
 		final String rotateFlag = "rotate";
-		final String customEndpoint = "watermark";
+		final String watermark = "watermark";
 		String target = "localhost:9090";
 		String rotationCmd = "0";
 		String filename = "sample-1.png";
 		boolean isColor = true;
 		boolean watermarkEndpoint = false;
-		Map<String, Option> optsSet = parseArgs(args);
 		if (args.length > 0) {
 			if ("--help".equals(args[0])) {
 				System.err.println("Usage: [--target target_server] " +
@@ -200,7 +199,8 @@ public class NLImageClient {
 						"[--color [yes | no]] [--rotate rotation_degrees]");
 				System.exit(1);
 			}
-		}
+    }
+    Map<String, Option> opts = parseArgs(args);
 		if (opts.get(targetFlag) != null) {
 			target = opts.get(targetFlag).opt;
 		}
@@ -218,7 +218,7 @@ public class NLImageClient {
 			}
 		}
 		if (opts.get(rotateFlag) != null) {
-			rotationCmd = opts.get(rotateFlag);
+			rotationCmd = opts.get(rotateFlag).opt;
 		}
 
 		ManagedChannel channel = ManagedChannelBuilder.forTarget(target)
@@ -231,13 +231,13 @@ public class NLImageClient {
 			} else {
 				NLImageRotateRequest.Rotation rotation = 
 						NLImageRotateRequest.Rotation.NONE;
-				if (rotationArg.equals("90")) {
+				if (rotationCmd.equals("90")) {
 					rotation = NLImageRotateRequest.Rotation.NINETY_DEG;
-				} else if (rotationArg.equals("180")) {
+				} else if (rotationCmd.equals("180")) {
 					rotation = NLImageRotateRequest.Rotation.ONE_EIGHTY_DEG;
-				} else if (rotationArg.equals("270")) {
+				} else if (rotationCmd.equals("270")) {
 					rotation = NLImageRotateRequest.Rotation.TWO_SEVENTY_DEG;
-				} else if (rotationArg.equals("0")) {
+				} else if (rotationCmd.equals("0")) {
 					rotation = NLImageRotateRequest.Rotation.NONE;
 				} else {
 					System.err.println("Invalid rotation specified. Exiting.");
