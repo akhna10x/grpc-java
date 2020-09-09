@@ -94,13 +94,13 @@ public class NLImageServer {
 			ByteString reqImgBytes = reqImg.getData();
 			byte[] bytes = reqImgBytes.toByteArray();
 			ImageIcon icon = 
-					createRotatedImage(bytes, width, height, req.isColor(), req.getRotation());
+					createRotatedImage(bytes, width, height, reqImg.getColor(), req.getRotation());
 			displayResponse(icon);
 			try {
 				int newWidth = width;
 				int newHeight = height;
-				if (rotation == NLImageRotateRequest.Rotation.NINETY_DEG ||
-						rotation == NLImageRotateRequest.Rotation.TWO_SEVENTY_DEG) {
+				if (req.getRotation() == NLImageRotateRequest.Rotation.NINETY_DEG ||
+            req.getRotation() == NLImageRotateRequest.Rotation.TWO_SEVENTY_DEG) {
 					newWidth = height;
 					newHeight = width;
 				}
@@ -124,7 +124,7 @@ public class NLImageServer {
 			int width = reqImg.getWidth();
 			ByteString reqImgBytes = reqImg.getData();
 			byte[] bytes = reqImgBytes.toByteArray();
-			ImageIcon icon = createWatermarkImage(bytes, width, height);
+			ImageIcon icon = createWatermarkImage(bytes, width, height, reqImg.getColor());
 			displayResponse(icon);
 			try {
 				NLImage replyImg = NLImage.newBuilder()
@@ -162,7 +162,7 @@ public class NLImageServer {
 		return newImage;
 	}
 
-	private ByteString imgToByteString(ImageIcon icon) {
+	private static ByteString imgToByteString(ImageIcon icon) throws IOException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		ImageOutputStream stream = new MemoryCacheImageOutputStream(baos);
 		ImageIO.write((
@@ -170,7 +170,7 @@ public class NLImageServer {
 		return ByteString.copyFrom(baos.toByteArray());
 	}
 
-	private ImageIcon createRotatedImage(byte[] b, int width, 
+	private static ImageIcon createRotatedImage(byte[] b, int width, 
 			int height, boolean color, 
 			NLImageRotateRequest.Rotation rotation) {
 		ImageIcon icon = new ImageIcon(b);
@@ -190,21 +190,21 @@ public class NLImageServer {
 		return icon;
 	}
 
-	public ImageIcon createWatermarkImage(byte[] b, int width, int height) {
+	private static ImageIcon createWatermarkImage(byte[] b, int width, int height, boolean color) {
 		ImageIcon icon = new ImageIcon(b);
 		java.awt.Image rawImage = icon.getImage();
-		BufferedImage image = convertToBufferedImage(rawImage);
+		BufferedImage image = convertToBufferedImage(rawImage, color);
 		icon.setImage(createWatermarked(image));
 		return icon;
 	}
 
-	private  static GraphicsConfiguration getDefaultConfiguration() {
+	private static GraphicsConfiguration getDefaultConfiguration() {
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		GraphicsDevice gd = ge.getDefaultScreenDevice();
 		return gd.getDefaultConfiguration();
 	}
 
-	public BufferedImage rotate(BufferedImage image, double angle) {
+	private static BufferedImage rotate(BufferedImage image, double angle) {
 		int w = image.getWidth(), h = image.getHeight();
 		GraphicsConfiguration gc = getDefaultConfiguration();
 		BufferedImage result = gc.createCompatibleImage(w, h);
@@ -215,7 +215,7 @@ public class NLImageServer {
 		return result;
 	}
 
-	private BufferedImage addImageWatermark(BufferedImage sourceImage) {
+	private static BufferedImage addImageWatermark(BufferedImage sourceImage) {
 		int w = sourceImage.getWidth();
 		int h = sourceImage.getHeight();
 		GraphicsConfiguration gc = getDefaultConfiguration();
@@ -238,7 +238,7 @@ public class NLImageServer {
 		return result;
 	}
 
-	private void displayResponse(ImageIcon icon) {
+	private static void displayResponse(ImageIcon icon) {
 		JFrame frame = new JFrame();
 		JLabel label = new JLabel(icon);
 		frame.add(label);
@@ -246,10 +246,10 @@ public class NLImageServer {
 		frame.setVisible(true);
 	}
 
-	private BufferedImage createFlipped(BufferedImage image){
+	private static BufferedImage createFlipped(BufferedImage image){
 		return rotate(image, 180.0);
 	}
-	private BufferedImage createWatermarked(BufferedImage image){
+	private static BufferedImage createWatermarked(BufferedImage image){
 		return addImageWatermark(image);
 	}
 
