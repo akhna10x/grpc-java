@@ -62,9 +62,6 @@ public class NLImageClient {
         .setImage(nlImage)
         .setRotation(rotation)
         .build();
-    System.out.println("bImageFromConvert created...");
-    System.out.println("Old height..." + img.getHeight());
-    System.out.println("bImageFromConvert height..." + bImageFromConvert.getHeight());
 
     NLImage response;
     try {
@@ -79,6 +76,9 @@ public class NLImageClient {
     displayResponse(icon);
   }
 
+  /** 
+   * Requests adding a watermark to an image.
+   */
   public void requestWatermark(String filename, boolean isColor) 
     throws IOException{
       byte[] bytes = readImgFile(filename);
@@ -108,7 +108,6 @@ public class NLImageClient {
 
   private byte[] readImgFile(String filename) throws IOException {
     FileInputStream fis = new FileInputStream(filename);
-    ByteArrayOutputStream baos = new ByteArrayOutputStream(1000);
     ByteArrayOutputStream bos = new ByteArrayOutputStream();
     final int maxBufferSize = 1024;
     byte[] buf = new byte[maxBufferSize];
@@ -124,14 +123,16 @@ public class NLImageClient {
   }
 
   private ImageIcon createRespImage(byte[] b, int width, int height) {
-    ImageIcon icon = new ImageIcon(b);
+    ImageIcon icon = 
+        new ImageIcon(b).getScaledInstance(width, 
+                                           height, 
+                                           java.awt.Image.SCALE_SMOOTH); 
     return icon;
   }
 
   private void displayResponse(ImageIcon icon) {
     JFrame frame = new JFrame();
-    JLabel label = new JLabel(icon);
-    frame.add(label);
+    frame.add(new JLabel(icon));
     frame.pack();
     frame.setVisible(true);
   }
@@ -147,7 +148,6 @@ public class NLImageClient {
   private static Map<String, Option> parseArgs(String[] args) {
     Map<String, Option> optsSet = new HashMap<>();
     List<Option> optsList = new ArrayList<Option>();
-    List<String> doubleOptsList = new ArrayList<String>();
     List<String> argsList = new ArrayList<String>();  
 
     for (int i = 0; i < args.length; i++) {
@@ -157,16 +157,16 @@ public class NLImageClient {
               throw new IllegalArgumentException("Not a valid argument: " + args[i]);
           }
           if (args[i].length() < 3) {
-              throw new IllegalArgumentException("Not a valid argument: "+args[i]);
+              throw new IllegalArgumentException("Not a valid argument: " + args[i]);
           }
           String name = args[i].replace("-", "");
-              doubleOptsList.add(args[i].substring(2, args[i].length()));
-              if (args.length-1 == i) {
-                  throw new IllegalArgumentException("Expected arg after: "+args[i]);
-              }
-              optsList.add(new Option(args[i], args[i+1]));
-              optsSet.put(name, new Option(name, args[i+1]));
-              i++;
+          if (args.length - 1 == i) {
+              throw new IllegalArgumentException("Expected arg after: " + args[i]);
+          }
+
+          optsList.add(new Option(args[i], args[i+1]));
+          optsSet.put(name, new Option(name, args[i+1]));
+          i++;
           break;
       default:
           argsList.add(args[i]);
@@ -180,27 +180,45 @@ public class NLImageClient {
    * Runs Neuralink image client.
    */
   public static void main(String[] args) throws Exception {
+    // Flags and associated constants.
+    final String targetFlag = "target"
+    final String endpointFlag = "endpoint";
+    final String filenameFlag = "filename";
+    final String colorFlag = "color";
+    final String rotateFlag = "rotate";
     final String customEndpoint = "watermark";
     String target = "localhost:9090";
+    String rotationCmd = "0";
+    String filename = "sample-1.png";
+    boolean isColor = true;
+    boolean watermarkEndpoint = false;
     Map<String, Option> optsSet = parseArgs(args);
     if (args.length > 0) {
       if ("--help".equals(args[0])) {
-        System.err.println("Usage: target [mode] [filename]");
-        System.err.println("  target  The server to connect to. Defaults to " + target);
+        System.err.println("Usage: [--target target_server] " +
+                           "[--endpoint [rotate | watermark]] [--filename filename] " +
+                           "[--color [yes | no]] [--rotate rotation_degrees]");
         System.exit(1);
       }
     }
-    if (args.length > 1) {
-      target = args[1];
+    if (opts.get(targetFlag) != null) {
+      target = opts.get(targetFlag).opt;
     }
-    boolean watermarkEndpoint = false;
-    Option endpoint = optsSet.get("endpoint");
-    if (endpoint != null && 
-        endpoint.opt.equals(customEndpoint)) {
+    if (opts.get(endpointFlag) != null) {
+      if (opts.get(endpointFlag).opt.equals(watermark)) {
+        watermarkEndpoint = true;
+      }
     }
-    boolean grayscaleImg = false;
-    if (args.length > 2 && args[2].equals(customEndpoint)) {
-      watermarkEndpoint = true;
+    if (opts.get(filenameFlag) != null) {
+      filename = opts.get(filenameFlag).opt;
+    }
+    if (opts.get(colorFlag) != null) {
+      if (opts.get(colorFlag).opt.equals("false")) {
+        isColor = false;
+      }
+    }
+    if (opts.get(rotateFlag) != null) {
+      rotationCmd = opts.get(rotateFlag);
     }
 
     ManagedChannel channel = ManagedChannelBuilder.forTarget(target)
@@ -208,16 +226,11 @@ public class NLImageClient {
         .build();
     try {
         NLImageClient client = new NLImageClient(channel);
-        String filename = "s-result.png";
-        boolean isColor = true;
         if (watermarkEndpoint) {
           client.requestWatermark(filename, isColor); 
         } else {
-          System.out.println("Args rotate: " +
-              optsSet.get("rotate"));
           NLImageRotateRequest.Rotation rotation = 
-              NLImageRotateRequest.Rotation.ONE_EIGHTY_DEG;
-          String rotationArg = optsSet.get("rotate").opt;
+              NLImageRotateRequest.Rotation.NONE;
           if (rotationArg.equals("90")) {
               rotation = NLImageRotateRequest.Rotation.NINETY_DEG;
           } else if (rotationArg.equals("180")) {
@@ -227,14 +240,13 @@ public class NLImageClient {
           } else if (rotationArg.equals("0")) {
             rotation = NLImageRotateRequest.Rotation.NONE;
           } else {
-            System.err.println("Invalid routation specified. Exiting.");
+            System.err.println("Invalid rotation specified. Exiting.");
             return;
           }
-
           client.requestRotate(filename, isColor, rotation); 
         }
       } finally {
         channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
-      }
+  }
   }
 }
