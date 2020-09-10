@@ -86,7 +86,7 @@ public class NLImageServer {
 				int newWidth = width;
 				int newHeight = height;
 				if (req.getRotation() == NLImageRotateRequest.Rotation.NINETY_DEG ||
-					req.getRotation() == NLImageRotateRequest.Rotation.TWO_SEVENTY_DEG) {
+						req.getRotation() == NLImageRotateRequest.Rotation.TWO_SEVENTY_DEG) {
 					newWidth = height;
 					newHeight = width;
 				}
@@ -159,7 +159,7 @@ public class NLImageServer {
 		ImageIcon icon = new ImageIcon(b);
 		java.awt.Image rawImage = icon.getImage();
 		BufferedImage image = 
-			convertToBufferedImage(rawImage, color, width, height);
+				convertToBufferedImage(rawImage, color, width, height);
 		if (rotation == NLImageRotateRequest.Rotation.NONE) { 
 			icon.setImage(rotate(image, 0.0));
 		} else if (rotation == NLImageRotateRequest.Rotation.NINETY_DEG) {
@@ -195,8 +195,8 @@ public class NLImageServer {
 	private static BufferedImage addImageWatermark(BufferedImage sourceImage) {
 		GraphicsConfiguration gc = getDefaultConfiguration();
 		BufferedImage result = 
-			gc.createCompatibleImage(sourceImage.getWidth(), 
-									 sourceImage.getHeight());
+				gc.createCompatibleImage(sourceImage.getWidth(), 
+						sourceImage.getHeight());
 		try {
 			BufferedImage watermarkImage = ImageIO.read(new File("watermark.png"));
 			Graphics2D g = result.createGraphics();
