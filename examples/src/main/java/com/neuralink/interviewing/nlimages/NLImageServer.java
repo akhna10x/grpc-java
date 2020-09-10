@@ -51,7 +51,6 @@ public class NLImageServer {
 				.build()
 				.start();
 		logger.info("Listening on " + port);
-		NLImage nlImage =  NLImage.newBuilder().build();
 
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			@Override
@@ -99,7 +98,7 @@ public class NLImageServer {
 				int newWidth = width;
 				int newHeight = height;
 				if (req.getRotation() == NLImageRotateRequest.Rotation.NINETY_DEG ||
-            req.getRotation() == NLImageRotateRequest.Rotation.TWO_SEVENTY_DEG) {
+						req.getRotation() == NLImageRotateRequest.Rotation.TWO_SEVENTY_DEG) {
 					newWidth = height;
 					newHeight = width;
 				}
