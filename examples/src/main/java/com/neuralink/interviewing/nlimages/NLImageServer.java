@@ -174,20 +174,6 @@ public class NLImageServer {
 		return icon;
 	}
 
-	private static ImageIcon createWatermarkImage(byte[] b, int width, int height, boolean color) {
-		ImageIcon icon = new ImageIcon(b);
-		java.awt.Image rawImage = icon.getImage();
-		BufferedImage image = convertToBufferedImage(rawImage, color);
-		icon.setImage(createWatermarked(image));
-		return icon;
-	}
-
-	private static GraphicsConfiguration getDefaultConfiguration() {
-		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		GraphicsDevice gd = ge.getDefaultScreenDevice();
-		return gd.getDefaultConfiguration();
-	}
-
 	private static BufferedImage rotate(BufferedImage image, double angle) {
 		int w = image.getWidth(), h = image.getHeight();
 		GraphicsConfiguration gc = getDefaultConfiguration();
@@ -197,6 +183,14 @@ public class NLImageServer {
 		g.drawRenderedImage(image, null);
 		g.dispose();
 		return result;
+	}
+
+	private static ImageIcon createWatermarkImage(byte[] b, int width, int height, boolean color) {
+		ImageIcon icon = new ImageIcon(b);
+		java.awt.Image rawImage = icon.getImage();
+		BufferedImage image = convertToBufferedImage(rawImage, color);
+		icon.setImage(addImageWatermark(image));
+		return icon;
 	}
 
 	private static BufferedImage addImageWatermark(BufferedImage sourceImage) {
@@ -221,8 +215,10 @@ public class NLImageServer {
 		return result;
 	}
 
-	private static BufferedImage createWatermarked(BufferedImage image){
-		return addImageWatermark(image);
+	private static GraphicsConfiguration getDefaultConfiguration() {
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		GraphicsDevice gd = ge.getDefaultScreenDevice();
+		return gd.getDefaultConfiguration();
 	}
 
 	/**
