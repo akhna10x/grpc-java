@@ -86,7 +86,7 @@ public class NLImageServer {
 				int newWidth = width;
 				int newHeight = height;
 				if (req.getRotation() == NLImageRotateRequest.Rotation.NINETY_DEG ||
-						req.getRotation() == NLImageRotateRequest.Rotation.TWO_SEVENTY_DEG) {
+					req.getRotation() == NLImageRotateRequest.Rotation.TWO_SEVENTY_DEG) {
 					newWidth = height;
 					newHeight = width;
 				}
@@ -161,7 +161,6 @@ public class NLImageServer {
 		ImageIcon icon = new ImageIcon(b);
 		java.awt.Image rawImage = icon.getImage();
 		BufferedImage image = convertToBufferedImage(rawImage, color);
-		icon.setImage(createFlipped(image));
 		if (rotation == NLImageRotateRequest.Rotation.NONE) { 
 			icon.setImage(rotate(image, 0.0));
 		} else if (rotation == NLImageRotateRequest.Rotation.NINETY_DEG) {
@@ -223,9 +222,6 @@ public class NLImageServer {
 		return result;
 	}
 
-	private static BufferedImage createFlipped(BufferedImage image){
-		return rotate(image, 180.0);
-	}
 	private static BufferedImage createWatermarked(BufferedImage image){
 		return addImageWatermark(image);
 	}
