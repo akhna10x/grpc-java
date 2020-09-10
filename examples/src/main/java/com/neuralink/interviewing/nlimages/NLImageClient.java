@@ -10,24 +10,17 @@ import io.grpc.Channel;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
-import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.io.*;
 import java.awt.image.BufferedImage;
-import java.awt.*;
-import java.awt.image.DataBufferByte;
 import javax.swing.*;
 import javax.imageio.ImageIO;
-import javax.imageio.ImageReadParam;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.ImageInputStream;
 
 /**
  * Client for managing requests to the Neuralink image service.
@@ -70,7 +63,6 @@ public class NLImageClient {
 			logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
 			return;
 		}
-		ByteString respImgBytes = response.getData();
 		byte[] rBytes = response.getData().toByteArray();
 		ImageIcon icon = createRespImage(rBytes, response.getWidth(), response.getHeight());
 		displayResponse(icon);

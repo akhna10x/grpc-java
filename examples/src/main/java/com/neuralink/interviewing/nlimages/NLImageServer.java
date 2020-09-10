@@ -129,16 +129,14 @@ public class NLImageServer {
 	}
 
 	private static BufferedImage convertToBufferedImage(
-			java.awt.Image image, boolean color) {
+			java.awt.Image image, boolean color, int width, int height) {
 		BufferedImage newImage;
 		if (color) {
 			newImage = new BufferedImage(
-					image.getWidth(null), image.getHeight(null),
-					BufferedImage.TYPE_INT_RGB);
+					width, height, BufferedImage.TYPE_INT_RGB);
 		} else {
 			newImage = new BufferedImage(
-					image.getWidth(null), image.getHeight(null),
-					BufferedImage.TYPE_BYTE_GRAY);
+					width, height, BufferedImage.TYPE_BYTE_GRAY);
 		}
 
 		Graphics2D g = newImage.createGraphics();
@@ -160,7 +158,8 @@ public class NLImageServer {
 			NLImageRotateRequest.Rotation rotation) {
 		ImageIcon icon = new ImageIcon(b);
 		java.awt.Image rawImage = icon.getImage();
-		BufferedImage image = convertToBufferedImage(rawImage, color);
+		BufferedImage image = 
+			convertToBufferedImage(rawImage, color, width, height);
 		if (rotation == NLImageRotateRequest.Rotation.NONE) { 
 			icon.setImage(rotate(image, 0.0));
 		} else if (rotation == NLImageRotateRequest.Rotation.NINETY_DEG) {
@@ -188,7 +187,7 @@ public class NLImageServer {
 	private static ImageIcon createWatermarkImage(byte[] b, int width, int height, boolean color) {
 		ImageIcon icon = new ImageIcon(b);
 		java.awt.Image rawImage = icon.getImage();
-		BufferedImage image = convertToBufferedImage(rawImage, color);
+		BufferedImage image = convertToBufferedImage(rawImage, color, width, height);
 		icon.setImage(addImageWatermark(image));
 		return icon;
 	}
