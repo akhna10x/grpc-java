@@ -6,32 +6,20 @@ package com.neuralink.interviewing.nlimages;
 
 import com.google.protobuf.ByteString;
 import com.neuralink.interviewing.*;
-import io.grpc.Channel;
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
-import io.grpc.StatusRuntimeException;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
-import java.util.Iterator;
 import java.io.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.WritableRaster;
-import java.awt.*;
 import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsConfiguration;
-import java.awt.geom.AffineTransform;
-import java.awt.image.DataBufferByte;
 import javax.imageio.ImageIO;
-import javax.imageio.ImageReadParam;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.ImageInputStream;
 import javax.imageio.stream.MemoryCacheImageOutputStream;
 import javax.imageio.stream.ImageOutputStream;
 import javax.swing.*;
@@ -110,7 +98,7 @@ public class NLImageServer {
 				responseObserver.onNext(reply);
 				responseObserver.onCompleted();
 			} catch(IOException e) {
-				System.err.println("IOExceotion: " + e.getMessage());
+				System.err.println("IOException: " + e.getMessage());
 			}
 		}
 
