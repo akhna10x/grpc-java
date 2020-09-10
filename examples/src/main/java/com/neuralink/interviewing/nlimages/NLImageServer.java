@@ -200,13 +200,12 @@ public class NLImageServer {
 	}
 
 	private static BufferedImage addImageWatermark(BufferedImage sourceImage) {
-		int w = sourceImage.getWidth();
-		int h = sourceImage.getHeight();
 		GraphicsConfiguration gc = getDefaultConfiguration();
-		BufferedImage result = gc.createCompatibleImage(w, h);
+		BufferedImage result = 
+			gc.createCompatibleImage(sourceImage.getWidth(), 
+									 sourceImage.getHeight());
 		try {
 			BufferedImage watermarkImage = ImageIO.read(new File("watermark.png"));
-
 			Graphics2D g = result.createGraphics();
 			Graphics2D g2d = (Graphics2D) sourceImage.getGraphics();
 			AlphaComposite alphaChannel = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f);
