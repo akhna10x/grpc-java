@@ -67,6 +67,19 @@ public class NLImageServer {
 			server.awaitTermination();
 		}
 	}
+	
+	 static void displayMatrix( 
+		        int N, int mat[][]) 
+		    { 
+		        for (int i = 0; i < N; i++) { 
+		            for (int j = 0; j < N; j++) 
+		                System.out.print( 
+		                    " " + mat[i][j]); 
+		  
+		            System.out.print("\n"); 
+		        } 
+		        System.out.print("\n"); 
+		    } 
 
 	/** 
 	 * NLImageService implementation.
@@ -75,31 +88,74 @@ public class NLImageServer {
 
 		@Override
 		public void rotateImage(NLImageRotateRequest req, StreamObserver<NLImage> responseObserver) {
-			NLImage reqImg = req.getImage();
-			int height = reqImg.getHeight();
-			int width = reqImg.getWidth();
-			ByteString reqImgBytes = reqImg.getData();
-			byte[] bytes = reqImgBytes.toByteArray();
-			ImageIcon icon = 
-					createRotatedImage(bytes, width, height, reqImg.getColor(), req.getRotation());
-			try {
-				int newWidth = width;
-				int newHeight = height;
-				if (req.getRotation() == NLImageRotateRequest.Rotation.NINETY_DEG ||
-						req.getRotation() == NLImageRotateRequest.Rotation.TWO_SEVENTY_DEG) {
-					newWidth = height;
-					newHeight = width;
+			NLImage img = req.getImage();
+			int height = img.getHeight();
+			int width = img.getWidth();
+			byte[] imgBytes = img.toByteArray();
+			// TODO: handle color imgs
+			byte[][] matrix = new byte[height][width];
+			final int maxSize = Integer.MAX_VALUE;
+			// Validate image
+			if (height * width != imgBytes.length) {
+				// TODO: return error code
+//				NLImage reply = NLImage.newBuilder()
+////						.setWidth(newWidth)
+////						.setHeight(newHeight)
+////						.setData(imgToByteString(icon))
+//						.build();
+				return;
+			}
+			
+//			if (!)
+			int index = 0;
+			for (int row = 0; row < height; ++row) {
+				for (int col = 0; col < width; ++col) {
+				   matrix[row][col] = imgBytes[index];
 				}
+			}
+			
+			NLImageRotateRequest.Rotation rotation =
+					req.getRotation();
+			
+			
+			if (rotation == NLImageRotateRequest.Rotation.ONE_EIGHTY_DEG) {
+				
+			}
+			
+			
+//					new byte[];
+			
+			
+			
+			
+//			if () {
+//				
+//				
+//			}
+//			
+			
+			
+
+			
+
+//			try {
+//				int newWidth = width;
+//				int newHeight = height;
+//				if (req.getRotation() == NLImageRotateRequest.Rotation.NINETY_DEG ||
+//						req.getRotation() == NLImageRotateRequest.Rotation.TWO_SEVENTY_DEG) {
+//					newWidth = height;
+//					newHeight = width;
+//				}
 				NLImage reply = NLImage.newBuilder()
-						.setWidth(newWidth)
-						.setHeight(newHeight)
-						.setData(imgToByteString(icon))
+//						.setWidth(newWidth)
+//						.setHeight(newHeight)
+//						.setData(imgToByteString(icon))
 						.build();
 				responseObserver.onNext(reply);
 				responseObserver.onCompleted();
-			} catch(IOException e) {
-				System.err.println("IOException: " + e.getMessage());
-			}
+//			} catch(IOException e) {
+//				System.err.println("IOException: " + e.getMessage());
+//			}
 		}
 
 		@Override 
