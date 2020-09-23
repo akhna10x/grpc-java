@@ -69,17 +69,17 @@ public class NLImageServer {
 	}
 	
 	 static void displayMatrix( 
-		        int N, int mat[][]) 
-		    { 
-		        for (int i = 0; i < N; i++) { 
-		            for (int j = 0; j < N; j++) 
-		                System.out.print( 
-		                    " " + mat[i][j]); 
-		  
-		            System.out.print("\n"); 
-		        } 
-		        System.out.print("\n"); 
-		    } 
+		        byte mat[][]) { 
+		 int N = mat.length;
+	        for (int i = 0; i < N; i++) { 
+	            for (int j = 0; j < mat[0].length; j++) 
+	                System.out.print( 
+	                    " " + mat[i][j]); 
+	  
+	            System.out.print("\n"); 
+	        } 
+	        System.out.print("\n"); 
+	} 
 
 	/** 
 	 * NLImageService implementation.
@@ -88,6 +88,7 @@ public class NLImageServer {
 
 		@Override
 		public void rotateImage(NLImageRotateRequest req, StreamObserver<NLImage> responseObserver) {
+			System.out.println("Handling request...");
 			NLImage img = req.getImage();
 			int height = img.getHeight();
 			int width = img.getWidth();
@@ -103,7 +104,8 @@ public class NLImageServer {
 ////						.setHeight(newHeight)
 ////						.setData(imgToByteString(icon))
 //						.build();
-				return;
+				System.err.println("Skipping invalid img...");
+//				return;
 			}
 			
 //			if (!)
@@ -113,10 +115,11 @@ public class NLImageServer {
 				   matrix[row][col] = imgBytes[index];
 				}
 			}
+			displayMatrix(matrix);
 			
 			NLImageRotateRequest.Rotation rotation =
 					req.getRotation();
-			
+			System.out.println("Handling rotate request " + rotation);
 			
 			if (rotation == NLImageRotateRequest.Rotation.ONE_EIGHTY_DEG) {
 				
