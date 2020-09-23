@@ -149,7 +149,7 @@ public class NLImageClient {
 					throw new IllegalArgumentException("Not a valid argument: " + args[i]);
 				}
 				if (args[i].length() < 3) {
-					throw new IllegalArgumentException("Not a valid argument: " + args[i]);
+					throw new IllegalArgumentException("Not a argument: " + args[i]);
 				}
 				String name = args[i].replace("-", "");
 				if (args.length - 1 == i) {
@@ -184,6 +184,7 @@ public class NLImageClient {
 		String filename = "sample-1.png";
 		boolean isColor = true;
 		boolean watermarkEndpoint = false;
+		System.out.println("Running client...");
 		if (args.length > 0) {
 			if ("--help".equals(args[0])) {
 				System.err.println("Usage: [--target target_server] " +
