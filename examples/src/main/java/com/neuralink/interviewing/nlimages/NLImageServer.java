@@ -68,6 +68,16 @@ public class NLImageServer {
 		}
 	}
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	 static void displayMatrix( 
 		        byte mat[][]) { 
 		 int N = mat.length;
@@ -86,8 +96,43 @@ public class NLImageServer {
 	 */
 	static class NLImageServiceImpl extends NLImageServiceGrpc.NLImageServiceImplBase {
 
+		
+
+		private void handleRequest(NLImageRotateRequest req, StreamObserver<NLImage> responseObserver) {
+			// Validate image
+			System.out.println("DEBUG: running handleRequest()");
+			
+			
+			NLImageRotateRequest.Rotation rotation =
+					req.getRotation();
+			// Update rotation
+//			if 
+			NLImage img = req.getImage();
+			int height = img.getHeight();
+			int width = img.getWidth();
+			byte[][] matrix = new byte[height][width];
+			displayMatrix(matrix);
+			
+			// Send response
+				NLImage reply = NLImage.newBuilder()
+						.build();
+				responseObserver.onNext(reply);
+				responseObserver.onCompleted();
+			
+		}
+		 
+		
+		
+		
+		
+		
+		
 		@Override
 		public void rotateImage(NLImageRotateRequest req, StreamObserver<NLImage> responseObserver) {
+			handleRequest(req, responseObserver);
+			return;
+			
+			
 			System.out.println("Handling request...");
 			NLImage img = req.getImage();
 			int height = img.getHeight();
@@ -140,24 +185,24 @@ public class NLImageServer {
 			
 
 			
-
-//			try {
-//				int newWidth = width;
-//				int newHeight = height;
-//				if (req.getRotation() == NLImageRotateRequest.Rotation.NINETY_DEG ||
-//						req.getRotation() == NLImageRotateRequest.Rotation.TWO_SEVENTY_DEG) {
-//					newWidth = height;
-//					newHeight = width;
-//				}
-				NLImage reply = NLImage.newBuilder()
-//						.setWidth(newWidth)
-//						.setHeight(newHeight)
-//						.setData(imgToByteString(icon))
-						.build();
-				responseObserver.onNext(reply);
-				responseObserver.onCompleted();
-//			} catch(IOException e) {
-//				System.err.println("IOException: " + e.getMessage());
+//
+////			try {
+////				int newWidth = width;
+////				int newHeight = height;
+////				if (req.getRotation() == NLImageRotateRequest.Rotation.NINETY_DEG ||
+////						req.getRotation() == NLImageRotateRequest.Rotation.TWO_SEVENTY_DEG) {
+////					newWidth = height;
+////					newHeight = width;
+////				}
+//				NLImage reply = NLImage.newBuilder()
+////						.setWidth(newWidth)
+////						.setHeight(newHeight)
+////						.setData(imgToByteString(icon))
+//						.build();
+//				responseObserver.onNext(reply);
+//				responseObserver.onCompleted();
+////			} catch(IOException e) {
+////				System.err.println("IOException: " + e.getMessage());
 //			}
 		}
 

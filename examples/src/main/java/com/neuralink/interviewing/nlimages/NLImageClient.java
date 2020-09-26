@@ -52,6 +52,12 @@ public class NLImageClient {
 	        System.out.print("\n"); 
 	} 
 
+	 
+	 
+	private void handleRequest() {
+		
+	}
+	 
 	
 	/** 
 	 * Requests an image be rotated.
