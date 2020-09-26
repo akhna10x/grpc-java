@@ -132,44 +132,44 @@ public class NLImageServer {
 			handleRequest(req, responseObserver);
 			return;
 			
-			
-			System.out.println("Handling request...");
-			NLImage img = req.getImage();
-			int height = img.getHeight();
-			int width = img.getWidth();
-			byte[] imgBytes = img.toByteArray();
-			// TODO: handle color imgs
-			byte[][] matrix = new byte[height][width];
-			final int maxSize = Integer.MAX_VALUE;
-			// Validate image
-			if (height * width != imgBytes.length) {
-				// TODO: return error code
-//				NLImage reply = NLImage.newBuilder()
-////						.setWidth(newWidth)
-////						.setHeight(newHeight)
-////						.setData(imgToByteString(icon))
-//						.build();
-				System.err.println("Skipping invalid img...");
-//				return;
-			}
-			
-//			if (!)
-			int index = 0;
-			for (int row = 0; row < height; ++row) {
-				for (int col = 0; col < width; ++col) {
-				   matrix[row][col] = imgBytes[index];
-				}
-			}
-			displayMatrix(matrix);
-			
-			NLImageRotateRequest.Rotation rotation =
-					req.getRotation();
-			System.out.println("Handling rotate request " + rotation);
-			
-			if (rotation == NLImageRotateRequest.Rotation.ONE_EIGHTY_DEG) {
-				
-			}
-			
+//			
+//			System.out.println("Handling request...");
+//			NLImage img = req.getImage();
+//			int height = img.getHeight();
+//			int width = img.getWidth();
+//			byte[] imgBytes = img.toByteArray();
+//			// TODO: handle color imgs
+//			byte[][] matrix = new byte[height][width];
+//			final int maxSize = Integer.MAX_VALUE;
+//			// Validate image
+//			if (height * width != imgBytes.length) {
+//				// TODO: return error code
+////				NLImage reply = NLImage.newBuilder()
+//////						.setWidth(newWidth)
+//////						.setHeight(newHeight)
+//////						.setData(imgToByteString(icon))
+////						.build();
+//				System.err.println("Skipping invalid img...");
+////				return;
+//			}
+//			
+////			if (!)
+//			int index = 0;
+//			for (int row = 0; row < height; ++row) {
+//				for (int col = 0; col < width; ++col) {
+//				   matrix[row][col] = imgBytes[index];
+//				}
+//			}
+//			displayMatrix(matrix);
+//			
+//			NLImageRotateRequest.Rotation rotation =
+//					req.getRotation();
+//			System.out.println("Handling rotate request " + rotation);
+//			
+//			if (rotation == NLImageRotateRequest.Rotation.ONE_EIGHTY_DEG) {
+//				
+//			}
+//			
 			
 //					new byte[];
 			
