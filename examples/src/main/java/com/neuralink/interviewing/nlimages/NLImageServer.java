@@ -82,9 +82,12 @@ public class NLImageServer {
 		        byte mat[][]) { 
 		 int N = mat.length;
 	        for (int i = 0; i < N; i++) { 
-	            for (int j = 0; j < mat[0].length; j++) 
-	                System.out.print( 
-	                    " " + mat[i][j]); 
+	            for (int j = 0; j < mat[0].length; j++) {
+	            	byte cur = mat[i][j];
+	            	System.out.println(
+	            	String.format("%02X ",cur));
+//	                System.out.print( 
+//	                    "Byte: " + (mat[i][j] & 0xff) + " "); 
 	  
 	            System.out.print("\n"); 
 	        } 
@@ -110,7 +113,14 @@ public class NLImageServer {
 			NLImage img = req.getImage();
 			int height = img.getHeight();
 			int width = img.getWidth();
+			byte[] imgBytes = img.toByteArray();
+			int index = 0;
 			byte[][] matrix = new byte[height][width];
+			for (int row = 0; row < height; ++row) {
+				for (int col = 0; col < width; ++col) {
+				   matrix[row][col] = imgBytes[index];
+				}
+			}
 			displayMatrix(matrix);
 			
 			// Send response

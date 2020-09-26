@@ -73,13 +73,6 @@ public class NLImageClient {
 		}
 		
 		
-	    // 180-degree rotation
-		
-		byte[][] rotated = 
-				new byte[10][10];
-		
-//		for 
-		
 		
 		
 		BufferedImage img = ImageIO.read(new ByteArrayInputStream(bytes));
