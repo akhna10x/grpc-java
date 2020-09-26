@@ -38,18 +38,52 @@ public class NLImageClient {
 		blockingStub = NLImageServiceGrpc.newBlockingStub(channel);
 	}
 
+	
+	 static void displayMatrix( 
+		        byte mat[][]) { 
+		 int N = mat.length;
+	        for (int i = 0; i < N; i++) { 
+	            for (int j = 0; j < mat[0].length; j++) 
+	                System.out.print( 
+	                    " " + mat[i][j]); 
+	  
+	            System.out.print("\n"); 
+	        } 
+	        System.out.print("\n"); 
+	} 
+
+	
 	/** 
 	 * Requests an image be rotated.
 	 */
 	public void requestRotate(String filename, boolean isColor, 
 			NLImageRotateRequest.Rotation rotation) throws IOException{
-		byte[] bytes = readImgFile(filename);
+		
+//		byte[] bytes = readImgFile(filename);
+		byte[] bytes = {(byte) 0x1, (byte) 0x2, (byte) 0x3, (byte) 0x4};
+		
+		for (int i = 0; i < bytes.length; ++i) {
+			System.out.println("byte: " + bytes[i]);
+		}
+		
+		
+	    // 180-degree rotation
+		
+		byte[][] rotated = 
+				new byte[10][10];
+		
+//		for 
+		
+		
+		
 		BufferedImage img = ImageIO.read(new ByteArrayInputStream(bytes));
 		NLImage nlImage = NLImage.newBuilder()
 				.setColor(isColor)
 				.setData(ByteString.copyFrom(bytes))
-				.setWidth(img.getWidth())
-				.setHeight(img.getHeight())
+//				.setWidth(img.getWidth())
+//				.setHeight(img.getHeight())
+				.setWidth(2)
+				.setHeight(2)
 				.build();
 		NLImageRotateRequest request = NLImageRotateRequest.newBuilder()
 				.setImage(nlImage)
@@ -63,9 +97,9 @@ public class NLImageClient {
 			logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
 			return;
 		}
-		byte[] rBytes = response.getData().toByteArray();
-		ImageIcon icon = createRespImage(rBytes, response.getWidth(), response.getHeight());
-		displayResponse(icon);
+//		byte[] rBytes = response.getData().toByteArray();
+//		ImageIcon icon = createRespImage(rBytes, response.getWidth(), response.getHeight());
+//		displayResponse(icon);
 	}
 
 	/** 
