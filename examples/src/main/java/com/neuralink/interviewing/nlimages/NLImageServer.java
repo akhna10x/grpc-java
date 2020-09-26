@@ -92,6 +92,7 @@ public class NLImageServer {
 	            System.out.print("\n"); 
 	        } 
 	        System.out.print("\n"); 
+	        }
 	} 
 
 	/** 
@@ -114,6 +115,7 @@ public class NLImageServer {
 			int height = img.getHeight();
 			int width = img.getWidth();
 			byte[] imgBytes = img.toByteArray();
+			System.out.println(Arrays.toString(byteArray));
 			int index = 0;
 			byte[][] matrix = new byte[height][width];
 			for (int row = 0; row < height; ++row) {
