@@ -150,7 +150,7 @@ public class NLImageServer {
 				for (int row = 0; row < newHeight; ++row) {
 					byte[] newRow = new byte[newWidth];
 					for (int col = 0; col < newWidth; ++ col) {
-						newRow[col] = matrix[newWidth - col][0];
+						newRow[col] = matrix[newWidth - col -1][0];
 						
 					}
 					rotated[row] = newRow;
