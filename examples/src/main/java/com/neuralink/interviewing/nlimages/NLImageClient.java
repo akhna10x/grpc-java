@@ -57,8 +57,7 @@ public class NLImageClient {
 	public void requestRotate(String filename, boolean isColor, 
 			NLImageRotateRequest.Rotation rotation) throws IOException{
 		
-//		byte[] bytes = readImgFile(filename);
-//		byte[] bytes = {(byte) 0x1, (byte) 0x2, (byte) 0x3, (byte) 0x4};
+
 		byte[] bytes = {(byte) 0x7, (byte) 0x7, (byte) 0x7, (byte) 0x8, (byte) 0x8, (byte) 0x8};
 //		byte[] bytes = {};
 		

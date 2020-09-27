@@ -30,7 +30,7 @@ import javax.swing.*;
  */
 public class NLImageServer {
 	private static final Logger logger = Logger.getLogger(NLImageServer.class.getName());
-
+	
 	private Server server;
 
 	private void start() throws IOException {
@@ -69,31 +69,15 @@ public class NLImageServer {
 		}
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	 static void displayMatrix( 
+	static void displayMatrix( 
 		        byte mat[][]) { 
 		 int N = mat.length;
 	        for (int i = 0; i < N; i++) { 
 	            for (int j = 0; j < mat[0].length; j++) {
 	            	byte cur = mat[i][j];
-	             	System.out.print(
-	    	            	String.format("%02X ",cur));
-//	            	System.out.println(
-//	            	String.format("%02X ",cur));
-//	                System.out.print( 
-//	                    "Byte: " + (mat[i][j] & 0xff) + " "); 
-	  
-	        } 
-	        System.out.print("\n"); 
+	             	System.out.print(String.format("%02X ",cur));
+	            } 
+	            System.out.print("\n"); 
 	        }
 	} 
 
@@ -102,24 +86,18 @@ public class NLImageServer {
 	 */
 	static class NLImageServiceImpl extends NLImageServiceGrpc.NLImageServiceImplBase {
 
-		
-
 		private void handleRequest(NLImageRotateRequest req, StreamObserver<NLImage> responseObserver) {
 			// Validate image
 			System.out.println("DEBUG: running handleRequest()");
 			final int numPaddingBytes = 8;
-			
-			NLImageRotateRequest.Rotation rotation =
-					req.getRotation();
-			// Update rotation
-//			if 
 			NLImage img = req.getImage();
 			int height = img.getHeight();
 			int width = img.getWidth();
+			int newHeight = img.getHeight();
+			int newWidth = img.getWidth();
 			byte[] imgBytes = img.toByteArray();
 			System.out.println("Length: " + imgBytes.length);
 			System.out.println(Arrays.toString(imgBytes));
-//			int index = 3; // Skip header 
 			int index = 4; // Skip header 
 			byte[][] matrix = new byte[height][width];
 			for (int row = 0; row < height; ++row) {
@@ -128,10 +106,68 @@ public class NLImageServer {
 				   index++;
 				}
 			}
+			
+			NLImageRotateRequest.Rotation rotation =
+					req.getRotation();
+			// Update rotation
+			
+			
+			
+			// Rotate (90 degrees is counterclockwise)
+			byte[][] rotated  = null;
+			
+			
+//			if (rotation == NLImageRotateRequest.Rotation.ONE_EIGHTY_DEG) {
+//				rotated = new byte[newHeight][newWidth];
+//				for (int row = 0; row < height; ++row) {
+//					for (int col = 0; col < width; ++col) {
+//						System.out.println("DEBUG: Swapping bytes ...");
+//						byte[] oldRow = matrix[height - row - 1];
+//						rotated[row] = oldRow;
+//					}
+//				}
+//			} else if (rotation == NLImageRotateRequest.Rotation.NINETY_DEG) {
+			if (true) {
+				newHeight = width;
+				newWidth = height;
+				rotated = new byte[newHeight][newWidth];
+				
+				for (int row = 0; row < newHeight; ++row) {
+					byte[] newRow = new byte[newWidth];
+					for (int col = 0; col < newWidth; ++ col) {
+						newRow[col] = matrix[col][0];
+						
+					}
+					rotated[row] = newRow;
+				}
+				
+				
+				
+				
+				
+				
+				// TODO: implement
+			} else if (rotation == NLImageRotateRequest.Rotation.TWO_SEVENTY_DEG) {
+				// TODO: implement
+			} else if (rotation == NLImageRotateRequest.Rotation.NONE) {
+				// TODO: implement
+			} else {
+				System.err.println("Unhandled request type: ");
+			}
+		
+			
+			
+			matrix = rotated;
+			
 			displayMatrix(matrix);
 			
+			
+		
 			// Send response
 				NLImage reply = NLImage.newBuilder()
+						.setHeight(newHeight)
+						.setWidth(newWidth)
+//						.setData(newImg)`
 						.build();
 				responseObserver.onNext(reply);
 				responseObserver.onCompleted();
