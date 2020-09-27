@@ -92,7 +92,6 @@ public class NLImageServer {
 //	                System.out.print( 
 //	                    "Byte: " + (mat[i][j] & 0xff) + " "); 
 	  
-	            System.out.print("\n"); 
 	        } 
 	        System.out.print("\n"); 
 	        }
