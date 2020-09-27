@@ -44,21 +44,13 @@ public class NLImageClient {
 		 int N = mat.length;
 	        for (int i = 0; i < N; i++) { 
 	            for (int j = 0; j < mat[0].length; j++) 
-	                System.out.print( 
-	                    " " + mat[i][j]); 
+	                System.out.print(" " + mat[i][j]); 
 	  
 	            System.out.print("\n"); 
 	        } 
 	        System.out.print("\n"); 
 	} 
 
-	 
-	 
-	private void handleRequest() {
-		
-	}
-	 
-	
 	/** 
 	 * Requests an image be rotated.
 	 */
@@ -67,8 +59,8 @@ public class NLImageClient {
 		
 //		byte[] bytes = readImgFile(filename);
 //		byte[] bytes = {(byte) 0x1, (byte) 0x2, (byte) 0x3, (byte) 0x4};
-//		byte[] bytes = {(byte) 0x7, (byte) 0x7, (byte) 0x7, (byte) 0x7};
-		byte[] bytes = {};
+		byte[] bytes = {(byte) 0x7, (byte) 0x7, (byte) 0x7, (byte) 0x7};
+//		byte[] bytes = {};
 		
 		for (int i = 0; i < bytes.length; ++i) {
 			System.out.println("byte: " + bytes[i]);

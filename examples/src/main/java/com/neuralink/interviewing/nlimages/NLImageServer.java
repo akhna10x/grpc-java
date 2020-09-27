@@ -85,8 +85,10 @@ public class NLImageServer {
 	        for (int i = 0; i < N; i++) { 
 	            for (int j = 0; j < mat[0].length; j++) {
 	            	byte cur = mat[i][j];
-	            	System.out.println(
-	            	String.format("%02X ",cur));
+	             	System.out.println(
+	    	            	String.format("%02X ",cur));
+//	            	System.out.println(
+//	            	String.format("%02X ",cur));
 //	                System.out.print( 
 //	                    "Byte: " + (mat[i][j] & 0xff) + " "); 
 	  
@@ -106,7 +108,7 @@ public class NLImageServer {
 		private void handleRequest(NLImageRotateRequest req, StreamObserver<NLImage> responseObserver) {
 			// Validate image
 			System.out.println("DEBUG: running handleRequest()");
-			final int numPaddingBytes = 6;
+			final int numPaddingBytes = 8;
 			
 			NLImageRotateRequest.Rotation rotation =
 					req.getRotation();
@@ -118,13 +120,14 @@ public class NLImageServer {
 			byte[] imgBytes = img.toByteArray();
 			System.out.println("Length: " + imgBytes.length);
 			System.out.println(Arrays.toString(imgBytes));
-			int index = 3; // Skip header 
+//			int index = 3; // Skip header 
+			int index = 4; // Skip header 
 			byte[][] matrix = new byte[height][width];
 			for (int row = 0; row < height; ++row) {
 				for (int col = 0; col < width; ++col) {
 				   matrix[row][col] = imgBytes[index];
+				   index++;
 				}
-				index++;
 			}
 			displayMatrix(matrix);
 			
