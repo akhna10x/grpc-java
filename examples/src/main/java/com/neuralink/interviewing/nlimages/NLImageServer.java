@@ -124,6 +124,7 @@ public class NLImageServer {
 				for (int col = 0; col < width; ++col) {
 				   matrix[row][col] = imgBytes[index];
 				}
+				index++;
 			}
 			displayMatrix(matrix);
 			
