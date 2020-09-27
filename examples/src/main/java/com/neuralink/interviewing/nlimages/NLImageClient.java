@@ -59,7 +59,7 @@ public class NLImageClient {
 		
 //		byte[] bytes = readImgFile(filename);
 //		byte[] bytes = {(byte) 0x1, (byte) 0x2, (byte) 0x3, (byte) 0x4};
-		byte[] bytes = {(byte) 0x7, (byte) 0x7, (byte) 0x7, (byte) 0x7};
+		byte[] bytes = {(byte) 0x7, (byte) 0x7, (byte) 0x7, (byte) 0x7, (byte) 0x7, (byte) 0x7};
 //		byte[] bytes = {};
 		
 		for (int i = 0; i < bytes.length; ++i) {
@@ -76,7 +76,7 @@ public class NLImageClient {
 				.setData(byteString)
 //				.setWidth(img.getWidth())
 //				.setHeight(img.getHeight())
-				.setWidth(2)
+				.setWidth(3)
 				.setHeight(2)
 				.build();
 		NLImageRotateRequest request = NLImageRotateRequest.newBuilder()
