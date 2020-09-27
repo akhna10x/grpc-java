@@ -154,9 +154,7 @@ public class NLImageServer {
 			} else {
 				System.err.println("Unhandled request type: ");
 			}
-		
-			
-			
+			// TODO: add back
 			matrix = rotated;
 			
 			displayMatrix(matrix);
