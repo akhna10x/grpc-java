@@ -127,6 +127,21 @@ public class NLImageServer {
 //					}
 //				}
 //			} else if (rotation == NLImageRotateRequest.Rotation.NINETY_DEG) {
+//				newHeight = width;
+//				newWidth = height;
+//				rotated = new byte[newHeight][newWidth];
+//				
+//				for (int row = 0; row < newHeight; ++row) {
+//					byte[] newRow = new byte[newWidth];
+//					for (int col = 0; col < newWidth; ++ col) {
+//						newRow[col] = matrix[col][0];
+//						
+//					}
+//					rotated[row] = newRow;
+//				}
+//					
+//
+//			} else if (rotation == NLImageRotateRequest.Rotation.TWO_SEVENTY_DEG) {
 			if (true) {
 				newHeight = width;
 				newWidth = height;
@@ -135,40 +150,31 @@ public class NLImageServer {
 				for (int row = 0; row < newHeight; ++row) {
 					byte[] newRow = new byte[newWidth];
 					for (int col = 0; col < newWidth; ++ col) {
-						newRow[col] = matrix[col][0];
+						newRow[col] = matrix[newWidth - col][0];
 						
 					}
 					rotated[row] = newRow;
 				}
-				
-				
-				
-				
-				
-				
-				// TODO: implement
-			} else if (rotation == NLImageRotateRequest.Rotation.TWO_SEVENTY_DEG) {
-				// TODO: implement
+					
 			} else if (rotation == NLImageRotateRequest.Rotation.NONE) {
-				// TODO: implement
+				System.out.println("Skipping rotation ");
 			} else {
 				System.err.println("Unhandled request type: ");
 			}
-			// TODO: add back
 			matrix = rotated;
-			
 			displayMatrix(matrix);
 			
 			
 		
 			// Send response
-				NLImage reply = NLImage.newBuilder()
-						.setHeight(newHeight)
-						.setWidth(newWidth)
-//						.setData(newImg)`
-						.build();
-				responseObserver.onNext(reply);
-				responseObserver.onCompleted();
+			NLImage reply = NLImage.newBuilder()
+					.setHeight(newHeight)
+					.setWidth(newWidth)
+					// TODO: add back matrix
+					// .setData(newImg)`
+					.build();
+			responseObserver.onNext(reply);
+			responseObserver.onCompleted();
 			
 		}
 		 
