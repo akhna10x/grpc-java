@@ -85,7 +85,7 @@ public class NLImageServer {
 	        for (int i = 0; i < N; i++) { 
 	            for (int j = 0; j < mat[0].length; j++) {
 	            	byte cur = mat[i][j];
-	             	System.out.println(
+	             	System.out.print(
 	    	            	String.format("%02X ",cur));
 //	            	System.out.println(
 //	            	String.format("%02X ",cur));
