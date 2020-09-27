@@ -66,19 +66,22 @@ public class NLImageClient {
 			NLImageRotateRequest.Rotation rotation) throws IOException{
 		
 //		byte[] bytes = readImgFile(filename);
-		byte[] bytes = {(byte) 0x1, (byte) 0x2, (byte) 0x3, (byte) 0x4};
+//		byte[] bytes = {(byte) 0x1, (byte) 0x2, (byte) 0x3, (byte) 0x4};
+//		byte[] bytes = {(byte) 0x7, (byte) 0x7, (byte) 0x7, (byte) 0x7};
+		byte[] bytes = {};
 		
 		for (int i = 0; i < bytes.length; ++i) {
 			System.out.println("byte: " + bytes[i]);
 		}
 		
 		
-		
+		ByteString byteString = ByteString.copyFrom(bytes);
+		System.out.println("Byte string: " + byteString);
 		
 		BufferedImage img = ImageIO.read(new ByteArrayInputStream(bytes));
 		NLImage nlImage = NLImage.newBuilder()
 				.setColor(isColor)
-				.setData(ByteString.copyFrom(bytes))
+				.setData(byteString)
 //				.setWidth(img.getWidth())
 //				.setHeight(img.getHeight())
 				.setWidth(2)

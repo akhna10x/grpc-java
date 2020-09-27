@@ -10,6 +10,7 @@ import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 import java.io.*;
@@ -105,7 +106,7 @@ public class NLImageServer {
 		private void handleRequest(NLImageRotateRequest req, StreamObserver<NLImage> responseObserver) {
 			// Validate image
 			System.out.println("DEBUG: running handleRequest()");
-			
+			final int numPaddingBytes = 6;
 			
 			NLImageRotateRequest.Rotation rotation =
 					req.getRotation();
@@ -115,8 +116,9 @@ public class NLImageServer {
 			int height = img.getHeight();
 			int width = img.getWidth();
 			byte[] imgBytes = img.toByteArray();
-			System.out.println(Arrays.toString(byteArray));
-			int index = 0;
+			System.out.println("Length: " + imgBytes.length);
+			System.out.println(Arrays.toString(imgBytes));
+			int index = 3; // Skip header 
 			byte[][] matrix = new byte[height][width];
 			for (int row = 0; row < height; ++row) {
 				for (int col = 0; col < width; ++col) {
