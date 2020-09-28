@@ -106,43 +106,41 @@ public class NLImageServer {
 				   index++;
 				}
 			}
-			
 			NLImageRotateRequest.Rotation rotation =
 					req.getRotation();
 			// Update rotation
-			
+			System.out.println("Requested rotation: " + rotation);
 			
 			
 			// Rotate (90 degrees is counterclockwise)
 			byte[][] rotated  = null;
 			
 			
-//			if (rotation == NLImageRotateRequest.Rotation.ONE_EIGHTY_DEG) {
-//				rotated = new byte[newHeight][newWidth];
-//				for (int row = 0; row < height; ++row) {
-//					for (int col = 0; col < width; ++col) {
-//						System.out.println("DEBUG: Swapping bytes ...");
-//						byte[] oldRow = matrix[height - row - 1];
-//						rotated[row] = oldRow;
-//					}
-//				}
-//			} else if (rotation == NLImageRotateRequest.Rotation.NINETY_DEG) {
-//				newHeight = width;
-//				newWidth = height;
-//				rotated = new byte[newHeight][newWidth];
-//				
-//				for (int row = 0; row < newHeight; ++row) {
-//					byte[] newRow = new byte[newWidth];
-//					for (int col = 0; col < newWidth; ++ col) {
-//						newRow[col] = matrix[col][0];
-//						
-//					}
-//					rotated[row] = newRow;
-//				}
-//					
-//
-//			} else if (rotation == NLImageRotateRequest.Rotation.TWO_SEVENTY_DEG) {
-			if (true) {
+			if (rotation == NLImageRotateRequest.Rotation.ONE_EIGHTY_DEG) {
+				rotated = new byte[newHeight][newWidth];
+				for (int row = 0; row < height; ++row) {
+					for (int col = 0; col < width; ++col) {
+						System.out.println("DEBUG: Swapping bytes ...");
+						byte[] oldRow = matrix[height - row - 1];
+						rotated[row] = oldRow;
+					}
+				}
+			} else if (rotation == NLImageRotateRequest.Rotation.NINETY_DEG) {
+				newHeight = width;
+				newWidth = height;
+				rotated = new byte[newHeight][newWidth];
+				
+				for (int row = 0; row < newHeight; ++row) {
+					byte[] newRow = new byte[newWidth];
+					for (int col = 0; col < newWidth; ++ col) {
+						newRow[col] = matrix[col][0];
+						
+					}
+					rotated[row] = newRow;
+				}
+					
+
+			} else if (rotation == NLImageRotateRequest.Rotation.TWO_SEVENTY_DEG) {
 				newHeight = width;
 				newWidth = height;
 				rotated = new byte[newHeight][newWidth];
@@ -157,14 +155,14 @@ public class NLImageServer {
 				}
 					
 			} else if (rotation == NLImageRotateRequest.Rotation.NONE) {
+				rotated = matrix;
 				System.out.println("Skipping rotation ");
 			} else {
+				rotated = new byte[newHeight][newWidth];
 				System.err.println("Unhandled request type: ");
 			}
 			matrix = rotated;
 			displayMatrix(matrix);
-			
-			
 		
 			// Send response
 			NLImage reply = NLImage.newBuilder()
