@@ -161,7 +161,7 @@ public class NLImageServer {
 			int index = 0;
 			for (int row = 0; row < newHeight; ++ row) {
 				for (int col = 0; col < newWidth; ++col) {
-					matrixBytes = matrix[row][col];
+					matrixBytes[index] = matrix[row][col];
 					++index;
 				}
 			}
