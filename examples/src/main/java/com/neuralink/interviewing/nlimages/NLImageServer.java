@@ -158,7 +158,7 @@ public class NLImageServer {
 		
 			
 			byte[] matrixBytes = new byte[newHeight * newWidth];
-			int index = 0;
+			index = 0;
 			for (int row = 0; row < newHeight; ++ row) {
 				for (int col = 0; col < newWidth; ++col) {
 					matrixBytes[index] = matrix[row][col];
