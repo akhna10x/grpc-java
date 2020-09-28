@@ -156,10 +156,20 @@ public class NLImageServer {
 			matrix = rotated;
 			displayMatrix(matrix);
 		
+			
+			byte[] matrixBytes = new byte[newHeight * newWidth];
+			int index = 0;
+			for (int row = 0; row < newHeight; ++ row) {
+				for (int col = 0; col < newWidth; ++col) {
+					matrixBytes = matrix[row][col];
+					++index;
+				}
+			}
+			
 			NLImage reply = NLImage.newBuilder()
 					.setHeight(newHeight)
 					.setWidth(newWidth)
-					 .setData(ByteString.from(matrix))
+					 .setData(ByteString.copyFrom(matrixBytes))
 					.build();
 			responseObserver.onNext(reply);
 			responseObserver.onCompleted();
