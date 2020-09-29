@@ -39,8 +39,7 @@ public class NLImageClient {
 	}
 
 	
-	 static void displayMatrix( 
-		        byte mat[][]) { 
+	private static void displayMatrix(byte mat[][]) { 
 		 int N = mat.length;
 	        for (int i = 0; i < N; i++) { 
 	            for (int j = 0; j < mat[0].length; j++) 
@@ -56,16 +55,11 @@ public class NLImageClient {
 	 */
 	public void requestRotate(String filename, boolean isColor, 
 			NLImageRotateRequest.Rotation rotation) throws IOException{
-		
-
-		byte[] bytes = {(byte) 0x7, (byte) 0x7, (byte) 0x7, (byte) 0x8, (byte) 0x8, (byte) 0x8};
-//		byte[] bytes = {};
-		
+		byte[] bytes = {(byte) 0x7, (byte) 0x7, (byte) 0x7, 
+						(byte) 0x8, (byte) 0x8, (byte) 0x8};
 		for (int i = 0; i < bytes.length; ++i) {
 			System.out.println("byte: " + bytes[i]);
 		}
-		
-		
 		ByteString byteString = ByteString.copyFrom(bytes);
 		System.out.println("Byte string: " + byteString);
 		
