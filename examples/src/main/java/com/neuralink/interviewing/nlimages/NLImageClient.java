@@ -38,16 +38,16 @@ public class NLImageClient {
 		blockingStub = NLImageServiceGrpc.newBlockingStub(channel);
 	}
 
-	
+
 	private static void displayMatrix(byte mat[][]) { 
-		 int N = mat.length;
-	        for (int i = 0; i < N; i++) { 
-	            for (int j = 0; j < mat[0].length; j++) 
-	                System.out.print(" " + mat[i][j]); 
-	  
-	            System.out.print("\n"); 
-	        } 
-	        System.out.print("\n"); 
+		int N = mat.length;
+		for (int i = 0; i < N; i++) { 
+			for (int j = 0; j < mat[0].length; j++) 
+				System.out.print(" " + mat[i][j]); 
+
+			System.out.print("\n"); 
+		} 
+		System.out.print("\n"); 
 	} 
 
 	/** 
@@ -56,19 +56,19 @@ public class NLImageClient {
 	public void requestRotate(String filename, boolean isColor, 
 			NLImageRotateRequest.Rotation rotation) throws IOException{
 		byte[] bytes = {(byte) 0x7, (byte) 0x7, (byte) 0x7, 
-						(byte) 0x8, (byte) 0x8, (byte) 0x8};
+				(byte) 0x8, (byte) 0x8, (byte) 0x8};
 		for (int i = 0; i < bytes.length; ++i) {
 			System.out.println("byte: " + bytes[i]);
 		}
 		ByteString byteString = ByteString.copyFrom(bytes);
 		System.out.println("Byte string: " + byteString);
-		
+
 		BufferedImage img = ImageIO.read(new ByteArrayInputStream(bytes));
 		NLImage nlImage = NLImage.newBuilder()
 				.setColor(isColor)
 				.setData(byteString)
-//				.setWidth(img.getWidth())
-//				.setHeight(img.getHeight())
+				//				.setWidth(img.getWidth())
+				//				.setHeight(img.getHeight())
 				.setWidth(3)
 				.setHeight(2)
 				.build();
@@ -84,10 +84,11 @@ public class NLImageClient {
 			logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
 			return;
 		}
-//		byte[] rBytes = response.getData().toByteArray();
-//		ImageIcon icon = createRespImage(rBytes, response.getWidth(), response.getHeight());
-//		displayResponse(icon);
+		//		byte[] rBytes = response.getData().toByteArray();
+		//		ImageIcon icon = createRespImage(rBytes, response.getWidth(), response.getHeight());
+		//		displayResponse(icon);
 	}
+
 
 	/** 
 	 * Requests adding a watermark to an image.
@@ -136,10 +137,10 @@ public class NLImageClient {
 	}
 
 	private ImageIcon createRespImage(byte[] b, int width, int height) {
-    java.awt.Image img = new ImageIcon(b).getImage().getScaledInstance(
-            width, 
-						height, 
-						java.awt.Image.SCALE_SMOOTH); 
+		java.awt.Image img = new ImageIcon(b).getImage().getScaledInstance(
+				width, 
+				height, 
+				java.awt.Image.SCALE_SMOOTH); 
 		return new ImageIcon(img);
 	}
 
@@ -213,8 +214,8 @@ public class NLImageClient {
 						"[--color [yes | no]] [--rotate rotation_degrees]");
 				System.exit(1);
 			}
-    }
-    Map<String, Option> opts = parseArgs(args);
+		}
+		Map<String, Option> opts = parseArgs(args);
 		if (opts.get(targetFlag) != null) {
 			target = opts.get(targetFlag).opt;
 		}
