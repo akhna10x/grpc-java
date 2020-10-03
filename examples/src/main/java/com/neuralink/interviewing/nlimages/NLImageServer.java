@@ -166,20 +166,34 @@ public class NLImageServer {
 			
 			
 			// TODO: update newHeight / width
-			NLImage reply = 
-					rotateGrayScale(req, responseObserver);
-					
-//					NLImage.newBuilder()
-//					.setHeight(newHeight)
-//					.setWidth(newWidth)
-//					 .setData(ByteString.copyFrom(matrixBytes))
-//					.build();
-			return reply;
+			System.out.println("Iscolor: " + img.getColor());
+			System.out.println("Iscolor: " + img.getColor());
+			if (img.getColor()) {
+				NLImage reply = 
+						rotateGrayScale(req, responseObserver);
+						
+	//					NLImage.newBuilder()
+	//					.setHeight(newHeight)
+	//					.setWidth(newWidth)
+	//					 .setData(ByteString.copyFrom(matrixBytes))
+	//					.build();
+				return reply;
+			} else {
+				NLImage reply = 
+						rotateColor(req, responseObserver);
+						
+//						NLImage.newBuilder()
+//						.setHeight(newHeight)
+//						.setWidth(newWidth)
+//						 .setData(ByteString.copyFrom(matrixBytes))
+//						.build();
+				return reply;
+			}
 		}
 		
 		
-		private void rotateColor() {
-			
+		private NLImage rotateColor(NLImageRotateRequest req, StreamObserver<NLImage> responseObserver) {
+			return null;
 		}
 		
 		private void handleRequest(NLImageRotateRequest req, StreamObserver<NLImage> responseObserver) {

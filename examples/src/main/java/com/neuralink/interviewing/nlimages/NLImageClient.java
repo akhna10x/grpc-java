@@ -62,6 +62,7 @@ public class NLImageClient {
 		}
 		ByteString byteString = ByteString.copyFrom(bytes);
 		System.out.println("Byte string: " + byteString);
+		System.out.println("isColor: " + isColor);
 
 		BufferedImage img = ImageIO.read(new ByteArrayInputStream(bytes));
 		NLImage nlImage = NLImage.newBuilder()
