@@ -180,9 +180,9 @@ public class NLImageServer {
 			byte b;
 			
 			public RGB(byte r, byte g, byte b) {
-//				this.r = r;
-//				this.
-//				this.r = r;
+				this.r = r;
+				this.g = g;
+				this.b = b;
 //				r
 			}
 			
@@ -228,7 +228,7 @@ public class NLImageServer {
 			int newHeight = img.getHeight();
 			int newWidth = img.getWidth();
 			byte[] imgBytes = img.toByteArray();
-			RGB[][] imgBytesX = toRGB(img.toByteArray());
+//			RGB[][] imgBytesX = toRGB(img.toByteArray());
 			
 			
 			
@@ -251,6 +251,10 @@ public class NLImageServer {
 				   index++;
 				}
 			}
+			
+			RGB[][] imgBytesX = toRGB(matrix);
+			
+			
 			NLImageRotateRequest.Rotation rotation = req.getRotation();
 			// Rotate (90 degrees is counterclockwise)
 			byte[][] rotated = null;
