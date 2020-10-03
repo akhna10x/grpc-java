@@ -94,10 +94,11 @@ public class NLImageServer {
 			byte[] imgBytes = img.toByteArray();
 			System.out.println("Length: " + imgBytes.length);
 			System.out.println(Arrays.toString(imgBytes));
-			if (height * width + numPaddingBytes != imgBytes.length) {
-				System.err.println("Invalid img size args");
-				return null;
-			}
+			// TODO: validate color
+//			if (height * width + numPaddingBytes != imgBytes.length) {
+//				System.err.println("Invalid img size args");
+//				return null;
+//			}
 					
 			int index = numPaddingBytes / 2; // Skip header 
 			byte[][] matrix = new byte[height][width];
@@ -173,8 +174,146 @@ public class NLImageServer {
 			return null;
 		}
 		
+		private class RGB {
+			byte r;
+			byte g;
+			byte b;
+			
+			public RGB(byte r, byte g, byte b) {
+//				this.r = r;
+//				this.
+//				this.r = r;
+//				r
+			}
+			
+		}
+		
+		
+		private RGB[][] toRGB(byte[][] bytes) {
+			System.out.println("DEBUG: toRGB");
+			RGB[][] rgb = 
+				new RGB[bytes.length][bytes[0].length / 3];
+			for (int row = 0; row < rgb.length; ++row) {
+				for (int col = 0; col < rgb[0].length; ++col) {
+					int bytesCol = col * 3;
+					byte r = bytes[row][bytesCol];
+					byte g = bytes[row][bytesCol + 1];
+					byte b = bytes[row][bytesCol + 2];
+					
+					rgb[row][col] = new RGB(r, g, b);
+					
+					
+				}
+			}
+
+			
+			
+			return rgb;
+		}
+		
+		private byte[][] toBytes(RGB[][] rgb) {
+			
+			
+			return null;
+		}
 		
 		private NLImage rotateColor(NLImageRotateRequest req, StreamObserver<NLImage> responseObserver) {
+			final int numPaddingBytes = 8;
+			System.out.println("...inside rotateColor()");
+			NLImage img = req.getImage();
+			int height = img.getHeight();
+//			final int colorTriplet = 3;
+			int width = img.getWidth() ;
+//					* colorTriplet;
+			int newHeight = img.getHeight();
+			int newWidth = img.getWidth();
+			byte[] imgBytes = img.toByteArray();
+			RGB[][] imgBytesX = toRGB(img.toByteArray());
+			
+			
+			
+			
+			
+			
+			System.out.println("Length: " + imgBytes.length);
+			System.out.println(Arrays.toString(imgBytes));
+			// TODO: validate color
+//			if (height * width + numPaddingBytes != imgBytes.length) {
+//				System.err.println("Invalid img size args");
+//				return null;
+//			}
+					
+			int index = numPaddingBytes / 2; // Skip header 
+			byte[][] matrix = new byte[height][width];
+			for (int row = 0; row < height; ++row) {
+				for (int col = 0; col < width; ++col) {
+				   matrix[row][col] = imgBytes[index];
+				   index++;
+				}
+			}
+			NLImageRotateRequest.Rotation rotation = req.getRotation();
+			// Rotate (90 degrees is counterclockwise)
+			byte[][] rotated = null;
+			if (rotation == NLImageRotateRequest.Rotation.ONE_EIGHTY_DEG) {
+				rotated = new byte[newHeight][newWidth];
+				for (int row = 0; row < height; ++row) {
+					for (int col = 0; col < width; ++col) {
+						byte[] oldRow = matrix[height - row - 1];
+						rotated[row] = oldRow;
+					}
+				}
+			} else if (rotation == NLImageRotateRequest.Rotation.NINETY_DEG) {
+				newHeight = width;
+				newWidth = height;
+				rotated = new byte[newHeight][newWidth];
+				for (int row = 0; row < newHeight; ++row) {
+					byte[] newRow = new byte[newWidth];
+					for (int col = 0; col < newWidth; ++ col) {
+						newRow[col] = matrix[col][0];
+						
+					}
+					rotated[row] = newRow;
+				}
+			} else if (rotation == NLImageRotateRequest.Rotation.TWO_SEVENTY_DEG) {
+				newHeight = width;
+				newWidth = height;
+				rotated = new byte[newHeight][newWidth];
+				
+				for (int row = 0; row < newHeight; ++row) {
+					byte[] newRow = new byte[newWidth];
+					for (int col = 0; col < newWidth; ++ col) {
+						newRow[col] = matrix[newWidth - col -1][0];
+						
+					}
+					rotated[row] = newRow;
+				}
+					
+			} else if (rotation == NLImageRotateRequest.Rotation.NONE) {
+				rotated = matrix;
+				System.out.println("Skipping rotation ");
+			} else {
+				rotated = new byte[newHeight][newWidth];
+				System.err.println("Unhandled request type: ");
+			}
+			matrix = rotated;
+			displayMatrix(matrix);
+		
+			
+			byte[] matrixBytes = new byte[newHeight * newWidth];
+			index = 0;
+			for (int row = 0; row < newHeight; ++ row) {
+				for (int col = 0; col < newWidth; ++col) {
+					matrixBytes[index] = matrix[row][col];
+					++index;
+				}
+			}
+			
+			
+			// TODO: update newHeight / width
+			System.out.println("Iscolor: " + img.getColor());
+			System.out.println("Iscolor: " + img.getColor());
+			
+			// TODO fix
 			return null;
 		}
 		

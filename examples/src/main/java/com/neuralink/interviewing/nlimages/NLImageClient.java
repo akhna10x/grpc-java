@@ -55,22 +55,23 @@ public class NLImageClient {
 	 */
 	public void requestRotate(String filename, boolean isColor, 
 			NLImageRotateRequest.Rotation rotation) throws IOException{
-		byte[] bytes = {(byte) 0x7, (byte) 0x7, (byte) 0x7,  (byte) 0x5, (byte) 0x6, (byte) 0x5,
-				(byte) 0x8, (byte) 0x8, (byte) 0x8, (byte) 0x4, (byte) 0x3, (byte) 0x4 };
+		byte[] bytes = {(byte) 0x7, (byte) 0x7, (byte) 0x7,    (byte) 0x5, (byte) 0x6, (byte) 0x5,
+						(byte) 0x8, (byte) 0x8, (byte) 0x8,    (byte) 0x4, (byte) 0x3, (byte) 0x4 };
+		isColor = true;
 		for (int i = 0; i < bytes.length; ++i) {
 			System.out.println("byte: " + bytes[i]);
 		}
 		ByteString byteString = ByteString.copyFrom(bytes);
 		System.out.println("Byte string: " + byteString);
 		System.out.println("isColor: " + isColor);
-
+		
 		BufferedImage img = ImageIO.read(new ByteArrayInputStream(bytes));
 		NLImage nlImage = NLImage.newBuilder()
 				.setColor(isColor)
 				.setData(byteString)
-				//				.setWidth(img.getWidth())
-				//				.setHeight(img.getHeight())
-				.setWidth(3)
+//				.setWidth(3)
+//				.setHeight(2)
+				.setWidth(2)
 				.setHeight(2)
 				.build();
 		NLImageRotateRequest request = NLImageRotateRequest.newBuilder()
