@@ -274,48 +274,43 @@ public class NLImageServer {
 			rotation = NLImageRotateRequest.Rotation.ONE_EIGHTY_DEG;
 			// Rotate (90 degrees is counterclockwise)
 			byte[][] rotated = null;
-//			RGB
 			RGB[][] rgbTmp = new RGB[img.getHeight()][img.getWidth()];
 			
 			if (rotation == NLImageRotateRequest.Rotation.ONE_EIGHTY_DEG) {
-//				rotated = new byte[newHeight][newWidth];
 				for (int row = 0; row < rgbMatrix.length; ++row) {
 					for (int col = 0; col < rgbMatrix[0].length; ++col) {
-//						byte[] oldRow = matrix[height - row - 1];
-//						rotated[row] = oldRow;
-//						
 						RGB[] oldRow = rgbMatrix[height - row - 1];
 						rgbTmp[row] = oldRow;
-						
-						
 					}
 				}
 			} else if (rotation == NLImageRotateRequest.Rotation.NINETY_DEG) {
-				newHeight = width;
-				newWidth = height;
-				rotated = new byte[newHeight][newWidth];
-				for (int row = 0; row < newHeight; ++row) {
-					byte[] newRow = new byte[newWidth];
-					for (int col = 0; col < newWidth; ++ col) {
-						newRow[col] = matrix[col][0];
-						
-					}
-					rotated[row] = newRow;
-				}
-			} else if (rotation == NLImageRotateRequest.Rotation.TWO_SEVENTY_DEG) {
-				newHeight = width;
-				newWidth = height;
-				rotated = new byte[newHeight][newWidth];
+				// TODO: impl
 				
-				for (int row = 0; row < newHeight; ++row) {
-					byte[] newRow = new byte[newWidth];
-					for (int col = 0; col < newWidth; ++ col) {
-						newRow[col] = matrix[newWidth - col -1][0];
-						
-					}
-					rotated[row] = newRow;
-				}
-					
+				newHeight = width;
+				newWidth = height;
+//				rotated = new byte[newHeight][newWidth];
+//				for (int row = 0; row < newHeight; ++row) {
+//					byte[] newRow = new byte[newWidth];
+//					for (int col = 0; col < newWidth; ++ col) {
+//						newRow[col] = matrix[col][0];
+//						
+//					}
+//					rotated[row] = newRow;
+//				}
+			} else if (rotation == NLImageRotateRequest.Rotation.TWO_SEVENTY_DEG) {
+//				newHeight = width;
+//				newWidth = height;
+//				rotated = new byte[newHeight][newWidth];
+//				
+//				for (int row = 0; row < newHeight; ++row) {
+//					byte[] newRow = new byte[newWidth];
+//					for (int col = 0; col < newWidth; ++ col) {
+//						newRow[col] = matrix[newWidth - col -1][0];
+//						
+//					}
+//					rotated[row] = newRow;
+//				}
+//					
 			} else if (rotation == NLImageRotateRequest.Rotation.NONE) {
 				rotated = matrix;
 				System.out.println("Skipping rotation ");
