@@ -186,6 +186,9 @@ public class NLImageServer {
 //				r
 			}
 			
+			public String toString() {
+				return "RGB: " + r + " " + g + " " + b;
+			}
 		}
 		
 		
@@ -222,8 +225,9 @@ public class NLImageServer {
 			System.out.println("...inside rotateColor()");
 			NLImage img = req.getImage();
 			int height = img.getHeight();
-//			final int colorTriplet = 3;
-			int width = img.getWidth() ;
+			final int colorTriplet = 3;
+			int width = img.getWidth() * 3;
+//			System
 //					* colorTriplet;
 			int newHeight = img.getHeight();
 			int newWidth = img.getWidth();
@@ -252,18 +256,37 @@ public class NLImageServer {
 				}
 			}
 			
-			RGB[][] imgBytesX = toRGB(matrix);
+			RGB[][] rgbMatrix = toRGB(matrix);
+			System.out.println("Displaying RGB: ");
+			for (int row = 0; row < rgbMatrix.length; ++row) {
+				for (int col = 0; col < rgbMatrix[0].length; ++col) {
+					System.out.print(rgbMatrix[row][col]+ " ");
+					
+					
+				}
+				System.out.println();
+			}
+			
 			
 			
 			NLImageRotateRequest.Rotation rotation = req.getRotation();
+			// TODO: remove
+			rotation = NLImageRotateRequest.Rotation.ONE_EIGHTY_DEG;
 			// Rotate (90 degrees is counterclockwise)
 			byte[][] rotated = null;
+//			RGB
+			RGB[][] rgbTmp = new RGB[img.getHeight()][img.getWidth()];
+			
 			if (rotation == NLImageRotateRequest.Rotation.ONE_EIGHTY_DEG) {
-				rotated = new byte[newHeight][newWidth];
+//				rotated = new byte[newHeight][newWidth];
 				for (int row = 0; row < height; ++row) {
-					for (int col = 0; col < width; ++col) {
-						byte[] oldRow = matrix[height - row - 1];
-						rotated[row] = oldRow;
+					for (int col = 0; col < img.getWidth(); ++col) {
+//						byte[] oldRow = matrix[height - row - 1];
+//						rotated[row] = oldRow;
+						
+						RGB[] oldRow = rgbMatrix[height - row - 1];
+						rgbTmp[row] = oldRow;
+						
 					}
 				}
 			} else if (rotation == NLImageRotateRequest.Rotation.NINETY_DEG) {
@@ -299,7 +322,52 @@ public class NLImageServer {
 				rotated = new byte[newHeight][newWidth];
 				System.err.println("Unhandled request type: ");
 			}
+			// TODO: add back
 			matrix = rotated;
+			
+			
+//			if (rotation == NLImageRotateRequest.Rotation.ONE_EIGHTY_DEG) {
+//				rotated = new byte[newHeight][newWidth];
+//				for (int row = 0; row < height; ++row) {
+//					for (int col = 0; col < width; ++col) {
+//						byte[] oldRow = matrix[height - row - 1];
+//						rotated[row] = oldRow;
+//					}
+//				}
+//			} else if (rotation == NLImageRotateRequest.Rotation.NINETY_DEG) {
+//				newHeight = width;
+//				newWidth = height;
+//				rotated = new byte[newHeight][newWidth];
+//				for (int row = 0; row < newHeight; ++row) {
+//					byte[] newRow = new byte[newWidth];
+//					for (int col = 0; col < newWidth; ++ col) {
+//						newRow[col] = matrix[col][0];
+//						
+//					}
+//					rotated[row] = newRow;
+//				}
+//			} else if (rotation == NLImageRotateRequest.Rotation.TWO_SEVENTY_DEG) {
+//				newHeight = width;
+//				newWidth = height;
+//				rotated = new byte[newHeight][newWidth];
+//				
+//				for (int row = 0; row < newHeight; ++row) {
+//					byte[] newRow = new byte[newWidth];
+//					for (int col = 0; col < newWidth; ++ col) {
+//						newRow[col] = matrix[newWidth - col -1][0];
+//						
+//					}
+//					rotated[row] = newRow;
+//				}
+//					
+//			} else if (rotation == NLImageRotateRequest.Rotation.NONE) {
+//				rotated = matrix;
+//				System.out.println("Skipping rotation ");
+//			} else {
+//				rotated = new byte[newHeight][newWidth];
+//				System.err.println("Unhandled request type: ");
+//			}
+//			matrix = rotated;
 			displayMatrix(matrix);
 		
 			
@@ -331,7 +399,7 @@ public class NLImageServer {
 			
 			NLImage reply;
 			
-			if (img.getColor()) {
+			if (!img.getColor()) {
 				reply = 
 						rotateGrayScale(req, responseObserver);
 						
