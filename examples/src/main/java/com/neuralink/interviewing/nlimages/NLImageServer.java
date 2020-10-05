@@ -374,11 +374,15 @@ public class NLImageServer {
 			
 			// TODO: update newHeight / width
 			System.out.println("Iscolor: " + img.getColor());
-			System.out.println("Iscolor: " + img.getColor());
-			
-			// TODO fix
 			return null;
 		}
+		
+		
+		
+		
+		
+		
+		
 		
 		private void handleRequest(NLImageRotateRequest req, StreamObserver<NLImage> responseObserver) {
 			// Validate image

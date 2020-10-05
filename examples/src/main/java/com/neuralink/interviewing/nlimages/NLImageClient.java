@@ -72,7 +72,7 @@ public class NLImageClient {
 //				.setWidth(3)
 //				.setHeight(2)
 				.setWidth(2)
-				.setHeight(2)
+				.setHeight(2) 
 				.build();
 		NLImageRotateRequest request = NLImageRotateRequest.newBuilder()
 				.setImage(nlImage)
