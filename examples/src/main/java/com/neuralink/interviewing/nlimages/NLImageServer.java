@@ -26,7 +26,7 @@ import javax.imageio.stream.ImageOutputStream;
 import javax.swing.*;
 
 /**
- * Neuralink image service server.
+ * Neuralink image service.
  */
 public class NLImageServer {
 	private static final Logger logger = Logger.getLogger(NLImageServer.class.getName());
@@ -70,13 +70,13 @@ public class NLImageServer {
 	}
 	
 	private static void displayMatrix(byte matrix[][]) { 
-//        for (int i = 0; i < matrix.length; i++) { 
-//            for (int j = 0; j < matrix[0].length; j++) {
-//            	byte cur = matrix[i][j];
-//             	System.out.print(String.format("%02X ",cur));
-//            } 
-//            System.out.print("\n"); 
-//        }
+        for (int i = 0; i < matrix.length; i++) { 
+            for (int j = 0; j < matrix[0].length; j++) {
+            	byte cur = matrix[i][j];
+             	System.out.print(String.format("%02X ",cur));
+            } 
+            System.out.print("\n"); 
+        }
 	} 
 
 	/** 
@@ -92,8 +92,6 @@ public class NLImageServer {
 			int newHeight = img.getHeight();
 			int newWidth = img.getWidth();
 			byte[] imgBytes = img.toByteArray();
-			System.out.println("Length: " + imgBytes.length);
-			System.out.println(Arrays.toString(imgBytes));
 			// TODO: validate color
 //			if (height * width + numPaddingBytes != imgBytes.length) {
 //				System.err.println("Invalid img size args");
@@ -165,9 +163,6 @@ public class NLImageServer {
 				}
 			}
 			
-			
-			// TODO: update newHeight / width
-			System.out.println("Iscolor: " + img.getColor());
 			System.out.println("Iscolor: " + img.getColor());
 			
 			// TODO fix
@@ -183,7 +178,6 @@ public class NLImageServer {
 				this.r = r;
 				this.g = g;
 				this.b = b;
-//				r
 			}
 			
 			public String toString() {
