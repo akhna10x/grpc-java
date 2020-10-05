@@ -271,7 +271,9 @@ public class NLImageServer {
 			
 			NLImageRotateRequest.Rotation rotation = req.getRotation();
 			// TODO: remove
-			rotation = NLImageRotateRequest.Rotation.ONE_EIGHTY_DEG;
+//			rotation = NLImageRotateRequest.Rotation.NINETY_DEG;
+			rotation = NLImageRotateRequest.Rotation.TWO_SEVENTY_DEG;
+//					NLImageRotateRequest.Rotation.ONE_EIGHTY_DEG;
 			// Rotate (90 degrees is counterclockwise)
 			byte[][] rotated = null;
 			RGB[][] rgbTmp = new RGB[img.getHeight()][img.getWidth()];
@@ -284,20 +286,59 @@ public class NLImageServer {
 					}
 				}
 			} else if (rotation == NLImageRotateRequest.Rotation.NINETY_DEG) {
-				// TODO: impl
+				System.out.println("DEBUG: rotating 90 degrees");
+
+				newHeight = img.getWidth();
+				newWidth = img.getHeight();
+//				System.out.println("New width")
+				rgbTmp = new RGB[newHeight][newWidth];
 				
-				newHeight = width;
-				newWidth = height;
+				for (int row = 0; row < newHeight; ++row) {
+//					byte[] newRow = new byte[newWidth];
+					RGB[] newRow = new RGB[newWidth];
+					for (int col = 0; col < newWidth; ++col) {
+						newRow[col] = rgbMatrix[rgbMatrix[0].length -col - 1][row];
+//						
+					}
+					System.out.println("New row: " + newRow[0] + " " + newRow[1]);
+					rgbTmp[row] = newRow;
+				}
+				
+				
 //				rotated = new byte[newHeight][newWidth];
 //				for (int row = 0; row < newHeight; ++row) {
-//					byte[] newRow = new byte[newWidth];
-//					for (int col = 0; col < newWidth; ++ col) {
-//						newRow[col] = matrix[col][0];
+//					byte[] newRow = ne newWidth; ++ col) {
+//						newRow[col] = matw byte[newWidth];
+//					for (int col = 0; col <rix[col][0];
 //						
 //					}
 //					rotated[row] = newRow;
 //				}
 			} else if (rotation == NLImageRotateRequest.Rotation.TWO_SEVENTY_DEG) {
+				System.out.println("DEBUG: rotating 90 degrees");
+
+				newHeight = img.getWidth();
+				newWidth = img.getHeight();
+//				System.out.println("New width")
+				rgbTmp = new RGB[newHeight][newWidth];
+				
+				for (int row = 0; row < newHeight; ++row) {
+//					byte[] newRow = new byte[newWidth];
+					RGB[] newRow = new RGB[newWidth];
+					for (int col = 0; col < newWidth; ++col) {
+						newRow[col] = rgbMatrix[col][rgbMatrix.length - row -1];
+//						
+					}
+					System.out.println("New row: " + newRow[0] + " " + newRow[1]);
+					rgbTmp[row] = newRow;
+				}
+				
+				
+				
+				
+				
+				
+				
 //				newHeight = width;
 //				newWidth = height;
 //				rotated = new byte[newHeight][newWidth];
