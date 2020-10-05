@@ -164,9 +164,12 @@ public class NLImageServer {
 			}
 			
 			System.out.println("Iscolor: " + img.getColor());
-			
-			// TODO fix
-			return null;
+		    NLImage reply = 	NLImage.newBuilder()
+					.setHeight(newHeight)
+					.setWidth(newWidth)
+					 .setData(ByteString.copyFrom(matrixBytes))
+					.build();
+			return reply;
 		}
 		
 		private class RGB {
@@ -392,12 +395,7 @@ public class NLImageServer {
 				reply = 
 						rotateGrayScale(req, responseObserver);
 						
-	//					NLImage.newBuilder()
-	//					.setHeight(newHeight)
-//	//					.setWidth(newWidth)
-//	//					 .setData(ByteString.copyFrom(matrixBytes))
-//	//					.build();
-//				return reply;
+
 			} else {
 				reply = 
 						rotateColor(req, responseObserver);
