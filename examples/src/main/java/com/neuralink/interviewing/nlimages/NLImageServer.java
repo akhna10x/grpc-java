@@ -79,10 +79,12 @@ public class NLImageServer {
         }
 	} 
 
+	
 	/** 
 	 * NLImageService implementation.
 	 */
 	static class NLImageServiceImpl extends NLImageServiceGrpc.NLImageServiceImplBase {
+		final int colorTriplets = 3;
 		
 		private NLImage rotateGrayScale(NLImageRotateRequest req, StreamObserver<NLImage> responseObserver) {
 			final int numPaddingBytes = 8;
@@ -92,12 +94,10 @@ public class NLImageServer {
 			int newHeight = img.getHeight();
 			int newWidth = img.getWidth();
 			byte[] imgBytes = img.toByteArray();
-			// TODO: validate color
-//			if (height * width + numPaddingBytes != imgBytes.length) {
-//				System.err.println("Invalid img size args");
-//				return null;
-//			}
-					
+			if (height * width + numPaddingBytes != imgBytes.length) {
+				System.err.println("Invalid img size args");
+				return null;
+			}
 			int index = numPaddingBytes / 2; // Skip header 
 			byte[][] matrix = new byte[height][width];
 			for (int row = 0; row < height; ++row) {
@@ -107,6 +107,8 @@ public class NLImageServer {
 				}
 			}
 			NLImageRotateRequest.Rotation rotation = req.getRotation();
+			
+			
 			// Rotate (90 degrees is counterclockwise)
 			byte[][] rotated = null;
 			if (rotation == NLImageRotateRequest.Rotation.ONE_EIGHTY_DEG) {
@@ -188,7 +190,6 @@ public class NLImageServer {
 			}
 		}
 		
-		
 		private RGB[][] toRGB(byte[][] bytes) {
 			System.out.println("DEBUG: toRGB");
 			RGB[][] rgb = 
@@ -199,21 +200,15 @@ public class NLImageServer {
 					byte r = bytes[row][bytesCol];
 					byte g = bytes[row][bytesCol + 1];
 					byte b = bytes[row][bytesCol + 2];
-					
 					rgb[row][col] = new RGB(r, g, b);
-					
-					
 				}
 			}
-
-			
 			
 			return rgb;
 		}
 		
 		private byte[][] toBytes(RGB[][] rgb) {
-			
-			
+			// TODO: implement
 			return null;
 		}
 		
@@ -224,20 +219,9 @@ public class NLImageServer {
 			int height = img.getHeight();
 			final int colorTriplet = 3;
 			int width = img.getWidth() * 3;
-//			System
-//					* colorTriplet;
 			int newHeight = img.getHeight();
 			int newWidth = img.getWidth();
 			byte[] imgBytes = img.toByteArray();
-//			RGB[][] imgBytesX = toRGB(img.toByteArray());
-			
-			
-			
-			
-			
-			
-			System.out.println("Length: " + imgBytes.length);
-			System.out.println(Arrays.toString(imgBytes));
 			// TODO: validate color
 //			if (height * width + numPaddingBytes != imgBytes.length) {
 //				System.err.println("Invalid img size args");
@@ -258,19 +242,12 @@ public class NLImageServer {
 			for (int row = 0; row < rgbMatrix.length; ++row) {
 				for (int col = 0; col < rgbMatrix[0].length; ++col) {
 					System.out.print(rgbMatrix[row][col]+ " ");
-					
-					
 				}
 				System.out.println();
 			}
 			
-			
-			
 			NLImageRotateRequest.Rotation rotation = req.getRotation();
-			// TODO: remove
-//			rotation = NLImageRotateRequest.Rotation.NINETY_DEG;
 			rotation = NLImageRotateRequest.Rotation.TWO_SEVENTY_DEG;
-//					NLImageRotateRequest.Rotation.ONE_EIGHTY_DEG;
 			// Rotate (90 degrees is counterclockwise)
 			byte[][] rotated = null;
 			RGB[][] rgbTmp = new RGB[img.getHeight()][img.getWidth()];
@@ -283,44 +260,26 @@ public class NLImageServer {
 					}
 				}
 			} else if (rotation == NLImageRotateRequest.Rotation.NINETY_DEG) {
-				System.out.println("DEBUG: rotating 90 degrees");
-
 				newHeight = img.getWidth();
 				newWidth = img.getHeight();
-//				System.out.println("New width")
 				rgbTmp = new RGB[newHeight][newWidth];
 				
 				for (int row = 0; row < newHeight; ++row) {
-//					byte[] newRow = new byte[newWidth];
 					RGB[] newRow = new RGB[newWidth];
 					for (int col = 0; col < newWidth; ++col) {
 						newRow[col] = rgbMatrix[rgbMatrix[0].length -col - 1][row];
-//						
 					}
 					System.out.println("New row: " + newRow[0] + " " + newRow[1]);
 					rgbTmp[row] = newRow;
 				}
-				
-				
-//				rotated = new byte[newHeight][newWidth];
-//				for (int row = 0; row < newHeight; ++row) {
-//					byte[] newRow = ne newWidth; ++ col) {
-//						newRow[col] = matw byte[newWidth];
-//					for (int col = 0; col <rix[col][0];
-//						
-//					}
-//					rotated[row] = newRow;
-//				}
 			} else if (rotation == NLImageRotateRequest.Rotation.TWO_SEVENTY_DEG) {
 				System.out.println("DEBUG: rotating 90 degrees");
 
 				newHeight = img.getWidth();
 				newWidth = img.getHeight();
-//				System.out.println("New width")
 				rgbTmp = new RGB[newHeight][newWidth];
 				
 				for (int row = 0; row < newHeight; ++row) {
-//					byte[] newRow = new byte[newWidth];
 					RGB[] newRow = new RGB[newWidth];
 					for (int col = 0; col < newWidth; ++col) {
 						newRow[col] = rgbMatrix[col][rgbMatrix.length - row -1];
@@ -469,37 +428,6 @@ public class NLImageServer {
 		ImageIO.write((
 				(BufferedImage) icon.getImage()), "png", stream);
 		return ByteString.copyFrom(baos.toByteArray());
-	}
-
-	private static ImageIcon createRotatedImage(byte[] b, int width, 
-			int height, boolean color, 
-			NLImageRotateRequest.Rotation rotation) {
-		ImageIcon icon = new ImageIcon(b);
-		java.awt.Image rawImage = icon.getImage();
-		BufferedImage image = 
-				convertToBufferedImage(rawImage, color, width, height);
-		if (rotation == NLImageRotateRequest.Rotation.NONE) { 
-			icon.setImage(rotate(image, 0.0));
-		} else if (rotation == NLImageRotateRequest.Rotation.NINETY_DEG) {
-			icon.setImage(rotate(image, 90.0));
-		} else if (rotation == NLImageRotateRequest.Rotation.ONE_EIGHTY_DEG) {
-			icon.setImage(rotate(image, 180.0));
-		} else if (rotation == NLImageRotateRequest.Rotation.TWO_SEVENTY_DEG) {
-			icon.setImage(rotate(image, 270.0));
-		}
-
-		return icon;
-	}
-
-	private static BufferedImage rotate(BufferedImage image, double angle) {
-		int w = image.getWidth(), h = image.getHeight();
-		GraphicsConfiguration gc = getDefaultConfiguration();
-		BufferedImage result = gc.createCompatibleImage(w, h);
-		Graphics2D g = result.createGraphics();
-		g.rotate(Math.toRadians(angle), w / 2, h / 2);
-		g.drawRenderedImage(image, null);
-		g.dispose();
-		return result;
 	}
 
 	private static ImageIcon createWatermarkImage(byte[] b, int width, int height, boolean color) {
