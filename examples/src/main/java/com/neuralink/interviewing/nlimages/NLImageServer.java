@@ -214,7 +214,6 @@ public class NLImageServer {
 		
 		private NLImage rotateColor(NLImageRotateRequest req, StreamObserver<NLImage> responseObserver) {
 			final int numPaddingBytes = 8;
-			System.out.println("...inside rotateColor()");
 			NLImage img = req.getImage();
 			int height = img.getHeight();
 			final int colorTriplet = 3;
@@ -222,12 +221,10 @@ public class NLImageServer {
 			int newHeight = img.getHeight();
 			int newWidth = img.getWidth();
 			byte[] imgBytes = img.toByteArray();
-			// TODO: validate color
-//			if (height * width + numPaddingBytes != imgBytes.length) {
-//				System.err.println("Invalid img size args");
-//				return null;
-//			}
-					
+			if (height * width  * colorTriplets + numPaddingBytes != imgBytes.length) {
+				System.err.println("Invalid img size args");
+				return null;
+			}
 			int index = numPaddingBytes / 2; // Skip header 
 			byte[][] matrix = new byte[height][width];
 			for (int row = 0; row < height; ++row) {
@@ -245,7 +242,6 @@ public class NLImageServer {
 				}
 				System.out.println();
 			}
-			
 			NLImageRotateRequest.Rotation rotation = req.getRotation();
 			rotation = NLImageRotateRequest.Rotation.TWO_SEVENTY_DEG;
 			// Rotate (90 degrees is counterclockwise)
@@ -283,30 +279,11 @@ public class NLImageServer {
 					RGB[] newRow = new RGB[newWidth];
 					for (int col = 0; col < newWidth; ++col) {
 						newRow[col] = rgbMatrix[col][rgbMatrix.length - row -1];
-//						
 					}
 					System.out.println("New row: " + newRow[0] + " " + newRow[1]);
 					rgbTmp[row] = newRow;
 				}
 				
-				
-				
-				
-				
-				
-				
-//				newHeight = width;
-//				newWidth = height;
-//				rotated = new byte[newHeight][newWidth];
-//				
-//				for (int row = 0; row < newHeight; ++row) {
-//					byte[] newRow = new byte[newWidth];
-//					for (int col = 0; col < newWidth; ++ col) {
-//						newRow[col] = matrix[newWidth - col -1][0];
-//						
-//					}
-//					rotated[row] = newRow;
-//				}
 //					
 			} else if (rotation == NLImageRotateRequest.Rotation.NONE) {
 				rotated = matrix;
@@ -358,15 +335,14 @@ public class NLImageServer {
 			} else {
 				reply = 
 						rotateColor(req, responseObserver);
-						
-////						NLImage.newBuilder()
-////						.setHeight(newHeight)
-////						.setWidth(newWidth)
-////						 .setData(ByteString.copyFrom(matrixBytes))
-////						.build();
-//				return reply;
 			}
 			
+			
+//			NLImage.newBuilder()
+//			.setHeight(newHeight)
+//			.setWidth(newWidth)
+//			 .setData(ByteString.copyFrom(matrixBytes))
+//			.build();
 			
 			responseObserver.onNext(reply);
 			responseObserver.onCompleted();
@@ -375,7 +351,6 @@ public class NLImageServer {
 		@Override
 		public void rotateImage(NLImageRotateRequest req, StreamObserver<NLImage> responseObserver) {
 			handleRequest(req, responseObserver);
-			// TODO: reject overly large images
 			return;
 		}
 
@@ -387,7 +362,7 @@ public class NLImageServer {
 			int width = reqImg.getWidth();
 			ByteString reqImgBytes = reqImg.getData();
 			byte[] bytes = reqImgBytes.toByteArray();
-			ImageIcon icon = createWatermarkImage(bytes, width, height, reqImg.getColor());
+			ImageIcon icon = createGrayscaleImage(bytes, width, height, reqImg.getColor());
 			try {
 				NLImage replyImg = NLImage.newBuilder()
 						.setWidth(width)
@@ -430,40 +405,19 @@ public class NLImageServer {
 		return ByteString.copyFrom(baos.toByteArray());
 	}
 
-	private static ImageIcon createWatermarkImage(byte[] b, int width, int height, boolean color) {
+	private static ImageIcon createGrayscaleImage(byte[] b, int width, int height, boolean color) {
+		// TODO: implement
+		// New grayscale image = ( (0.3 * R) + (0.59 * G) + (0.11 * B) ).
+		final double rFactor = 0.3;
+		final double gFactor = 0.59;
+		final double bFactor = 0.11;
+		
+		
+		
+		
+		
 		ImageIcon icon = new ImageIcon(b);
-		java.awt.Image rawImage = icon.getImage();
-		BufferedImage image = convertToBufferedImage(rawImage, color, width, height);
-		icon.setImage(addImageWatermark(image));
 		return icon;
-	}
-
-	private static BufferedImage addImageWatermark(BufferedImage sourceImage) {
-		GraphicsConfiguration gc = getDefaultConfiguration();
-		BufferedImage result = 
-				gc.createCompatibleImage(sourceImage.getWidth(), 
-						sourceImage.getHeight());
-		try {
-			BufferedImage watermarkImage = ImageIO.read(new File("watermark.png"));
-			Graphics2D g = result.createGraphics();
-			Graphics2D g2d = (Graphics2D) sourceImage.getGraphics();
-			AlphaComposite alphaChannel = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f);
-			g2d.setComposite(alphaChannel);
-			int topLeftX = (sourceImage.getWidth() - watermarkImage.getWidth()) / 2;
-			int topLeftY = (sourceImage.getHeight() - watermarkImage.getHeight()) / 2;
-			g2d.drawImage(watermarkImage, topLeftX, topLeftY, null);
-			g.dispose();
-			return sourceImage;
-		} catch (IOException ex) {
-			System.err.println(ex);
-		}
-		return result;
-	}
-
-	private static GraphicsConfiguration getDefaultConfiguration() {
-		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		GraphicsDevice gd = ge.getDefaultScreenDevice();
-		return gd.getDefaultConfiguration();
 	}
 
 	public static void main(String[] args) throws IOException, InterruptedException {
