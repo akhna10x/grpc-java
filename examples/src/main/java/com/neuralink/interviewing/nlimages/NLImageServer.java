@@ -362,21 +362,21 @@ public class NLImageServer {
 			int width = reqImg.getWidth();
 			ByteString reqImgBytes = reqImg.getData();
 			byte[] bytes = reqImgBytes.toByteArray();
-			ImageIcon icon = createGrayscaleImage(bytes, width, height, reqImg.getColor());
-			try {
+//			ImageIcon icon = createGrayscaleImage(bytes, width, height, reqImg.getColor());
+//			try {
 				NLImage replyImg = NLImage.newBuilder()
 						.setWidth(width)
 						.setHeight(height)
-						.setData(imgToByteString(icon))
+						.setData(ByteString.copyFrom(createGrayscaleImage(bytes, width, height, reqImg.getColor())))
 						.build();
 				NLCustomImageEndpointResponse reply = NLCustomImageEndpointResponse.newBuilder()
 						.setImage(replyImg)
 						.build();
 				responseObserver.onNext(reply);
 				responseObserver.onCompleted();
-			} catch(IOException e) {
-				System.err.println("IOException: " + e.getMessage());
-			}
+//			} catch(IOException e) {
+//				System.err.println("IOException: " + e.getMessage());
+//			}
 		}
 	}
 
@@ -405,7 +405,8 @@ public class NLImageServer {
 		return ByteString.copyFrom(baos.toByteArray());
 	}
 
-	private static ImageIcon createGrayscaleImage(byte[] b, int width, int height, boolean color) {
+	private static byte[] createGrayscaleImage(byte[] b, int width, int height, boolean color) {
+		byte[] ret = new byte[0];
 		// TODO: implement
 		// New grayscale image = ( (0.3 * R) + (0.59 * G) + (0.11 * B) ).
 		final double rFactor = 0.3;
@@ -417,8 +418,8 @@ public class NLImageServer {
 		
 		
 		ImageIcon icon = new ImageIcon(b);
-		return icon;
-	}
+		return ret;
+	} 
 
 	public static void main(String[] args) throws IOException, InterruptedException {
 		final NLImageServer server = new NLImageServer();
