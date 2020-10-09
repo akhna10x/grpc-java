@@ -362,7 +362,7 @@ public class NLImageServer {
 			int width = reqImg.getWidth();
 			ByteString reqImgBytes = reqImg.getData();
 			byte[] bytes = reqImgBytes.toByteArray();
-//			ImageIcon icon = createGrayscaleImage(bytes, width, height, reqImg.getColor());
+
 //			try {
 				NLImage replyImg = NLImage.newBuilder()
 						.setWidth(width)
