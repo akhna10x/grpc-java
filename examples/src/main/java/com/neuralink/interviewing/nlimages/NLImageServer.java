@@ -283,8 +283,6 @@ public class NLImageServer {
 					System.out.println("New row: " + newRow[0] + " " + newRow[1]);
 					rgbTmp[row] = newRow;
 				}
-				
-//					
 			} else if (rotation == NLImageRotateRequest.Rotation.NONE) {
 				rotated = matrix;
 				System.out.println("Skipping rotation ");
