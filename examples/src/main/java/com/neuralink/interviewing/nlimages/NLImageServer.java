@@ -209,6 +209,7 @@ public class NLImageServer {
 		
 		private byte[][] toBytes(RGB[][] rgb) {
 			// TODO: implement
+			
 			return null;
 		}
 		
@@ -221,10 +222,10 @@ public class NLImageServer {
 			int newHeight = img.getHeight();
 			int newWidth = img.getWidth();
 			byte[] imgBytes = img.toByteArray();
-			if (height * width  * colorTriplets + numPaddingBytes != imgBytes.length) {
-				System.err.println("Invalid img size args");
-				return null;
-			}
+			// if (height * width  * colorTriplets + numPaddingBytes != imgBytes.length) {
+			// 	System.err.println("Invalid img size args: " + imgBytes.length);
+			// 	return null;
+			// }
 			int index = numPaddingBytes / 2; // Skip header 
 			byte[][] matrix = new byte[height][width];
 			for (int row = 0; row < height; ++row) {
@@ -358,6 +359,7 @@ public class NLImageServer {
 			int width = reqImg.getWidth();
 			ByteString reqImgBytes = reqImg.getData();
 			byte[] bytes = reqImgBytes.toByteArray();
+			System.out.println("Running create grayscale image from customImageEndpoint()");
 
 //			try {
 				NLImage replyImg = NLImage.newBuilder()
