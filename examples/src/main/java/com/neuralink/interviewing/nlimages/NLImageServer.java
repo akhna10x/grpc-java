@@ -269,8 +269,6 @@ public class NLImageServer {
 					rgbTmp[row] = newRow;
 				}
 			} else if (rotation == NLImageRotateRequest.Rotation.TWO_SEVENTY_DEG) {
-				System.out.println("DEBUG: rotating 90 degrees");
-
 				newHeight = img.getWidth();
 				newWidth = img.getHeight();
 				rgbTmp = new RGB[newHeight][newWidth];
