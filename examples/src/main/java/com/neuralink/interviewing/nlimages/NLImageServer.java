@@ -411,7 +411,13 @@ public class NLImageServer {
 		final double gFactor = 0.59;
 		final double bFactor = 0.11;
 		
+		System.out.println("Inside createGrayscaleImage");
+		if (color) {
+			
+
+		} else {
 		
+		}
 		
 		
 		
