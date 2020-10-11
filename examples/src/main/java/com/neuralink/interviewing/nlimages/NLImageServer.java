@@ -407,7 +407,6 @@ public class NLImageServer {
 
 	private static byte[] createGrayscaleImage(byte[] bytes, int width, int height, boolean color) {
 		byte[] ret = new byte[bytes.length/3];
-		// TODO: implement
 		// New grayscale image = ( (0.3 * R) + (0.59 * G) + (0.11 * B) ).
 		final double rFactor = 0.3;
 		final double gFactor = 0.59;
@@ -415,12 +414,15 @@ public class NLImageServer {
 		// byte[] newBytes = new b
 		System.out.println("Inside createGrayscaleImage");
 		if (color) {
+			// System.out.println("");
+			int index = 0;
 			for (int i = 0; i < (bytes.length - 3); i += 3 ) {
 				double newColor = 0;
 				newColor += bytes[i] *0.3;
 				newColor += bytes[i+1] * 0.59;
 				newColor += bytes[i+2] * 0.11;
-				
+				ret[index] += bytes[i];
+				index++;
 			}
 		} else {
 			System.out.println("Skipping...");
@@ -432,7 +434,6 @@ public class NLImageServer {
 			System.out.println("Byte " + i + ": " + bytes[i]);
 		}
 
-		// ImageIcon icon = new ImageIcon(bytes);
 		return ret;
 	} 
 
