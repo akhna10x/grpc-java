@@ -115,7 +115,7 @@ public class NLImageClient {
 			ByteString respImgBytes = response.getData();
 			byte[] rBytes = response.getData().toByteArray();
 			ImageIcon icon = createRespImage(rBytes, response.getWidth(), response.getHeight());
-			displayResponse(icon);
+			// displayResponse(icon);
 		} catch (StatusRuntimeException e) {
 			logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
 			return;

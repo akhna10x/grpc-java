@@ -360,21 +360,23 @@ public class NLImageServer {
 			ByteString reqImgBytes = reqImg.getData();
 			byte[] bytes = reqImgBytes.toByteArray();
 			System.out.println("Running create grayscale image from customImageEndpoint()");
+			// displayMatrix(bytes);
+			for (int i = 0; i < bytes.length; ++i) {
+				System.out.println("Byte " + i + ": " + bytes[i]);
+			}
 
-//			try {
-				NLImage replyImg = NLImage.newBuilder()
-						.setWidth(width)
-						.setHeight(height)
-						.setData(ByteString.copyFrom(createGrayscaleImage(bytes, width, height, reqImg.getColor())))
-						.build();
-				NLCustomImageEndpointResponse reply = NLCustomImageEndpointResponse.newBuilder()
-						.setImage(replyImg)
-						.build();
-				responseObserver.onNext(reply);
-				responseObserver.onCompleted();
-//			} catch(IOException e) {
-//				System.err.println("IOException: " + e.getMessage());
-//			}
+			NLImage replyImg = NLImage.newBuilder()
+					.setWidth(width)
+					.setHeight(height)
+					.setData(ByteString.copyFrom(createGrayscaleImage(bytes, width, height, reqImg.getColor())))
+					.build();
+			NLCustomImageEndpointResponse reply = NLCustomImageEndpointResponse.newBuilder()
+					.setImage(replyImg)
+					.build();
+
+
+			responseObserver.onNext(reply);
+			responseObserver.onCompleted();
 		}
 	}
 
