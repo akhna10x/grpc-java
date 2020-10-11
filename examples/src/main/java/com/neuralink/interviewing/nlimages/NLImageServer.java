@@ -429,7 +429,7 @@ public class NLImageServer {
 		
 		
 		System.out.println("New array: ");
-		for (int i = 0; i < bytes.length; ++i) {
+		for (int i = 0; i < ret.length; ++i) {
 			System.out.println("Byte " + i + ": " + bytes[i]);
 		}
 
