@@ -415,13 +415,23 @@ public class NLImageServer {
 		
 		System.out.println("Inside createGrayscaleImage");
 		if (color) {
-			
+			for (int i = 0; i < bytes.length; i +=3 ) {
+				double newColor = 0;
+				newColor += bytes[i] *0.3;
+				newColor += bytes[i+1] * 0.59;
+
+			}
 
 		} else {
-		
+			System.out.println("Skipping...");
 		}
 		
 		
+
+		for (int i = 0; i < bytes.length; ++i) {
+			System.out.println("Byte " + i + ": " + bytes[i]);
+		}
+
 		
 		ImageIcon icon = new ImageIcon(b);
 		return ret;
