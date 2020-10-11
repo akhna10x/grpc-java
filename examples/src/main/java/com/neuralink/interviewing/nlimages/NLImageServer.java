@@ -420,7 +420,10 @@ public class NLImageServer {
 				newColor += bytes[i] *0.3;
 				newColor += bytes[i+1] * 0.59;
 				newColor += bytes[i+2] * 0.11;
+				System.out.println("newColor" + newColor);
 				ret[index] += bytes[i];
+				System.out.println("ret[index" + ret[index]);
+				// TODO: fix type conversion
 				index++;
 			}
 		} else {
@@ -430,7 +433,7 @@ public class NLImageServer {
 		
 		System.out.println("New array: ");
 		for (int i = 0; i < ret.length; ++i) {
-			System.out.println("Byte " + i + ": " + bytes[i]);
+			System.out.println("New Byte " + i + ": " + bytes[i]);
 		}
 
 		return ret;
