@@ -360,7 +360,6 @@ public class NLImageServer {
 			ByteString reqImgBytes = reqImg.getData();
 			byte[] bytes = reqImgBytes.toByteArray();
 			System.out.println("Running create grayscale image from customImageEndpoint()");
-			// displayMatrix(bytes);
 			for (int i = 0; i < bytes.length; ++i) {
 				System.out.println("Byte " + i + ": " + bytes[i]);
 			}
