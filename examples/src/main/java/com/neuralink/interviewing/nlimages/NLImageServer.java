@@ -414,7 +414,6 @@ public class NLImageServer {
 		// byte[] newBytes = new b
 		System.out.println("Inside createGrayscaleImage");
 		if (color) {
-			// System.out.println("");
 			int index = 0;
 			for (int i = 0; i < (bytes.length - 3); i += 3 ) {
 				double newColor = 0;
