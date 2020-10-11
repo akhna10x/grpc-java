@@ -421,8 +421,11 @@ public class NLImageServer {
 				newColor += bytes[i+1] * 0.59;
 				newColor += bytes[i+2] * 0.11;
 				System.out.println("newColor" + newColor);
-				ret[index] += bytes[i];
-				System.out.println("ret[index" + ret[index]);
+				ret[index] =  
+					((byte) Math.round(newColor));
+				// ret[index] &= 0xFF;
+				System.out.println("ret[index" +
+					Byte.toUnsignedInt(ret[index]));
 				// TODO: fix type conversion
 				index++;
 			}
@@ -433,7 +436,7 @@ public class NLImageServer {
 		
 		System.out.println("New array: ");
 		for (int i = 0; i < ret.length; ++i) {
-			System.out.println("New Byte " + i + ": " + bytes[i]);
+			System.out.println("New Byte " + i + ": " + Byte.toUnsignedInt((bytes[i])));
 		}
 
 		return ret;
