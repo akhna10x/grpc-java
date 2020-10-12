@@ -98,6 +98,8 @@ public class NLImageClient {
 			throws IOException{
 		byte[] bytes = {(byte) 0x7, (byte) 0x7, (byte) 0x7,    (byte) 0x5, (byte) 0x6, (byte) 0x5,
 			(byte) 0x8, (byte) 0x8, (byte) 0x8,    (byte) 0x4, (byte) 0x3, (byte) 0x4 };
+		int length = 2;
+		int height = 2;
 		isColor = true;
 		for (int i = 0; i < bytes.length; ++i) {
 			System.out.println("byte: " + bytes[i]);
@@ -111,8 +113,6 @@ public class NLImageClient {
 		NLImage nlImage = NLImage.newBuilder()
 				.setColor(isColor)
 				.setData(ByteString.copyFrom(bytes))
-				// .setWidth(img.getWidth())
-				// .setHeight(img.getHeight())
 				.setWidth(2)
 				.setHeight(2) 
 				.build();
